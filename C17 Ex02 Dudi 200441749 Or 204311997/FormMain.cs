@@ -769,12 +769,14 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             {
                 initDataTablesTab();
                 m_TabPageDataTablesInit = true;
+                // TODO del
                 MessageBox.Show("2");
             }
             else if (m_TabPageFriendshipAnalyzer == false && tabControl.SelectedTab == tabPageFriendshipAnalyzer)
             {
                 initDataTablesTab();
                 m_TabPageFriendshipAnalyzer = true;
+                // TODO del
                 MessageBox.Show("3");
             }
         }
