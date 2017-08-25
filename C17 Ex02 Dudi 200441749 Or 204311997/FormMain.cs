@@ -19,6 +19,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private FacebookDataTable m_DataTableBindedToView;
         private FriendshipAnalyzer m_FriendshipAnalyzer;
         private string m_PostPicturePath;
+        private bool m_TabPageDataTablesInit = false;
+        private bool m_TabPageFriendshipAnalyzer = false;
         private bool m_LogoutClicked = false;
 
         public FormMain()
@@ -32,7 +34,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             base.OnShown(e);
             initMainForm();
             fetchProfileAndCoverPhotos();
-            initTabs();
+            //initTabs();
+            initAboutMeTab();
         }
 
         private void initMainForm()
@@ -55,12 +58,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void initTabs()
-        {
-            initAboutMeTab();
-            initDataTablesTab();
-            initFriendshipAnalyzerTab();
-        }
+        //private void initTabs()
+        //{
+        //    initAboutMeTab();
+        //    initDataTablesTab();
+        //    initFriendshipAnalyzerTab();
+        //}
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -756,6 +759,23 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             {
                 pictureBoxMostRecentTaggedTogether.LoadAsync(mostRecentTaggedTogether.PictureNormalURL);
                 pictureBoxMostRecentTaggedTogether.Tag = mostRecentTaggedTogether;
+            }
+        }
+        
+        // ================================================ Friendship analyzer Tab ==============================================
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (m_TabPageDataTablesInit == false && tabControl.SelectedTab == tabPageDataTables)
+            {
+                initDataTablesTab();
+                m_TabPageDataTablesInit = true;
+                MessageBox.Show("2");
+            }
+            else if (m_TabPageFriendshipAnalyzer == false && tabControl.SelectedTab == tabPageFriendshipAnalyzer)
+            {
+                initDataTablesTab();
+                m_TabPageFriendshipAnalyzer = true;
+                MessageBox.Show("3");
             }
         }
     }
