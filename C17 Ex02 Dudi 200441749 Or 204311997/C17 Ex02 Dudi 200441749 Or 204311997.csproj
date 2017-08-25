@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{85A0BD04-2200-4FD2-9FC8-0456621ADB8D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>C17_Ex01_Dudi_200441749_Or_204311997</RootNamespace>
+    <AssemblyName>C17 Ex01 Dudi 200441749 Or 204311997</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="FbGraphApiWrapper, Version=6.8.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FbGraphApiWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlbumsSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlbumsSelector.Designer.cs">
+      <DependentUpon>AlbumsSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="FacebookDataFetcher.cs" />
+    <Compile Include="FacebookPhotoUtils.cs" />
+    <Compile Include="FacebookApplication.cs" />
+    <Compile Include="DataTables\FacebookDataTable.cs" />
+    <Compile Include="DataTables\FacebookDataTableManager.cs" />
+    <Compile Include="DataTables\FacebookFriendsDataTable.cs" />
+    <Compile Include="DataTables\FacebookLikedPagesDataTable.cs" />
+    <Compile Include="DataTables\FacebookPhotosDataTable.cs" />
+    <Compile Include="FacebookObjectDisplayer.cs" />
+    <Compile Include="FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLogin.Designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FriendDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FriendDetails.Designer.cs">
+      <DependentUpon>FriendDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FriendshipAnalyzer.cs" />
+    <Compile Include="IDisplayable.cs" />
+    <Compile Include="PhotoDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PhotoDetails.Designer.cs">
+      <DependentUpon>PhotoDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PictureFrame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PictureFrame.Designer.cs">
+      <DependentUpon>PictureFrame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgressBarWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressBarWindow.Designer.cs">
+      <DependentUpon>ProgressBarWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AlbumsSelector.resx">
+      <DependentUpon>AlbumsSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLogin.resx">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FriendDetails.resx">
+      <DependentUpon>FriendDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PhotoDetails.resx">
+      <DependentUpon>PhotoDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PictureFrame.resx">
+      <DependentUpon>PictureFrame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressBarWindow.resx">
+      <DependentUpon>ProgressBarWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\DataSources\FacebookWrapper.ObjectModel.User.datasource" />
+    <None Include="Properties\DataSources\FriendshipAnalyzer.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Login.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MainFormBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutMeBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadingPhoto.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CoverLoading.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CoverLoading1.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
