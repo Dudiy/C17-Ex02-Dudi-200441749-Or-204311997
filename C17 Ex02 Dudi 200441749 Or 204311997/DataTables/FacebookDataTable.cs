@@ -18,7 +18,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public object ObjectToDisplay { get; set; }
         protected Type m_ObjectTypeRepresentedByRow;
 
-        public FacebookDataTable(string i_TableName, Type i_ObjectTypeRepresentedByRow)
+        protected FacebookDataTable(string i_TableName, Type i_ObjectTypeRepresentedByRow)
         {
             m_ObjectTypeRepresentedByRow = i_ObjectTypeRepresentedByRow;
             DataTable = new DataTable(i_TableName);

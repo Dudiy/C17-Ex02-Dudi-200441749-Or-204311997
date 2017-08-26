@@ -7,6 +7,7 @@
 */
 using System.Collections.Generic;
 using C17_Ex01_Dudi_200441749_Or_204311997.DataTables;
+using System;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
@@ -15,10 +16,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private List<FacebookDataTable> m_DataTables = new List<FacebookDataTable>();
 
         public FacebookDataTableManager()
-        {
-            m_DataTables.Add(new FacebookFriendsDataTable());
-            m_DataTables.Add(new FacebookLikedPagesDataTable());
-            m_DataTables.Add(new FacebookPhotosDataTable());
+        {            
+            foreach (eFacebookDataTableType tableType in Enum.GetValues(typeof(eFacebookDataTableType)))
+            {
+                m_DataTables.Add(FacebookDataTableFactory.CreateTable(tableType));
+            }
         }
 
         public FacebookDataTable[] GetDataTables()

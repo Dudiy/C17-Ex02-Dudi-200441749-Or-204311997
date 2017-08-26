@@ -14,7 +14,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     public class FacebookFriendsDataTable : FacebookDataTable
     {
-        public FacebookFriendsDataTable()
+        internal FacebookFriendsDataTable()
             : base("Friends", typeof(User))
         {
         }
