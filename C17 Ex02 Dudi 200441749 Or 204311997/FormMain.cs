@@ -38,7 +38,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             initMainForm();
             fetchProfileAndCoverPhotos();
             //initTabs();
-            initAboutMeTab();
+            new Thread(initAboutMeTab).Start();
         }
 
         private void initMainForm()
@@ -92,32 +92,18 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                Action action = new Action(
-                    () =>
-                    {
-                        likedPagesBindingSource.DataSource = FacebookApplication.LoggedInUser.LikedPages;
-                        for (int i = 0; i < 100000000000; i++)
-                        {
-                            i++;
-                            i--;
-                        }
-                        MessageBox.Show("Test1");
-                    });
+                FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
+                Action action = new Action(() => { likedPagesBindingSource.DataSource = likedPages; });
                 //listBoxLikedPage.Invoke(new Action(
                 //    () =>
                 //    {
 
                 //    }));
-                new Thread(()=>listBoxLikedPage.Invoke(action)).Start();
+                listBoxLikedPage.Invoke(action);
                 new Thread(updateAboutMeFriends).Start();
                 new Thread(initLastPost).Start();
-                listBoxPostTags.Invoke(new Action(
-                        () => 
-                    {
-                        friendsBindingSource.DataSource = FacebookApplication.LoggedInUser.Friends;
-                        MessageBox.Show("Test2");
-
-                    }));
+                FacebookObjectCollection<User> friends = FacebookApplication.LoggedInUser.Friends;
+                listBoxPostTags.Invoke(new Action(() => friendsBindingSource.DataSource = friends));
             }
             catch
             {
@@ -126,7 +112,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             listBoxPostLiked.MouseDoubleClick += ListBoxPostLiked_MouseDoubleClick;
             listBoxPostComment.MouseDoubleClick += ListBoxPostComment_MouseDoubleClick;
-            listBoxPostTags.ClearSelected();
+            //listBoxPostTags.ClearSelected();
         }
 
         private void updateAboutMeFriends()
