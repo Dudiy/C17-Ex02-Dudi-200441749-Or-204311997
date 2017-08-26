@@ -98,8 +98,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 likedPagesBindingSource.DataSource = FacebookApplication.LoggedInUser.LikedPages;
                 friendsBindingSource.DataSource = FacebookApplication.LoggedInUser.Friends;
-                updateAboutMeFriends();
-                initLastPost();
+                //updateAboutMeFriends();
+                //initLastPost();
             }
             catch
             {
@@ -762,7 +762,7 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
         }
         
-        // ================================================ Friendship analyzer Tab ==============================================
+        // ================================================ Other methods ==============================================
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (m_TabPageDataTablesInit == false && tabControl.SelectedTab == tabPageDataTables)
