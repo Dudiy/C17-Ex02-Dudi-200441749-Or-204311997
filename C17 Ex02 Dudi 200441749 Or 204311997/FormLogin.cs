@@ -63,6 +63,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private void buttonExit_Click(object sender, EventArgs e)
         {
             FacebookApplication.ExitSelected = true;
+            //FacebookApplication.Logout();
             Close();
         }
 

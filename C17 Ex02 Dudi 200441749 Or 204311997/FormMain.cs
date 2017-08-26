@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
 using C17_Ex01_Dudi_200441749_Or_204311997.DataTables;
+using System.Threading;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
@@ -22,6 +23,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private bool m_TabPageDataTablesInit = false;
         private bool m_TabPageFriendshipAnalyzer = false;
         private bool m_LogoutClicked = false;
+        private object m_UpdateAboutMeFriendsLock = new object();
+        private object m_InitLastPostLock = new object();
 
         public FormMain()
         {
@@ -58,13 +61,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        //private void initTabs()
-        //{
-        //    initAboutMeTab();
-        //    initDataTablesTab();
-        //    initFriendshipAnalyzerTab();
-        //}
-
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -96,10 +92,32 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                likedPagesBindingSource.DataSource = FacebookApplication.LoggedInUser.LikedPages;
-                friendsBindingSource.DataSource = FacebookApplication.LoggedInUser.Friends;
-                //updateAboutMeFriends();
-                //initLastPost();
+                Action action = new Action(
+                    () =>
+                    {
+                        likedPagesBindingSource.DataSource = FacebookApplication.LoggedInUser.LikedPages;
+                        for (int i = 0; i < 100000000000; i++)
+                        {
+                            i++;
+                            i--;
+                        }
+                        MessageBox.Show("Test1");
+                    });
+                //listBoxLikedPage.Invoke(new Action(
+                //    () =>
+                //    {
+
+                //    }));
+                new Thread(()=>listBoxLikedPage.Invoke(action)).Start();
+                new Thread(updateAboutMeFriends).Start();
+                new Thread(initLastPost).Start();
+                listBoxPostTags.Invoke(new Action(
+                        () => 
+                    {
+                        friendsBindingSource.DataSource = FacebookApplication.LoggedInUser.Friends;
+                        MessageBox.Show("Test2");
+
+                    }));
             }
             catch
             {
@@ -115,20 +133,25 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             try
             {
-                foreach (User friend in FacebookApplication.LoggedInUser.Friends)
+                lock (m_UpdateAboutMeFriendsLock)
                 {
-                    PictureBox friendProfile = new PictureBox()
+                    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
                     {
-                        Image = friend.ImageLarge,
-                        Size = sr_FriendProfilePicSize,
-                        SizeMode = PictureBoxSizeMode.Zoom,
-                        Tag = friend
-                    };
+                        PictureBox friendProfile = new PictureBox()
+                        {
+                            Image = friend.ImageLarge,
+                            Size = sr_FriendProfilePicSize,
+                            SizeMode = PictureBoxSizeMode.Zoom,
+                            Tag = friend
+                        };
 
-                    friendProfile.MouseEnter += FriendProfile_MouseEnter;
-                    friendProfile.MouseLeave += FriendProfile_MouseLeave;
-                    friendProfile.MouseClick += FriendProfile_MouseClick;
-                    flowLayoutPanelAboutMeFriends.Controls.Add(friendProfile);
+                        // TODO invoke ?
+                        friendProfile.MouseEnter += FriendProfile_MouseEnter;
+                        friendProfile.MouseLeave += FriendProfile_MouseLeave;
+                        friendProfile.MouseClick += FriendProfile_MouseClick;
+                        flowLayoutPanelAboutMeFriends.Invoke(new Action(() =>
+                            flowLayoutPanelAboutMeFriends.Controls.Add(friendProfile)));
+                    }
                 }
             }
             catch
@@ -139,42 +162,49 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private void initLastPost()
         {
-            if (FacebookApplication.LoggedInUser.Posts.Count == 0)
+            lock (m_InitLastPostLock)
             {
-                MessageBox.Show("No available posts");
-            }
-            else
-            {
-                Post myLastPosts = FacebookApplication.LoggedInUser.Posts[0];
-
-                // clear pervious data
-                listBoxPostLiked.Items.Clear();
-                listBoxPostComment.Items.Clear();
-                pictureBoxLastPost.Image = null;
-                // get new data
-                if (myLastPosts != null && myLastPosts.Message != null)
+                if (FacebookApplication.LoggedInUser.Posts.Count != 0)
                 {
-                    textBoxLastPostMessage.Text = myLastPosts.Message;
+                    clearLastPost();
+                    getLastPost();
                 }
                 else
                 {
-                    textBoxLastPostMessage.Text = "[No post message]";
+                    MessageBox.Show("No available posts");
+                }
+            }
+        }
+
+        private void clearLastPost()
+        {
+            listBoxPostLiked.Invoke(new Action(() => listBoxPostLiked.Items.Clear()));
+            listBoxPostComment.Invoke(new Action(() => listBoxPostComment.Items.Clear()));
+            pictureBoxLastPost.Invoke(new Action(() => pictureBoxLastPost.Image = null));
+        }
+
+        private void getLastPost()
+        {
+            Post myLastPosts = FacebookApplication.LoggedInUser.Posts[0];
+
+            textBoxLastPostMessage.Invoke(new Action(() =>
+            {
+                textBoxLastPostMessage.Text = (myLastPosts != null && myLastPosts.Message != null) ?
+                    myLastPosts.Message : "[No post message]";
+            }));
+            if (myLastPosts != null && myLastPosts.PictureURL != null)
+            {
+                pictureBoxLastPost.LoadAsync(myLastPosts.PictureURL);
+                listBoxPostLiked.DisplayMember = "Name";
+                foreach (User friendWhoLiked in myLastPosts.LikedBy)
+                {
+                    listBoxPostLiked.Invoke(new Action(() => listBoxPostLiked.Items.Add(friendWhoLiked)));
                 }
 
-                if (myLastPosts != null && myLastPosts.PictureURL != null)
+                listBoxPostComment.DisplayMember = "Message";
+                foreach (Comment comment in myLastPosts.Comments)
                 {
-                    pictureBoxLastPost.LoadAsync(myLastPosts.PictureURL);
-                    listBoxPostLiked.DisplayMember = "Name";
-                    foreach (User friendWhoLiked in myLastPosts.LikedBy)
-                    {
-                        listBoxPostLiked.Items.Add(friendWhoLiked);
-                    }
-
-                    listBoxPostComment.DisplayMember = "Message";
-                    foreach (Comment comment in myLastPosts.Comments)
-                    {
-                        listBoxPostComment.Items.Add(comment);
-                    }
+                    listBoxPostComment.Invoke(new Action(() => listBoxPostComment.Items.Add(comment)));
                 }
             }
         }
@@ -761,7 +791,7 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
                 pictureBoxMostRecentTaggedTogether.Tag = mostRecentTaggedTogether;
             }
         }
-        
+
         // ================================================ Other methods ==============================================
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
