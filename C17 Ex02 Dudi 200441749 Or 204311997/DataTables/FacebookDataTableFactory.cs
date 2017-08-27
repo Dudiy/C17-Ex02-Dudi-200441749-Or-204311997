@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FacebookWrapper.ObjectModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
-    internal static class FacebookDataTableFactory    
+    internal static class FacebookDataTableFactory
     {
         //todo change parameter to enum
         public static FacebookDataTable CreateTable(eFacebookDataTableType tableType)
@@ -14,7 +15,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
             switch (tableType)
             {
-                case eFacebookDataTableType.Friends:
+                case eFacebookDataTableType.Friends:                    
                     tableCreated = new FacebookFriendsDataTable();
                     break;
                 case eFacebookDataTableType.LikedPages:
@@ -23,7 +24,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 case eFacebookDataTableType.MyPhotos:
                     tableCreated = new FacebookPhotosDataTable();
                     break;
-                default:                    
+                default:
                     break;
             }
 

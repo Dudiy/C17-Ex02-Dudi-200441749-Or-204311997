@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
+using System.Threading;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
@@ -18,27 +19,71 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
         }
 
-        public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
+        //public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
+        //{
+        //    int currRow = 0;
+
+        //    TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
+        //    //add rows
+        //    foreach (Page page in FacebookApplication.LoggedInUser.LikedPages)
+        //    {
+        //        yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
+
+        //        DataTable.Rows.Add(
+        //            page,
+        //            page.Name,
+        //            page.Phone,
+        //            page.Category,
+        //            page.Description,
+        //            page.Website);
+        //    }
+
+        //    // if the user has no liked pages
+        //    yield return Tuple.Create<int, int, object>(1, 1, null);
+        //}
+
+        public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            int currRow = 0;
-
-            TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
-            //add rows
-            foreach (Page page in FacebookApplication.LoggedInUser.LikedPages)
+            lock (m_PopulateRowsLock)
             {
-                yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
+                if (DataTable.Rows.Count == 0)
+                {
+                    //FacebookObjectCollection<Page> likedPages = new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages).FetchDataWithProgressBar();
+                    new Thread(() => populateRows(i_Collection)).Start();
+                }
+            }
+        }
 
-                DataTable.Rows.Add(
-                    page,
-                    page.Name,
-                    page.Phone,
-                    page.Category,
-                    page.Description,
-                    page.Website);
+        private void populateRows(FacebookObjectCollection<FacebookObject> likedPages)
+        {
+            TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
+            if (PopulateRowsStarting != null)
+            {
+                PopulateRowsStarting.Invoke();
             }
 
-            // if the user has no liked pages
-            yield return Tuple.Create<int, int, object>(1, 1, null);
+            lock (m_PopulateRowsLock)
+            {
+                foreach (Page page in likedPages)
+                {
+                    DataTable.Rows.Add(
+                        page,
+                        page.Name,
+                        page.Phone,
+                        page.Category,
+                        page.Description,
+                        page.Website);
+                    if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                    {
+                        TenRowsInserted.Invoke();
+                    }
+                }
+
+                if (PopulateRowsCompleted != null)
+                {
+                    PopulateRowsCompleted.Invoke();
+                }
+            }
         }
 
         protected override void InitColumns()

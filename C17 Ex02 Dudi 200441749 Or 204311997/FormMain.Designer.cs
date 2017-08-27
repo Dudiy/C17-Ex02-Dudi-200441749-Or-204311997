@@ -53,6 +53,9 @@
             this.treeViewPhotosOfFriendIAmTaggedIn = new System.Windows.Forms.TreeView();
             this.flowLayoutPanelFriendshipAnalyzer = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageDataTables = new System.Windows.Forms.TabPage();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.buttonFetchData = new System.Windows.Forms.Button();
             this.comboBoxDataTableBindingSelection = new System.Windows.Forms.ComboBox();
@@ -67,7 +70,6 @@
             this.panelLikedPage = new System.Windows.Forms.Panel();
             this.listBoxLikedPage = new System.Windows.Forms.ListBox();
             this.likedPagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.friendsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.linkLabelLikedPageURL = new System.Windows.Forms.LinkLabel();
             this.labelLikedPageName = new System.Windows.Forms.Label();
             this.buttonRefreshLikedPage = new System.Windows.Forms.Button();
@@ -78,6 +80,7 @@
             this.buttonClearPostTags = new System.Windows.Forms.Button();
             this.richTextBoxStatusPost = new System.Windows.Forms.RichTextBox();
             this.listBoxPostTags = new System.Windows.Forms.ListBox();
+            this.friendsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.labelTagFriends = new System.Windows.Forms.Label();
             this.labelPostStatus = new System.Windows.Forms.Label();
             this.labelFriendTitle = new System.Windows.Forms.Label();
@@ -101,15 +104,16 @@
             this.tabPageFriendshipAnalyzer.SuspendLayout();
             this.panelGeneralInfo.SuspendLayout();
             this.tabPageDataTables.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.tabPageAboutMe.SuspendLayout();
             this.panelPostPhoto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPostPhoto)).BeginInit();
             this.panelLikedPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.likedPagesBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.friendsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLikedPage)).BeginInit();
             this.panelPostStatus.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.friendsBindingSource)).BeginInit();
             this.panelFriends.SuspendLayout();
             this.panelLastPost.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLastPost)).BeginInit();
@@ -341,6 +345,7 @@
             // 
             // tabPageDataTables
             // 
+            this.tabPageDataTables.Controls.Add(this.statusStrip1);
             this.tabPageDataTables.Controls.Add(this.dataGridView);
             this.tabPageDataTables.Controls.Add(this.buttonFetchData);
             this.tabPageDataTables.Controls.Add(this.comboBoxDataTableBindingSelection);
@@ -351,7 +356,30 @@
             this.tabPageDataTables.TabIndex = 1;
             this.tabPageDataTables.Text = "Data Tables";
             this.tabPageDataTables.UseVisualStyleBackColor = true;
-            this.tabPageDataTables.Click += new System.EventHandler(this.tabPageDataTables_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel,
+            this.toolStripProgressBar});
+            this.statusStrip1.Location = new System.Drawing.Point(3, 524);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1158, 22);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(112, 17);
+            this.toolStripStatusLabel.Text = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Visible = false;
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBar.Visible = false;
             // 
             // dataGridView
             // 
@@ -524,10 +552,6 @@
             this.likedPagesBindingSource.DataMember = "LikedPages";
             this.likedPagesBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.User);
             // 
-            // friendsBindingSource
-            // 
-            this.friendsBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.User);
-            // 
             // linkLabelLikedPageURL
             // 
             this.linkLabelLikedPageURL.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.likedPagesBindingSource, "URL", true));
@@ -641,6 +665,10 @@
             this.listBoxPostTags.Size = new System.Drawing.Size(117, 93);
             this.listBoxPostTags.TabIndex = 8;
             this.listBoxPostTags.ValueMember = "Albums";
+            // 
+            // friendsBindingSource
+            // 
+            this.friendsBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.User);
             // 
             // labelTagFriends
             // 
@@ -851,6 +879,9 @@
             this.panelGeneralInfo.ResumeLayout(false);
             this.panelGeneralInfo.PerformLayout();
             this.tabPageDataTables.ResumeLayout(false);
+            this.tabPageDataTables.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.tabPageAboutMe.ResumeLayout(false);
             this.tabPageAboutMe.PerformLayout();
@@ -859,10 +890,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPostPhoto)).EndInit();
             this.panelLikedPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.likedPagesBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.friendsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLikedPage)).EndInit();
             this.panelPostStatus.ResumeLayout(false);
             this.panelPostStatus.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.friendsBindingSource)).EndInit();
             this.panelFriends.ResumeLayout(false);
             this.panelLastPost.ResumeLayout(false);
             this.panelLastPost.PerformLayout();
@@ -938,5 +969,8 @@
         private System.Windows.Forms.Label labelLastName;
         private System.Windows.Forms.Label labelPhotoPreview;
         private System.Windows.Forms.Button buttonFetchGeneralData;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }

@@ -9,6 +9,8 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
+using System.Threading;
+using System.Data;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
@@ -19,26 +21,66 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
         }
 
-        public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
+        //public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
+        //{
+        //    int currRow = 0;
+
+        //    TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
+        //    //add rows
+        //    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
+        //    {
+        //        yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
+
+        //        DataTable.Rows.Add(
+        //            friend,
+        //            friend.FirstName,
+        //            friend.LastName,
+        //            friend.Gender != null ? friend.Gender.ToString() : string.Empty,
+        //            getMostRecentPost(friend));
+        //    }
+
+        //    // if the user has no friends :(
+        //    yield return Tuple.Create<int, int, object>(1, 1, null);
+        //}
+        public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            int currRow = 0;
-
             TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
-            //add rows
-            foreach (User friend in FacebookApplication.LoggedInUser.Friends)
+            if (PopulateRowsStarting != null)
             {
-                yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
+                PopulateRowsStarting.Invoke();
+            }
 
+            lock (m_PopulateRowsLock)
+            {
+                if (DataTable.Rows.Count == 0)
+                {
+                    //FacebookObjectCollection<User> friendsList = new FacebookCollectionAdapter<User>(Adapter.eFacebookCollectionType.Friends).FetchDataWithProgressBar();
+                    new Thread(() => populateRows(i_Collection)).Start();
+                }
+
+                if (PopulateRowsCompleted != null)
+                {
+                    PopulateRowsCompleted.Invoke();
+                }
+            }
+        }
+
+        private void populateRows(FacebookObjectCollection<FacebookObject> friendsList)
+        {
+            foreach (User friend in friendsList)
+            {
                 DataTable.Rows.Add(
                     friend,
                     friend.FirstName,
                     friend.LastName,
-                    friend.Gender != null ? friend.Gender.ToString() : string.Empty,
-                    getMostRecentPost(friend));
-            }
+                    friend.Gender != null ? friend.Gender.ToString() : string.Empty);
+                //getMostRecentPost(friend));
 
-            // if the user has no friends :(
-            yield return Tuple.Create<int, int, object>(1, 1, null);
+                if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                {
+                    TenRowsInserted.Invoke();
+                }
+            }
         }
 
         protected override void InitColumns()
@@ -46,14 +88,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             DataTable.Columns.Add("First Name", typeof(string));
             DataTable.Columns.Add("Last Name", typeof(string));
             DataTable.Columns.Add("Gender", typeof(string));
-            DataTable.Columns.Add("Most Recent Post", typeof(string));
+            //DataTable.Columns.Add("Most Recent Post", typeof(string));
         }
 
         private string getMostRecentPost(User i_User)
         {
             StringBuilder mostRecentPostStr = new StringBuilder();
 
-            if (i_User != null && i_User.Posts.Count > 0)
+            if (i_User != null && i_User.Posts[0] != null)
             {
                 Post mostRecentPost = i_User.Posts[0];
 

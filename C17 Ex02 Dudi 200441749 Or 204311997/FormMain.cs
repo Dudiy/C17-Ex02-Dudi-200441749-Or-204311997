@@ -20,8 +20,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private FacebookDataTable m_DataTableBindedToView;
         private FriendshipAnalyzer m_FriendshipAnalyzer;
         private string m_PostPicturePath;
-        private bool m_TabPageDataTablesInit = false;
-        private bool m_TabPageFriendshipAnalyzer = false;
+        private bool m_DataTablesTabWasInitialized = false;
+        private bool m_FriendshipAnalyzerTabWasInitialized = false;
         private bool m_LogoutClicked = false;
         private object m_UpdateAboutMeFriendsLock = new object();
         private object m_InitLastPostLock = new object();
@@ -35,19 +35,18 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            new Thread(initMainForm).Start();
+            initMainForm();
         }
 
         private void initMainForm()
         {
-            Invoke(new Action(() =>
-            {
-                Text = FacebookApplication.LoggedInUser.Name ?? string.Empty;
-                labelUserName.Text = FacebookApplication.LoggedInUser.Name ?? string.Empty;
-                MinimumSize = sr_MinimumWindowSize;
-            }));
-            fetchProfileAndCoverPhotos();
+            String userName = FacebookApplication.LoggedInUser.Name ?? string.Empty;
+            Text = userName;
+            labelUserName.Text = userName;
+            MinimumSize = sr_MinimumWindowSize;
+            new Thread(fetchProfileAndCoverPhotos).Start(); ;
             initAboutMeTab();
+            new Thread(initDataTablesTab).Start();
         }
 
         private void fetchProfileAndCoverPhotos()
@@ -94,13 +93,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                updateAboutMeFriends();
-                initLikedPages();
-                initLastPost();
-                // TODO doesn't work without thread
-                //new Thread(initLastPost).Start();
-                initPostTags();
-
+                new Thread(updateAboutMeFriends).Start();
+                new Thread(initLikedPages).Start();
+                new Thread(initLastPost).Start();
+                new Thread(initPostTags).Start();
             }
             catch
             {
@@ -109,12 +105,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             listBoxPostLiked.MouseDoubleClick += ListBoxPostLiked_MouseDoubleClick;
             listBoxPostComment.MouseDoubleClick += ListBoxPostComment_MouseDoubleClick;
-            listBoxPostTags.Invoke(new Action(() => listBoxPostTags.ClearSelected()));
         }
 
         private void initLikedPages()
         {
-            FacebookObjectCollection<Page> likedPages = new FacebookCollectionAdapter<Page>(FacebookApplication.LoggedInUser.LikedPages).FetchDataWithProgressBar();
+            FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
+            //new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages)
+            //.FetchDataWithProgressBar();
             listBoxLikedPage.Invoke(new Action(() => likedPagesBindingSource.DataSource = likedPages));
         }
 
@@ -122,7 +119,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             FacebookObjectCollection<User> friends = FacebookApplication.LoggedInUser.Friends;
 
-            listBoxPostTags.Invoke(new Action(() => friendsBindingSource.DataSource = friends));
+            listBoxPostTags.Invoke(new Action(() =>
+            {
+                friendsBindingSource.DataSource = friends;
+                listBoxPostTags.ClearSelected();
+            }));
         }
 
         private void updateAboutMeFriends()
@@ -140,9 +141,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                             SizeMode = PictureBoxSizeMode.Zoom,
                             Tag = friend
                         };
-                        //friendProfile.LoadAsync(friend.PictureLargeURL);
 
-                        // TODO invoke ?
                         friendProfile.MouseEnter += FriendProfile_MouseEnter;
                         friendProfile.MouseLeave += FriendProfile_MouseLeave;
                         friendProfile.MouseClick += FriendProfile_MouseClick;
@@ -277,7 +276,7 @@ i_Comment.Message);
 
         private void buttonRefreshFriends_Click(object sender, EventArgs e)
         {
-            FacebookApplication.LoggedInUser.ReFetch();
+            FacebookApplication.LoggedInUser.ReFetch("friends");
             flowLayoutPanelAboutMeFriends.Controls.Clear();
             updateAboutMeFriends();
         }
@@ -292,11 +291,10 @@ i_Comment.Message);
 
         private void buttonRefreshLikedPage_Click(object sender, EventArgs e)
         {
-            FacebookObjectCollection<Page> list = new FacebookCollectionAdapter<Page>(FacebookApplication.LoggedInUser.LikedPages)
-                .FetchDataWithProgressBar();
+            FacebookCollectionAdapter<Page> collectionAdapter = new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages);
+            FacebookObjectCollection<FacebookObject> list = collectionAdapter.FetchDataWithProgressBar();
 
-            likedPagesBindingSource.DataSource = list;
-            listBoxLikedPage.ClearSelected();
+            likedPagesBindingSource.DataSource = collectionAdapter.unboxCollection(list);
         }
 
         private void buttonPost_Click(object sender, EventArgs e)
@@ -434,6 +432,7 @@ i_Comment.Message);
         {
             m_DataTableManager = new FacebookDataTableManager();
             initComboBoxDataTableBindingSelection();
+            m_DataTablesTabWasInitialized = true;
         }
 
         private void initComboBoxDataTableBindingSelection()
@@ -448,16 +447,14 @@ i_Comment.Message);
             {
                 dataGridView.DataSource = null;
                 m_DataTableBindedToView = (FacebookDataTable)comboBoxDataTableBindingSelection.SelectedItem;
-                m_DataTableBindedToView.DataTable.Rows.Clear();
-                if (m_DataTableBindedToView is FacebookPhotosDataTable)
-                {
-                    AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-                    Album[] albumsToLoad = albumSelector.GetAlbumsSelection();
-
-                    ((FacebookPhotosDataTable)m_DataTableBindedToView).AlbumsToLoad = albumsToLoad;
-                }
-
-                FacebookDataFetcher.FetchDataWithProgressBar(m_DataTableBindedToView.FetchDataTableValues().GetEnumerator(), m_DataTableBindedToView.TableName);
+                //m_DataTableBindedToView.DataTable.Rows.Clear();
+                FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
+                m_DataTableBindedToView.PopulateRowsStarting += new Action(startingDataTablePopulation);
+                //m_DataTableBindedToView.RowInserted += new Action(updateToolstripProgressBar);
+                m_DataTableBindedToView.PopulateRowsCompleted += new Action(FinishedDataTablePopulation);
+                toolStripProgressBar.ProgressBar.Visible = true;
+                m_DataTableBindedToView.PopulateRows(collection);
+                //FacebookDataFetcher.FetchDataWithProgressBar(m_DataTableBindedToView.FetchDataTableValues().GetEnumerator(), m_DataTableBindedToView.TableName);
                 dataGridView.DataSource = m_DataTableBindedToView.DataTable;
                 if (dataGridView.Columns["ObjectDisplayed"] != null)
                 {
@@ -468,14 +465,78 @@ i_Comment.Message);
                 {
                     MessageBox.Show("The requested table could not be loaded, please try again");
                 }
+
+
             }
+        }
+
+        private void FinishedDataTablePopulation()
+        {
+            Invoke(new Action(() =>
+            {
+                dataGridView.Refresh();
+                toolStripProgressBar.ProgressBar.Visible = false;
+            }));
+        }
+
+        private void startingDataTablePopulation()
+        {
+            Invoke(new Action(() =>
+            {
+                toolStripProgressBar.ProgressBar.Visible = true;
+                toolStripProgressBar.Maximum = m_DataTableBindedToView.TotalRows;
+                toolStripProgressBar.Value = m_DataTableBindedToView.DataTable.Rows.Count;
+            }));
+        }
+
+        private FacebookObjectCollection<FacebookObject> fetchCollectionWithAdapter(Type i_DataTableType)
+        {
+            FacebookObjectCollection<FacebookObject> collection;
+
+            if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
+            {
+                AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
+                FacebookCollectionAdapter<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.MyPhotos);
+                myPhotosAdapter.AlbumsToLoad = albumSelector.GetAlbumsSelection();
+                collection = myPhotosAdapter.FetchDataWithProgressBar();
+            }
+            else if (i_DataTableType.Name == typeof(FacebookLikedPagesDataTable).Name)
+            {
+                collection = new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages).FetchDataWithProgressBar();
+            }
+            else if (i_DataTableType.Name == typeof(FacebookFriendsDataTable).Name)
+            {
+                collection = new FacebookCollectionAdapter<User>(Adapter.eFacebookCollectionType.Friends).FetchDataWithProgressBar();
+            }
+            else
+            {
+                throw new NotImplementedException("unknow data table type while fetching facebook collection");
+            }
+
+            return collection;
+        }
+
+        private void updateToolstripProgressBar()
+        {
+            Invoke(new Action(() =>
+            {
+                //toolStripProgressBar.Value++;
+                toolStripProgressBar.Value = dataGridView.Rows.Count;
+                if (dataGridView.Rows.Count % 20 == 0)
+                {
+                    dataGridView.Refresh();
+                }
+            }));
         }
 
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewRow rowSelected = ((DataGridView)sender).SelectedCells[0].OwningRow;
-            rowSelected.Selected = true;
-            displayDetailsForRowObject(rowSelected);
+            if (((DataGridView)sender).SelectedCells.Count > 0)
+            {
+                DataGridViewRow rowSelected = ((DataGridView)sender).SelectedCells[0].OwningRow;
+                rowSelected.Selected = true;
+                displayDetailsForRowObject(rowSelected);
+            }
         }
 
         private void displayDetailsForRowObject(DataGridViewRow i_RowSelected)
@@ -487,7 +548,10 @@ i_Comment.Message);
 
         private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            ((DataGridView)sender).SelectedCells[0].OwningRow.Selected = true;
+            if (((DataGridView)sender).SelectedCells.Count > 0)
+            {
+                ((DataGridView)sender).SelectedCells[0].OwningRow.Selected = true;
+            }
         }
 
         private void buttonFetchData_Click(object sender, EventArgs e)
@@ -500,6 +564,7 @@ i_Comment.Message);
         {
             m_FriendshipAnalyzer = new FriendshipAnalyzer();
             initFriendsPhotosBar();
+            m_FriendshipAnalyzerTabWasInitialized = true;
         }
 
         private void initFriendsPhotosBar()
@@ -794,25 +859,14 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
         // ================================================ Other methods ==============================================
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (m_TabPageDataTablesInit == false && tabControl.SelectedTab == tabPageDataTables)
+            if (!m_DataTablesTabWasInitialized && tabControl.SelectedTab == tabPageDataTables)
             {
                 initDataTablesTab();
-                m_TabPageDataTablesInit = true;
-                // TODO del
-                MessageBox.Show("2");
             }
-            else if (m_TabPageFriendshipAnalyzer == false && tabControl.SelectedTab == tabPageFriendshipAnalyzer)
+            else if (!m_FriendshipAnalyzerTabWasInitialized && tabControl.SelectedTab == tabPageFriendshipAnalyzer)
             {
                 initFriendshipAnalyzerTab();
-                m_TabPageFriendshipAnalyzer = true;
-                // TODO del
-                MessageBox.Show("3");
             }
-        }
-
-        private void tabPageDataTables_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

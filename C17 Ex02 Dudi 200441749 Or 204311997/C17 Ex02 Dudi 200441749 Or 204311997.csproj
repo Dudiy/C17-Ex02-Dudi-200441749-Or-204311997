@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapter\eFacebookCollectionType.cs" />
     <Compile Include="Adapter\IFacebookCollection.cs" />
     <Compile Include="AlbumsSelector.cs">
       <SubType>Form</SubType>
@@ -171,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CoverLoading1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
