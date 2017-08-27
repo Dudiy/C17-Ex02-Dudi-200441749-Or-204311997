@@ -35,17 +35,19 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            initMainForm();
-            fetchProfileAndCoverPhotos();
-            //initTabs();
-            new Thread(initAboutMeTab).Start();
+            new Thread(initMainForm).Start();
         }
 
         private void initMainForm()
         {
-            Text = FacebookApplication.LoggedInUser.Name ?? string.Empty;
-            labelUserName.Text = FacebookApplication.LoggedInUser.Name ?? string.Empty;
-            MinimumSize = sr_MinimumWindowSize;
+            Invoke(new Action(() =>
+            {
+                Text = FacebookApplication.LoggedInUser.Name ?? string.Empty;
+                labelUserName.Text = FacebookApplication.LoggedInUser.Name ?? string.Empty;
+                MinimumSize = sr_MinimumWindowSize;
+            }));
+            fetchProfileAndCoverPhotos();
+            initAboutMeTab();
         }
 
         private void fetchProfileAndCoverPhotos()
@@ -92,18 +94,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
-                Action action = new Action(() => { likedPagesBindingSource.DataSource = likedPages; });
-                //listBoxLikedPage.Invoke(new Action(
-                //    () =>
-                //    {
-
-                //    }));
-                listBoxLikedPage.Invoke(action);
-                new Thread(updateAboutMeFriends).Start();
+                updateAboutMeFriends();
+                initLikedPages();
+                //initLastPost();
+                // TODO doesn't work without thread
                 new Thread(initLastPost).Start();
-                FacebookObjectCollection<User> friends = FacebookApplication.LoggedInUser.Friends;
-                listBoxPostTags.Invoke(new Action(() => friendsBindingSource.DataSource = friends));
+                initPostTags();
+                
             }
             catch
             {
@@ -112,7 +109,21 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             listBoxPostLiked.MouseDoubleClick += ListBoxPostLiked_MouseDoubleClick;
             listBoxPostComment.MouseDoubleClick += ListBoxPostComment_MouseDoubleClick;
-            //listBoxPostTags.ClearSelected();
+            listBoxPostTags.Invoke(new Action(()=>listBoxPostTags.ClearSelected()));
+        }
+
+        private void initLikedPages()
+        {
+            FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
+
+            listBoxLikedPage.Invoke(new Action(() => likedPagesBindingSource.DataSource = likedPages));
+        }
+
+        private void initPostTags()
+        {
+            FacebookObjectCollection<User> friends = FacebookApplication.LoggedInUser.Friends;
+
+            listBoxPostTags.Invoke(new Action(() => friendsBindingSource.DataSource = friends));
         }
 
         private void updateAboutMeFriends()
@@ -130,6 +141,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                             SizeMode = PictureBoxSizeMode.Zoom,
                             Tag = friend
                         };
+                        //friendProfile.LoadAsync(friend.PictureLargeURL);
 
                         // TODO invoke ?
                         friendProfile.MouseEnter += FriendProfile_MouseEnter;
