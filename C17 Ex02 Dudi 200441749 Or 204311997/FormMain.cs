@@ -126,6 +126,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             listBoxPostTags.Invoke(new Action(() => friendsBindingSource.DataSource = friends));
         }
 
+        private void LikedPages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void updateAboutMeFriends()
         {
             try
