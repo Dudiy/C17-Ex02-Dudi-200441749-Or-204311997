@@ -351,6 +351,7 @@
             this.tabPageDataTables.TabIndex = 1;
             this.tabPageDataTables.Text = "Data Tables";
             this.tabPageDataTables.UseVisualStyleBackColor = true;
+            this.tabPageDataTables.Click += new System.EventHandler(this.tabPageDataTables_Click);
             // 
             // dataGridView
             // 

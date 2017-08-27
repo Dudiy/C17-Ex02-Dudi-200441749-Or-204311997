@@ -802,11 +802,16 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
             else if (m_TabPageFriendshipAnalyzer == false && tabControl.SelectedTab == tabPageFriendshipAnalyzer)
             {
-                initDataTablesTab();
+                initFriendshipAnalyzerTab();
                 m_TabPageFriendshipAnalyzer = true;
                 // TODO del
                 MessageBox.Show("3");
             }
+        }
+
+        private void tabPageDataTables_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
