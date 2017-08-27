@@ -28,7 +28,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public int MaxValue
         {
             get { return progressBar.Maximum; }
-            set { progressBar.Maximum = value; }
+            set { progressBar.Maximum = Math.Min(value, FacebookApplication.k_CollectionLimit); }
         }
 
         public int ProgressValue

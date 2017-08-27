@@ -14,7 +14,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     public static class FacebookApplication
     {
-        private const int k_CollectionLimit = 500;
+        public const int k_CollectionLimit = 500;
         public const byte k_MaxPhotosInAlbum = 100;
         public static User LoggedInUser { get; private set; }
         public static AppSettings AppSettings { get; private set; }

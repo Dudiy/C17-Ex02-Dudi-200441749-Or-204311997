@@ -522,7 +522,7 @@
             // likedPagesBindingSource
             // 
             this.likedPagesBindingSource.DataMember = "LikedPages";
-            this.likedPagesBindingSource.DataSource = this.friendsBindingSource;
+            this.likedPagesBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.User);
             // 
             // friendsBindingSource
             // 
@@ -700,6 +700,7 @@
             // 
             // flowLayoutPanelAboutMeFriends
             // 
+            this.flowLayoutPanelAboutMeFriends.AutoScroll = true;
             this.flowLayoutPanelAboutMeFriends.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanelAboutMeFriends.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelAboutMeFriends.Name = "flowLayoutPanelAboutMeFriends";

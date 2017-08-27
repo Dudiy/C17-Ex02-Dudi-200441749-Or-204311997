@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapter\IFacebookCollection.cs" />
     <Compile Include="AlbumsSelector.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +61,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="DataTables\eFacebookDataTableType.cs" />
     <Compile Include="DataTables\FacebookDataTableFactory.cs" />
+    <Compile Include="Adapter\FacebookCollectionAdapter.cs" />
     <Compile Include="FacebookDataFetcher.cs" />
     <Compile Include="FacebookPhotoUtils.cs" />
     <Compile Include="FacebookApplication.cs" />

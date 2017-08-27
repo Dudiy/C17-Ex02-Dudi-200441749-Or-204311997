@@ -100,7 +100,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 // TODO doesn't work without thread
                 //new Thread(initLastPost).Start();
                 initPostTags();
-                
+
             }
             catch
             {
@@ -109,13 +109,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             listBoxPostLiked.MouseDoubleClick += ListBoxPostLiked_MouseDoubleClick;
             listBoxPostComment.MouseDoubleClick += ListBoxPostComment_MouseDoubleClick;
-            listBoxPostTags.Invoke(new Action(()=>listBoxPostTags.ClearSelected()));
+            listBoxPostTags.Invoke(new Action(() => listBoxPostTags.ClearSelected()));
         }
 
         private void initLikedPages()
         {
-            FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
-
+            FacebookObjectCollection<Page> likedPages = new FacebookCollectionAdapter<Page>(FacebookApplication.LoggedInUser.LikedPages).FetchDataWithProgressBar();
             listBoxLikedPage.Invoke(new Action(() => likedPagesBindingSource.DataSource = likedPages));
         }
 
@@ -124,11 +123,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             FacebookObjectCollection<User> friends = FacebookApplication.LoggedInUser.Friends;
 
             listBoxPostTags.Invoke(new Action(() => friendsBindingSource.DataSource = friends));
-        }
-
-        private void LikedPages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private void updateAboutMeFriends()
@@ -298,8 +292,10 @@ i_Comment.Message);
 
         private void buttonRefreshLikedPage_Click(object sender, EventArgs e)
         {
-            FacebookApplication.LoggedInUser.ReFetch();
-            likedPagesBindingSource.DataSource = FacebookApplication.LoggedInUser.LikedPages;
+            FacebookObjectCollection<Page> list = new FacebookCollectionAdapter<Page>(FacebookApplication.LoggedInUser.LikedPages)
+                .FetchDataWithProgressBar();
+
+            likedPagesBindingSource.DataSource = list;
             listBoxLikedPage.ClearSelected();
         }
 
