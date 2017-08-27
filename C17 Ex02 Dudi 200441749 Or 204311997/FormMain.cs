@@ -92,13 +92,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
-                Action action = new Action(() => { likedPagesBindingSource.DataSource = likedPages; });
-                //listBoxLikedPage.Invoke(new Action(
-                //    () =>
-                //    {
-
-                //    }));
+                FacebookApplication.LoggedInUser.LikedPages.CollectionChanged += (sender, e) => MessageBox.Show("Test");
+                FacebookObjectCollection<Page> likedPages;
+                likedPages = FacebookApplication.LoggedInUser.LikedPages;
+                Thread.Sleep(5000);
+                Action action = new Action(() => likedPagesBindingSource.DataSource = likedPages);
                 listBoxLikedPage.Invoke(action);
                 new Thread(updateAboutMeFriends).Start();
                 new Thread(initLastPost).Start();
@@ -113,6 +111,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             listBoxPostLiked.MouseDoubleClick += ListBoxPostLiked_MouseDoubleClick;
             listBoxPostComment.MouseDoubleClick += ListBoxPostComment_MouseDoubleClick;
             //listBoxPostTags.ClearSelected();
+        }
+
+        private void LikedPages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void updateAboutMeFriends()
