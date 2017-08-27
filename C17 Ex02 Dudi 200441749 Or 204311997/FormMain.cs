@@ -96,9 +96,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 updateAboutMeFriends();
                 initLikedPages();
-                //initLastPost();
+                initLastPost();
                 // TODO doesn't work without thread
-                new Thread(initLastPost).Start();
+                //new Thread(initLastPost).Start();
                 initPostTags();
                 
             }
@@ -197,7 +197,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }));
             if (myLastPosts != null && myLastPosts.PictureURL != null)
             {
-                pictureBoxLastPost.LoadAsync(myLastPosts.PictureURL);
+                pictureBoxLastPost.Load(myLastPosts.PictureURL);
                 listBoxPostLiked.DisplayMember = "Name";
                 foreach (User friendWhoLiked in myLastPosts.LikedBy)
                 {
