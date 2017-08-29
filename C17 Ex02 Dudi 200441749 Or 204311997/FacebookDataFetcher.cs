@@ -17,23 +17,23 @@
 //        {
 //            object returnedObject = new object();
 
-//            try
-//            {
-//                if (i_ProgressOfFetchData.MoveNext())
-//                {
-//                    Tuple<int, int, object> progressBarValue = i_ProgressOfFetchData.Current;
-//                    ProgressBarWindow progressBarWindow = new ProgressBarWindow(progressBarValue.Item1, progressBarValue.Item2, i_Title);
+            try
+            {
+                if (i_ProgressOfFetchData.MoveNext())
+                {
+                    Tuple<int, int, object> progressBarValue = i_ProgressOfFetchData.Current;
+                    ProgressBarWindow progressBarWindow = new ProgressBarWindow(progressBarValue.Item1, progressBarValue.Item2, i_Title);
 
-//                    progressBarWindow.StartPosition = FormStartPosition.CenterScreen;
-//                    progressBarWindow.Show();
-//                    while (i_ProgressOfFetchData.MoveNext())
-//                    {
-//                        progressBarValue = i_ProgressOfFetchData.Current;
-//                        if (progressBarValue.Item1 < progressBarValue.Item2)
-//                        {
-//                            progressBarWindow.ProgressValue++;
-//                        }
-//                    }
+                    progressBarWindow.StartPosition = FormStartPosition.CenterScreen;
+                    progressBarWindow.Show();
+                    while (i_ProgressOfFetchData.MoveNext())
+                    {
+                        progressBarValue = i_ProgressOfFetchData.Current;
+                        if (progressBarValue.Item1 < progressBarValue.Item2)
+                        {
+                            progressBarWindow.ProgressValue++;
+                        }
+                    }
 
 //                    progressBarWindow.Close();
 //                    returnedObject = progressBarValue.Item3;
