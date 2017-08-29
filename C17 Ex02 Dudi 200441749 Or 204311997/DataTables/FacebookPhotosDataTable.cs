@@ -17,7 +17,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
     {
         private Thread populateRowsThread;
 
-        private bool abortSelected;
+        private bool abortRunningThread;
         public Album[] AlbumsToLoad { get; set; }
         internal FacebookPhotosDataTable()
             : base("Photos", typeof(Photo))
@@ -39,13 +39,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            if (populateRowsThread != null && populateRowsThread.IsAlive)
-            {
-                abortSelected = true;
-            }
-
+            this.abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;
             DataTable.Rows.Clear();
-            getTotalPhotos();
+            TotalRows = i_Collection.Count;
 
             if (PopulateRowsStarting != null)
             {
@@ -76,9 +72,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                             photoTags);
                     }
 
-                    if (abortSelected)
+                    if (this.abortRunningThread)
                     {
-                        abortSelected = false;
+                        this.abortRunningThread = false;
                         break;
                     }
                 }
