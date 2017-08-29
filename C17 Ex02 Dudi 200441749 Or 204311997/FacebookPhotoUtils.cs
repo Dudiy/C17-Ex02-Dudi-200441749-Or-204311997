@@ -76,11 +76,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         //    return photos;
         //}
 
-        //Dictionary<Album, List<Photo>> 
-        public static IEnumerable<Tuple<int, int, object>> GetPhotosByOwnerAndTags(User i_User, User i_Tagged, Album[] albums)
+        // 
+        public static Dictionary<Album, List<Photo>> GetPhotosByOwnerAndTags(User i_User, User i_Tagged, Album[] albums)
         {
             Dictionary<Album, List<Photo>> photos = new Dictionary<Album, List<Photo>>();
-            int currPhoto = 0;
             int photosToSearch;
 
             if (albums.Length > 0)
@@ -92,8 +91,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     List<Photo> photosInAlbum = new List<Photo>();
                     foreach (Photo photo in album.Photos)
                     {
-                        yield return Tuple.Create<int, int, object>(currPhoto, photosToSearch, photos);
-
                         if (photo.Tags != null)
                         {
                             foreach (PhotoTag tag in photo.Tags)
@@ -114,7 +111,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 }
             }
 
-            yield return Tuple.Create<int, int, object>(1, 1, photos);
+            return photos;
         }
     }
 }

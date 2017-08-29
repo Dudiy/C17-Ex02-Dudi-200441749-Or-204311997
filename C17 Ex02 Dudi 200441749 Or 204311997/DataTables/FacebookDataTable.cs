@@ -27,7 +27,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             m_ObjectTypeRepresentedByRow = i_ObjectTypeRepresentedByRow;
             DataTable = new DataTable(i_TableName);
-            // all tables initialy have a column that holds the current row object displayed
+            // all tables initially have a column that holds the current row object displayed
             DataTable.Columns.Add("ObjectDisplayed", typeof(object));
             InitColumns();
         }

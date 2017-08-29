@@ -17,31 +17,28 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private User m_LoggedInUser = FacebookApplication.LoggedInUser;
         public User Friend { get; set; }
 
-        public IEnumerable<Tuple<int, int, object>> FetchPhotosTaggedTogether()
+        public List<Photo> PhotosTaggedTogether(FacebookObjectCollection<Photo> i_PhotosTaggedIn)
         {
-            List<Photo> photos = new List<Photo>();
-            int currTag = 0;
-            int totalTag = m_LoggedInUser.PhotosTaggedIn.Count;
+            List<Photo> photosTaggedTogether = new List<Photo>();
 
-            foreach (Photo photo in m_LoggedInUser.PhotosTaggedIn)
+            foreach (Photo photo in photosTaggedTogether)
             {
-                yield return Tuple.Create(++currTag, totalTag, (object)photos);
-
                 if (photo.Tags != null)
                 {
                     foreach (PhotoTag tag in photo.Tags)
                     {
                         if (tag.User.Id == Friend.Id)
                         {
-                            photos.Add(photo);
+                            photosTaggedTogether.Add(photo);
                             break;
                         }
                     }
                 }
             }
 
-            photos.OrderBy(photo => photo.CreatedTime);
-            yield return Tuple.Create(1, 1, (object)photos);
+            photosTaggedTogether.OrderBy(photo => photo.CreatedTime);
+
+            return photosTaggedTogether;
         }
 
         public Dictionary<string, List<Photo>> GroupPhotoListByOwner(List<Photo> i_Photos)
@@ -70,59 +67,42 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return i_PhotosTaggedTogether.Count > 0 ? i_PhotosTaggedTogether[0] : null;
         }
 
-        public IEnumerable<Tuple<int, int, object>> GetNumberOfPhotosFriendLiked()
+        public int GetNumberOfPhotosFriendLiked(FacebookObjectCollection<Photo> i_Photos)
         {
             int numLikes = 0;
-            int currPhoto = 0;
-            Album[] allUserAlbums = FacebookPhotoUtils.GetAllUserAlbumsAsArray();
-            int totalPhotos = FacebookPhotoUtils.GetTotalPhotosInAlbumArray(allUserAlbums);
 
-            foreach (Album album in allUserAlbums)
+            foreach (Photo photo in i_Photos)
             {
-                foreach (Photo photo in album.Photos)
+                foreach (User user in photo.LikedBy)
                 {
-                    yield return Tuple.Create(++currPhoto, totalPhotos, (object)numLikes);
-
-                    foreach (User user in photo.LikedBy)
+                    if (user.Id == Friend.Id)
                     {
-                        if (user.Id == Friend.Id)
-                        {
-                            numLikes++;
-                            break;
-                        }
+                        numLikes++;
+                        break;
                     }
                 }
             }
 
-            yield return Tuple.Create(1, 1, (object)numLikes);
+            return numLikes;
         }
 
-        public IEnumerable<Tuple<int, int, object>> GetNumberOfPhotosFriendCommented()
+        public int GetNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos)
         {
-            Album[] allUserAlbums = FacebookPhotoUtils.GetAllUserAlbumsAsArray();
-            int totalPhotos = FacebookPhotoUtils.GetTotalPhotosInAlbumArray(allUserAlbums);
-            int currPhoto = 0;
             int numComments = 0;
 
-            foreach (Album album in m_LoggedInUser.Albums)
+            foreach (Photo photo in i_Photos)
             {
-                foreach (Photo photo in album.Photos)
+                foreach (Comment comment in photo.Comments)
                 {
-                    foreach (Comment comment in photo.Comments)
+                    if (comment.From.Id == Friend.Id)
                     {
-                        yield return Tuple.Create(++currPhoto, totalPhotos, (object)numComments);
-
-                        if (comment.From.Id == Friend.Id)
-                        {
-                            numComments++;
-                            break;
-                        }
+                        numComments++;
+                        break;
                     }
                 }
             }
 
-            // if no comments are found
-            yield return Tuple.Create(1, 1, (object)numComments);
+            return numComments;
         }
     }
 }

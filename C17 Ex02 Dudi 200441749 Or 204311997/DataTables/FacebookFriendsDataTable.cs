@@ -21,27 +21,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
         }
 
-        //public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
-        //{
-        //    int currRow = 0;
-
-        //    TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
-        //    //add rows
-        //    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
-        //    {
-        //        yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
-
-        //        DataTable.Rows.Add(
-        //            friend,
-        //            friend.FirstName,
-        //            friend.LastName,
-        //            friend.Gender != null ? friend.Gender.ToString() : string.Empty,
-        //            getMostRecentPost(friend));
-        //    }
-
-        //    // if the user has no friends :(
-        //    yield return Tuple.Create<int, int, object>(1, 1, null);
-        //}
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
             TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
@@ -54,7 +33,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             {
                 if (DataTable.Rows.Count == 0)
                 {
-                    //FacebookObjectCollection<User> friendsList = new FacebookCollectionAdapter<User>(Adapter.eFacebookCollectionType.Friends).FetchDataWithProgressBar();
                     new Thread(() => populateRows(i_Collection)).Start();
                 }
 
@@ -74,7 +52,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     friend.FirstName,
                     friend.LastName,
                     friend.Gender != null ? friend.Gender.ToString() : string.Empty);
-                //getMostRecentPost(friend));
 
                 if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
                 {
@@ -88,25 +65,24 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             DataTable.Columns.Add("First Name", typeof(string));
             DataTable.Columns.Add("Last Name", typeof(string));
             DataTable.Columns.Add("Gender", typeof(string));
-            //DataTable.Columns.Add("Most Recent Post", typeof(string));
-        }
-
-        private string getMostRecentPost(User i_User)
-        {
-            StringBuilder mostRecentPostStr = new StringBuilder();
-
-            if (i_User != null && i_User.Posts[0] != null)
-            {
-                Post mostRecentPost = i_User.Posts[0];
-
-                mostRecentPostStr.Append(mostRecentPost.CreatedTime);
-                if (!string.IsNullOrEmpty(mostRecentPost.Message))
-                {
-                    mostRecentPostStr.Append(string.Format(" - {0}", mostRecentPost.Message));
-                }
-            }
-
-            return mostRecentPostStr.ToString();
         }
     }
 }
+
+        //private string getMostRecentPost(User i_User)
+        //{
+        //    StringBuilder mostRecentPostStr = new StringBuilder();
+
+        //    if (i_User != null && i_User.Posts[0] != null)
+        //    {
+        //        Post mostRecentPost = i_User.Posts[0];
+
+        //        mostRecentPostStr.Append(mostRecentPost.CreatedTime);
+        //        if (!string.IsNullOrEmpty(mostRecentPost.Message))
+        //        {
+        //            mostRecentPostStr.Append(string.Format(" - {0}", mostRecentPost.Message));
+        //        }
+        //    }
+
+        //    return mostRecentPostStr.ToString();
+        //}

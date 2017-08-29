@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
 using C17_Ex01_Dudi_200441749_Or_204311997.DataTables;
 using System.Threading;
+using C17_Ex01_Dudi_200441749_Or_204311997.Adapter;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
@@ -294,7 +295,7 @@ i_Comment.Message);
             FacebookCollectionAdapter<Page> collectionAdapter = new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages);
             FacebookObjectCollection<FacebookObject> list = collectionAdapter.FetchDataWithProgressBar();
 
-            likedPagesBindingSource.DataSource = collectionAdapter.unboxCollection(list);
+            likedPagesBindingSource.DataSource = collectionAdapter.UnboxCollection(list);
         }
 
         private void buttonPost_Click(object sender, EventArgs e)
@@ -390,7 +391,7 @@ i_Comment.Message);
                 {
                     Post postedItem = FacebookApplication.LoggedInUser.PostPhoto(m_PostPicturePath, i_Title: richTextBoxPostPhoto.Text);
 
-                    MessageBox.Show("The photo was succesfully posted!");
+                    MessageBox.Show("The photo was successfully posted!");
                     richTextBoxPostPhoto.Clear();
                     refreshLastPost();
                 }
@@ -496,7 +497,7 @@ i_Comment.Message);
             if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
             {
                 AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-                FacebookCollectionAdapter<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.MyPhotos);
+                FacebookCollectionAdapter<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.MyAlbumPhotos);
                 myPhotosAdapter.AlbumsToLoad = albumSelector.GetAlbumsSelection();
                 collection = myPhotosAdapter.FetchDataWithProgressBar();
             }
@@ -595,9 +596,12 @@ i_Comment.Message);
 
         private void fetchPhotosTaggedTogether()
         {
-            IEnumerator<Tuple<int, int, object>> i_ProgressOfFetchData = m_FriendshipAnalyzer.FetchPhotosTaggedTogether().GetEnumerator();
-            List<Photo> taggedTogether = (List<Photo>)FacebookDataFetcher.FetchDataWithProgressBar(i_ProgressOfFetchData, "Photos tagged together");
-            Dictionary<string, List<Photo>> photosGroupedByOwner = m_FriendshipAnalyzer.GroupPhotoListByOwner(taggedTogether);
+            // TODO was big change
+            FacebookCollectionAdapter<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
+            FacebookObjectCollection<FacebookObject> boxPhotosTaggedIn = photosTaggedInAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> photosTaggedIn = photosTaggedInAdapter.UnboxCollection(boxPhotosTaggedIn);
+            List<Photo> photosTaggedTogether = m_FriendshipAnalyzer.PhotosTaggedTogether(photosTaggedIn);
+            Dictionary<string, List<Photo>> photosGroupedByOwner = m_FriendshipAnalyzer.GroupPhotoListByOwner(photosTaggedTogether);
 
             treeViewTaggedTogether.Nodes.Clear();
             foreach (KeyValuePair<string, List<Photo>> UserPhotos in photosGroupedByOwner)
@@ -624,10 +628,16 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name));
         {
             AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
             Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
-            IEnumerator<Tuple<int, int, object>> progressOfFetchData = FacebookPhotoUtils.GetPhotosByOwnerAndTags(
-                FacebookApplication.LoggedInUser, m_FriendshipAnalyzer.Friend, selectedAlbums).GetEnumerator();
-            Dictionary<Album, List<Photo>> photos = (Dictionary<Album, List<Photo>>)
-                FacebookDataFetcher.FetchDataWithProgressBar(progressOfFetchData, "photos");
+            FacebookCollectionAdapter<Photo> albumPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.MyAlbumPhotos)
+            {
+                AlbumsToLoad = selectedAlbums
+            };
+
+            FacebookObjectCollection<FacebookObject> boxAlbumPhotosTaggedIn = albumPhotosAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> albumPhotos = albumPhotosAdapter.UnboxCollection(boxAlbumPhotosTaggedIn);
+            // TODO check if use cache
+            Dictionary<Album, List<Photo>> photos = FacebookPhotoUtils.GetPhotosByOwnerAndTags(
+                FacebookApplication.LoggedInUser, m_FriendshipAnalyzer.Friend, selectedAlbums);
 
             treeViewPhotosOfFriendInMyPhotos.Nodes.Clear();
             if (photos == null || photos.Count == 0)
@@ -660,10 +670,16 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
         {
             AlbumsSelector albumSelector = new AlbumsSelector(m_FriendshipAnalyzer.Friend);
             Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
-            IEnumerator<Tuple<int, int, object>> progressOfFetchData = FacebookPhotoUtils.GetPhotosByOwnerAndTags(
-                m_FriendshipAnalyzer.Friend, FacebookApplication.LoggedInUser, selectedAlbums).GetEnumerator();
-            Dictionary<Album, List<Photo>> photos = (Dictionary<Album, List<Photo>>)
-                FacebookDataFetcher.FetchDataWithProgressBar(progressOfFetchData, "photos by owner and tags");
+            FacebookCollectionAdapter<Photo> albumPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.MyAlbumPhotos)
+            {
+                AlbumsToLoad = selectedAlbums
+            };
+
+            FacebookObjectCollection<FacebookObject> boxAlbumPhotosTaggedIn = albumPhotosAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> albumPhotos = albumPhotosAdapter.UnboxCollection(boxAlbumPhotosTaggedIn);
+            // TODO check if use cache
+            Dictionary<Album, List<Photo>> photos = FacebookPhotoUtils.GetPhotosByOwnerAndTags(
+                m_FriendshipAnalyzer.Friend, FacebookApplication.LoggedInUser, selectedAlbums);
 
             treeViewPhotosOfFriendIAmTaggedIn.Nodes.Clear();
             if (photos == null || photos.Count == 0)
@@ -834,21 +850,31 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
 
         private void friendshipAnalyzerFetchGeneralData()
         {
-            IEnumerator<Tuple<int, int, object>> progressOfFetchData;
+            Album[] selectedAlbums = FacebookPhotoUtils.GetAllUserAlbumsAsArray();
+            FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.MyAlbumPhotos);
+            FacebookObjectCollection<FacebookObject> boxAllPhotosTaggedIn = allPhotosAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
+            // TODO check if use cache
             int numPhotosFriendLiked, numOfPhotosFriendCommented;
 
             // count likes
-            progressOfFetchData = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked().GetEnumerator();
-            numPhotosFriendLiked = (int)FacebookDataFetcher.FetchDataWithProgressBar(progressOfFetchData, "likes");
+            numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos);
             labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numPhotosFriendLiked);
             // count comments
-            progressOfFetchData = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented().GetEnumerator();
-            numOfPhotosFriendCommented = (int)FacebookDataFetcher.FetchDataWithProgressBar(progressOfFetchData, "comments");
+            numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos);
             labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numOfPhotosFriendCommented);
             // get most recent tagged together
-            progressOfFetchData = m_FriendshipAnalyzer.FetchPhotosTaggedTogether().GetEnumerator();
-            List<Photo> taggedTogether = (List<Photo>)FacebookDataFetcher.FetchDataWithProgressBar(progressOfFetchData, "photos tagged together");
-            Photo mostRecentTaggedTogether = m_FriendshipAnalyzer.GetMostRecentPhotoTaggedTogether(taggedTogether);
+            getMostRecentPhotoTogether();
+        }
+
+        private void getMostRecentPhotoTogether()
+        {
+            FacebookCollectionAdapter<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
+            FacebookObjectCollection<FacebookObject> boxPhotosTaggedIn = photosTaggedInAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> photosTaggedIn = photosTaggedInAdapter.UnboxCollection(boxPhotosTaggedIn);
+            List<Photo> photosTaggedTogether = m_FriendshipAnalyzer.PhotosTaggedTogether(photosTaggedIn);
+            Photo mostRecentTaggedTogether = m_FriendshipAnalyzer.GetMostRecentPhotoTaggedTogether(photosTaggedTogether);
+
             if (mostRecentTaggedTogether != null)
             {
                 pictureBoxMostRecentTaggedTogether.LoadAsync(mostRecentTaggedTogether.PictureNormalURL);

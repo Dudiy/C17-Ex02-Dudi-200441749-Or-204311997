@@ -10,6 +10,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     class FacebookCollectionAdapter<T> : IFacebookCollection<T>
         where T : class
     {
+        // TODO like event ? no m_ ?
         private Func<FacebookObjectCollection<FacebookObject>> m_FetchDataDelegate;
         public Album[] AlbumsToLoad { get; set; }
 
@@ -18,15 +19,16 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             switch (i_CollectionType)
             {
                 case eFacebookCollectionType.Friends:
-                    m_FetchDataDelegate = new Func<FacebookObjectCollection<FacebookObject>>(() => fetchFriends());
+                    m_FetchDataDelegate = fetchFriends;
                     break;
                 case eFacebookCollectionType.LikedPages:
-                    m_FetchDataDelegate = new Func<FacebookObjectCollection<FacebookObject>>(() => fetchLikedPages());
+                    m_FetchDataDelegate = fetchLikedPages;
                     break;
-                case eFacebookCollectionType.MyPhotos:
-                    m_FetchDataDelegate = new Func<FacebookObjectCollection<FacebookObject>>(() => fetchMyPhotos());
+                case eFacebookCollectionType.MyAlbumPhotos:
+                    m_FetchDataDelegate = fetchMyPhotos;
                     break;
-                default:
+                case eFacebookCollectionType.PhotosTaggedIn:
+                    m_FetchDataDelegate = fetchPhotosTaggedIn;
                     break;
             }
         }
@@ -36,12 +38,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return m_FetchDataDelegate.Invoke();
         }
 
-        public FacebookObjectCollection<T> unboxCollection(FacebookObjectCollection<FacebookObject> i_Collection)
+        public FacebookObjectCollection<T> UnboxCollection(FacebookObjectCollection<FacebookObject> i_Collection)
         {
             FacebookObjectCollection<T> returnedList = new FacebookObjectCollection<T>();
+
             foreach (FacebookObject facebookObject in i_Collection)
             {
                 T converted = facebookObject as T;
+
                 if (converted != null)
                 {
                     returnedList.Add(converted);
@@ -50,6 +54,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             return returnedList;
         }
+
         // =================================== Friends =====================================
         //public FacebookCollectionAdapter(FacebookObjectCollection<User> i_FriendsCollection)
         //{            
@@ -99,10 +104,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return likedPagesList;
         }
 
+        // =================================== Photos =====================================
         private FacebookObjectCollection<FacebookObject> fetchMyPhotos()
         {
             FacebookObjectCollection<FacebookObject> myPhotosList = new FacebookObjectCollection<FacebookObject>();
             ProgressBarWindow progressBarWindow = new ProgressBarWindow("my photos");
+
             if (AlbumsToLoad == null)
             {
                 AlbumsToLoad = FacebookApplication.LoggedInUser.Albums.ToArray();
@@ -126,6 +133,24 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             progressBarWindow.Close();
 
             return myPhotosList;
+        }
+
+        private FacebookObjectCollection<FacebookObject> fetchPhotosTaggedIn()
+        {
+            FacebookObjectCollection<FacebookObject> photosTaggedIn = new FacebookObjectCollection<FacebookObject>();
+            ProgressBarWindow progressBarWindow = new ProgressBarWindow("Photos tagged in");
+
+            progressBarWindow.MaxValue = FacebookApplication.LoggedInUser.PhotosTaggedIn.Count;
+            progressBarWindow.Show();
+            foreach (Photo photo in FacebookApplication.LoggedInUser.PhotosTaggedIn)
+            {
+                photosTaggedIn.Add(photo);
+                progressBarWindow.ProgressValue++;
+            }
+
+            progressBarWindow.Close();
+
+            return photosTaggedIn;
         }
     }
 }

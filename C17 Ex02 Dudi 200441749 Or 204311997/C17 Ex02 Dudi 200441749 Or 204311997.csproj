@@ -159,12 +159,6 @@
     <None Include="Resources\Login.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MainFormBackground.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AboutMeBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\LoadingPhoto.jpg" />
   </ItemGroup>
   <ItemGroup>

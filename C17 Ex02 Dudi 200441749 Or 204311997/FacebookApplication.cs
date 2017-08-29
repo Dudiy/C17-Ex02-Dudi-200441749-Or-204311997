@@ -41,7 +41,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             exitApplication();
         }
 
-        // used as a method to call after successfuly invoking FacebookService.Logout
+        // used as a method to call after successfully invoking FacebookService.Logout
         public static void Logout()
         {
             FacebookService.Logout(logoutSuccessful);
