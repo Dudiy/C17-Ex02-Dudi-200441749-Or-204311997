@@ -46,7 +46,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             MinimumSize = sr_MinimumWindowSize;
             new Thread(fetchProfileAndCoverPhotos).Start(); ;
             initAboutMeTab();
-            new Thread(initDataTablesTab).Start();
         }
 
         private void fetchProfileAndCoverPhotos()
@@ -447,15 +446,14 @@ i_Comment.Message);
             {
                 dataGridView.DataSource = null;
                 m_DataTableBindedToView = (FacebookDataTable)comboBoxDataTableBindingSelection.SelectedItem;
-                //m_DataTableBindedToView.DataTable.Rows.Clear();
-                FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
-                m_DataTableBindedToView.PopulateRowsStarting += new Action(startingDataTablePopulation);
-                //m_DataTableBindedToView.RowInserted += new Action(updateToolstripProgressBar);
-                m_DataTableBindedToView.PopulateRowsCompleted += new Action(FinishedDataTablePopulation);
-                toolStripProgressBar.ProgressBar.Visible = true;
-                m_DataTableBindedToView.PopulateRows(collection);
-                //FacebookDataFetcher.FetchDataWithProgressBar(m_DataTableBindedToView.FetchDataTableValues().GetEnumerator(), m_DataTableBindedToView.TableName);
                 dataGridView.DataSource = m_DataTableBindedToView.DataTable;
+                if (m_DataTableBindedToView.DataTable.Rows.Count == 0 || m_DataTableBindedToView is FacebookPhotosDataTable)
+                {
+                    FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
+                    this.m_DataTableBindedToView.PopulateRowsCompleted += () => dataGridView.Invoke(new Action(refreshDataGridView));
+                    m_DataTableBindedToView.PopulateRows(collection);
+                }
+
                 if (dataGridView.Columns["ObjectDisplayed"] != null)
                 {
                     dataGridView.Columns["ObjectDisplayed"].Visible = false;
@@ -465,8 +463,6 @@ i_Comment.Message);
                 {
                     MessageBox.Show("The requested table could not be loaded, please try again");
                 }
-
-
             }
         }
 
@@ -485,7 +481,6 @@ i_Comment.Message);
             {
                 toolStripProgressBar.ProgressBar.Visible = true;
                 toolStripProgressBar.Maximum = m_DataTableBindedToView.TotalRows;
-                toolStripProgressBar.Value = m_DataTableBindedToView.DataTable.Rows.Count;
             }));
         }
 
@@ -796,9 +791,7 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
 
         private void pictureBoxMostRecentTaggedTogether_MouseClick(object sender, MouseEventArgs e)
         {
-            Photo photo = ((PictureBox)sender).Tag as Photo;
-
-            if (photo != null)
+            if (((PictureBox)sender).Tag is Photo photo)
             {
                 PhotoDetails photoDetails = new PhotoDetails(photo);
 
@@ -813,17 +806,17 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
 
         private void pictureBoxMostRecentTaggedTogether_MouseHover(object sender, EventArgs e)
         {
-            if (sender is PictureBox)
+            if (sender is PictureBox pictureBox)
             {
-                increasePictureBoxSize(sender as PictureBox, k_PictureBoxIncreaseSizeOnMouseHover);
+                increasePictureBoxSize(pictureBox, k_PictureBoxIncreaseSizeOnMouseHover);
             }
         }
 
         private void pictureBoxMostRecentTaggedTogether_MouseLeave(object sender, EventArgs e)
         {
-            if (sender is PictureBox)
+            if (sender is PictureBox pictureBox)
             {
-                increasePictureBoxSize(sender as PictureBox, -k_PictureBoxIncreaseSizeOnMouseHover);
+                increasePictureBoxSize(pictureBox, -k_PictureBoxIncreaseSizeOnMouseHover);
             }
         }
 
@@ -867,6 +860,21 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             {
                 initFriendshipAnalyzerTab();
             }
+        }
+
+        private void buttonRefresDataGridView_Click(object sender, EventArgs e)
+        {
+            refreshDataGridView();
+        }
+
+        private void refreshDataGridView()
+        {
+            toolStripStatusLabel.Visible = true;
+            dataGridView.Refresh();
+            int totalRows = m_DataTableBindedToView.TotalRows;
+            int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
+            toolStripStatusLabel.Text = totalRows == loadedRows ?
+                "All rows loaded" : string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
         }
     }
 }

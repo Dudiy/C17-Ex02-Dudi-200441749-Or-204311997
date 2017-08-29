@@ -22,8 +22,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 if (i_ProgressOfFetchData.MoveNext())
                 {
                     Tuple<int, int, object> progressBarValue = i_ProgressOfFetchData.Current;
-                    ProgressBarWindow progressBarWindow = new ProgressBarWindow(progressBarValue.Item1, progressBarValue.Item2, i_Title);
-
+                    ProgressBarWindow progressBarWindow = new ProgressBarWindow(progressBarValue.Item2, i_Title);
+                    
                     progressBarWindow.StartPosition = FormStartPosition.CenterScreen;
                     progressBarWindow.Show();
                     while (i_ProgressOfFetchData.MoveNext())

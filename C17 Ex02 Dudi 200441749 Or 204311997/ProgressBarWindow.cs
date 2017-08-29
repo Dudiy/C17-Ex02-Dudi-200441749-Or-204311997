@@ -10,18 +10,20 @@ using System.Windows.Forms;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+    using System.Threading;
+
     public partial class ProgressBarWindow : Form
     {
-        public ProgressBarWindow(int i_MinValue, int i_MaxValue, string i_Description)
+        public ProgressBarWindow(int i_MaxValue, string i_Description)
         {
             InitializeComponent();
-            progressBar.Minimum = i_MinValue;
+            progressBar.Minimum = 0;
             progressBar.Maximum = i_MaxValue;
-            labelLoading.Text = string.Format("Loading {0}...", i_Description);
+            labelLoading.Text = string.Format("Loading {0}...", i_Description);            
         }
 
         public ProgressBarWindow(string i_Description)
-            : this(0, 0, i_Description)
+            : this(0, i_Description)
         {
         }
 
@@ -50,6 +52,6 @@ progressBar.Minimum,
 progressBar.Maximum));
                 }
             }
-        }
+        }        
     }
 }

@@ -12,35 +12,16 @@ using System.Threading;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
+    using System.Windows.Forms;
+
+    using Timer = System.Threading.Timer;
+
     public class FacebookLikedPagesDataTable : FacebookDataTable
     {
         internal FacebookLikedPagesDataTable()
             : base("Liked Pages", typeof(Page))
         {
         }
-
-        //public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
-        //{
-        //    int currRow = 0;
-
-        //    TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
-        //    //add rows
-        //    foreach (Page page in FacebookApplication.LoggedInUser.LikedPages)
-        //    {
-        //        yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
-
-        //        DataTable.Rows.Add(
-        //            page,
-        //            page.Name,
-        //            page.Phone,
-        //            page.Category,
-        //            page.Description,
-        //            page.Website);
-        //    }
-
-        //    // if the user has no liked pages
-        //    yield return Tuple.Create<int, int, object>(1, 1, null);
-        //}
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
@@ -64,18 +45,21 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
             lock (m_PopulateRowsLock)
             {
-                foreach (Page page in likedPages)
+                foreach (FacebookObject facebookObject in likedPages)
                 {
-                    DataTable.Rows.Add(
-                        page,
-                        page.Name,
-                        page.Phone,
-                        page.Category,
-                        page.Description,
-                        page.Website);
-                    if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                    if (facebookObject is Page page)
                     {
-                        TenRowsInserted.Invoke();
+                        DataTable.Rows.Add(
+                            page,
+                            page.Name,
+                            page.Phone,
+                            page.Category,
+                            page.Description,
+                            page.Website);
+                        if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                        {
+                            TenRowsInserted.Invoke();
+                        }
                     }
                 }
 

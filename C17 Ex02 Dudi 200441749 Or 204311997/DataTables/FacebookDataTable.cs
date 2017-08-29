@@ -12,6 +12,8 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+    using System.Threading;
+
     public abstract class FacebookDataTable : IDisplayable
     {
         public Action PopulateRowsStarting;
@@ -40,6 +42,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         // using yield, the user of this method can know the fetch progression status (numbers of fetched item, total items, return value)
         //public abstract IEnumerable<Tuple<int, int, object>> FetchDataTableValues();
 
+        // adds all FacebookObjects of the given collection that are of type T to the data table rows
         public abstract void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection);
 
         protected abstract void InitColumns();

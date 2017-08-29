@@ -35,40 +35,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             }
         }
 
-        //public override IEnumerable<Tuple<int, int, object>> FetchDataTableValues()
-        //{
-        //    int currRow = 0;
-
-        //    DataTable.Clear();
-        //    TotalRows = 0;
-        //    //add rows
-        //    if (AlbumsToLoad.Length > 0)
-        //    {
-        //        TotalRows = FacebookPhotoUtils.GetTotalPhotosInAlbumArray(AlbumsToLoad);
-
-        //        foreach (Album album in AlbumsToLoad)
-        //        {
-        //            foreach (Photo photo in album.Photos)
-        //            {
-        //                yield return Tuple.Create<int, int, object>(++currRow, TotalRows, null);
-
-        //                string photoTags = buildTagsString(photo);
-
-        //                DataTable.Rows.Add(
-        //                    photo,
-        //                    photo.Album.Name,
-        //                    photo.CreatedTime,
-        //                    photo.LikedBy != null ? photo.LikedBy.Count : 0,
-        //                    photo.Comments != null ? photo.Comments.Count : 0,
-        //                    buildTagsString(photo));
-        //            }
-        //        }
-        //    }
-
-        //    // if the user has no albums
-        //    yield return Tuple.Create<int, int, object>(1, 1, null);
-        //}
-
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
             DataTable.Rows.Clear();
@@ -83,34 +49,32 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             {
                 if (DataTable.Rows.Count == 0)
                 {
-                    //FacebookObjectCollection<Photo> myPhotos = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.MyPhotos).FetchDataWithProgressBar();
                     new Thread(() => populateRows(i_Collection)).Start();
-                }
-
-                if (PopulateRowsCompleted != null)
-                {
-                    PopulateRowsCompleted.Invoke();
                 }
             }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> myPhotos)
         {
-            foreach (Photo photo in myPhotos)
+            foreach (FacebookObject facebookObject in myPhotos)
             {
-                string photoTags = buildTagsString(photo);
-
-                DataTable.Rows.Add(
-                    photo,
-                    photo.Album.Name,
-                    photo.CreatedTime,
-                    photo.LikedBy != null ? photo.LikedBy.Count : 0,
-                    photo.Comments != null ? photo.Comments.Count : 0,
-                    buildTagsString(photo));
-                if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                if (facebookObject is Photo photo)
                 {
-                    TenRowsInserted.Invoke();
+                    string photoTags = buildTagsString(photo);
+
+                    DataTable.Rows.Add(
+                        photo,
+                        photo.Album.Name,
+                        photo.CreatedTime,
+                        photo.LikedBy?.Count ?? 0,
+                        photo.Comments?.Count ?? 0,
+                        photoTags);
                 }
+
+            }
+            if (PopulateRowsCompleted != null)
+            {
+                PopulateRowsCompleted.Invoke();
             }
         }
 
