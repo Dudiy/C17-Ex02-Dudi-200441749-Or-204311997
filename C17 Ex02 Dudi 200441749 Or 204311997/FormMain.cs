@@ -493,7 +493,7 @@ i_Comment.Message);
             if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
             {
                 AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-                FacebookCollectionAdapter<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.MyAlbumPhotos);
+                FacebookCollectionAdapter<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.AlbumPhotos);
                 myPhotosAdapter.AlbumsToLoad = albumSelector.GetAlbumsSelection();
                 collection = myPhotosAdapter.FetchDataWithProgressBar();
             }
@@ -592,7 +592,6 @@ i_Comment.Message);
 
         private void fetchPhotosTaggedTogether()
         {
-            // TODO was big change
             FacebookCollectionAdapter<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
             FacebookObjectCollection<FacebookObject> boxPhotosTaggedIn = photosTaggedInAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Photo> photosTaggedIn = photosTaggedInAdapter.UnboxCollection(boxPhotosTaggedIn);
@@ -622,18 +621,9 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name));
 
         private void fetchPhotosOfFriendInMyPhotos()
         {
-            AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-            Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
-            FacebookCollectionAdapter<Photo> albumPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.MyAlbumPhotos)
-            {
-                AlbumsToLoad = selectedAlbums
-            };
-
-            FacebookObjectCollection<FacebookObject> boxAlbumPhotosTaggedIn = albumPhotosAdapter.FetchDataWithProgressBar();
-            FacebookObjectCollection<Photo> albumPhotos = albumPhotosAdapter.UnboxCollection(boxAlbumPhotosTaggedIn);
-            // TODO check if use cache
-            Dictionary<Album, List<Photo>> photos = FacebookPhotoUtils.GetPhotosByOwnerAndTags(
-                FacebookApplication.LoggedInUser, m_FriendshipAnalyzer.Friend, selectedAlbums);
+            FacebookObjectCollection<Album> albums = fetchAlbums();
+            Dictionary<Album, List<Photo>> photos = FriendshipAnalyzer.GetPhotosByOwnerAndTags(
+                FacebookApplication.LoggedInUser, m_FriendshipAnalyzer.Friend, albums);
 
             treeViewPhotosOfFriendInMyPhotos.Nodes.Clear();
             if (photos == null || photos.Count == 0)
@@ -662,20 +652,26 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
         }
 
-        private void fetchPhotosOfMeInFriendsPhotos()
+        private static FacebookObjectCollection<Album> fetchAlbums()
         {
-            AlbumsSelector albumSelector = new AlbumsSelector(m_FriendshipAnalyzer.Friend);
+            AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
             Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
-            FacebookCollectionAdapter<Photo> albumPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.MyAlbumPhotos)
+            FacebookCollectionAdapter<Album> albumsAdapter = new FacebookCollectionAdapter<Album>(eFacebookCollectionType.AlbumPhotos)
             {
                 AlbumsToLoad = selectedAlbums
             };
 
-            FacebookObjectCollection<FacebookObject> boxAlbumPhotosTaggedIn = albumPhotosAdapter.FetchDataWithProgressBar();
-            FacebookObjectCollection<Photo> albumPhotos = albumPhotosAdapter.UnboxCollection(boxAlbumPhotosTaggedIn);
-            // TODO check if use cache
-            Dictionary<Album, List<Photo>> photos = FacebookPhotoUtils.GetPhotosByOwnerAndTags(
-                m_FriendshipAnalyzer.Friend, FacebookApplication.LoggedInUser, selectedAlbums);
+            FacebookObjectCollection<FacebookObject> boxAlbumsTaggedIn = albumsAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Album> albums = albumsAdapter.UnboxCollection(boxAlbumsTaggedIn);
+
+            return albums;
+        }
+
+        private void fetchPhotosOfMeInFriendsPhotos()
+        {
+            FacebookObjectCollection<Album> albums = fetchAlbums();
+            Dictionary<Album, List<Photo>> photos = FriendshipAnalyzer.GetPhotosByOwnerAndTags(
+                m_FriendshipAnalyzer.Friend, FacebookApplication.LoggedInUser, albums);
 
             treeViewPhotosOfFriendIAmTaggedIn.Nodes.Clear();
             if (photos == null || photos.Count == 0)
@@ -844,8 +840,7 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
 
         private void friendshipAnalyzerFetchGeneralData()
         {
-            Album[] selectedAlbums = FacebookPhotoUtils.GetAllUserAlbumsAsArray();
-            FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.MyAlbumPhotos);
+            FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
             FacebookObjectCollection<FacebookObject> boxAllPhotosTaggedIn = allPhotosAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
             // TODO check if use cache
