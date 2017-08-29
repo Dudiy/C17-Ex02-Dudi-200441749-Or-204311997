@@ -14,6 +14,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
     public partial class ProgressBarWindow : Form
     {
+        public object m_ProgressValueLock = new object();
+
         public ProgressBarWindow(int i_MaxValue, string i_Description)
         {
             InitializeComponent();
@@ -33,14 +35,28 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             set { progressBar.Maximum = Math.Min(value, FacebookApplication.k_CollectionLimit); }
         }
 
+        //public string Text
+        //{
+        //    set
+        //    {
+        //        labelLoading.Text = value;
+        //    }
+        //}
+
         public int ProgressValue
         {
-            get { return progressBar.Value; }
+            get
+            {
+                lock (m_ProgressValueLock)
+                {
+                    return progressBar.Value;
+                }
+            }
             set
             {
                 if (value <= progressBar.Maximum)
                 {
-                    progressBar.Value = value;
+                    progressBar.Invoke(new Action(() => progressBar.Value = value));
                     labelLoadedPercent.Text = string.Format("{0:P0}", (float)value / progressBar.Maximum);
                     Refresh();
                 }
@@ -52,6 +68,6 @@ progressBar.Minimum,
 progressBar.Maximum));
                 }
             }
-        }        
+        } 
     }
 }

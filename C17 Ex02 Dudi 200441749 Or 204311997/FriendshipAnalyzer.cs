@@ -67,7 +67,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return i_PhotosTaggedTogether.Count > 0 ? i_PhotosTaggedTogether[0] : null;
         }
 
-        public int GetNumberOfPhotosFriendLiked(FacebookObjectCollection<Photo> i_Photos)
+        public int GetNumberOfPhotosFriendLiked(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
         {
             int numLikes = 0;
 
@@ -81,12 +81,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                         break;
                     }
                 }
+
+                i_PromoteProgressBar.Invoke();
             }
 
             return numLikes;
         }
 
-        public int GetNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos)
+        public int GetNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
         {
             int numComments = 0;
 
@@ -100,6 +102,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                         break;
                     }
                 }
+
+                i_PromoteProgressBar.Invoke();
             }
 
             return numComments;

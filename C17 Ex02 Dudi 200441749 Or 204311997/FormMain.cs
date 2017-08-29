@@ -843,18 +843,36 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
             FacebookObjectCollection<FacebookObject> boxAllPhotosTaggedIn = allPhotosAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
-            // TODO check if use cache
-            int numPhotosFriendLiked, numOfPhotosFriendCommented;
+            ProgressBarWindow progressBar = new ProgressBarWindow(2 * allPhotos.Count, "Statistic"); // likes + comments
 
-            // count likes
-            numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos);
+            // TODO thread doesn't work
+            progressBar.Show();
+            int numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos,
+            () => progressBar.ProgressValue++);
+
             labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numPhotosFriendLiked);
-            // count comments
-            numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos);
+            int numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos,
+                () => progressBar.ProgressValue++);
+
             labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numOfPhotosFriendCommented);
-            // get most recent tagged together
+            progressBar.Close();
             getMostRecentPhotoTogether();
         }
+
+        //private void countLikes(FacebookObjectCollection<Photo> allPhotos, ProgressBarWindow progressBar)
+        //{
+        //    int numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos,
+        //        () => progressBar.ProgressValue++);
+
+        //    labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numPhotosFriendLiked);
+        //}
+
+        //private int countComments(FacebookObjectCollection<Photo> allPhotos)
+        //{
+        //    int numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos);
+        //    labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numOfPhotosFriendCommented);
+        //    return numOfPhotosFriendCommented;
+        //}
 
         private void getMostRecentPhotoTogether()
         {
@@ -887,24 +905,24 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
         private void refreshDataGridView()
         {
 
-            toolStripStatusLabel.Visible = true;
-            dataGridView.Refresh();
-            int totalRows = m_DataTableBindedToView.TotalRows;
-            int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
-            if (totalRows == loadedRows)
-            {
-                toolStripStatusLabel.Text = "All rows loaded";
-                timerDataTables.Stop();
-            }
-            else
-            {
-                toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
-            }
+            //toolStripStatusLabel.Visible = true;
+            //dataGridView.Refresh();
+            //int totalRows = m_DataTableBindedToView.TotalRows;
+            //int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
+            //if (totalRows == loadedRows)
+            //{
+            //    toolStripStatusLabel.Text = "All rows loaded";
+            //    timerDataTables.Stop();
+            //}
+            //else
+            //{
+            //    toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
+            //}
         }
 
         private void timerDataTables_Tick(object sender, EventArgs e)
         {
-            refreshDataGridView();
+            //refreshDataGridView();
         }
     }
 }
