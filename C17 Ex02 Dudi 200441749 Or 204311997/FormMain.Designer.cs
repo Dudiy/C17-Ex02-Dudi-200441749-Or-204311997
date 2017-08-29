@@ -98,7 +98,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.labelMyLastPost = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.buttonRefresDataGridView = new System.Windows.Forms.Button();
+            this.timerDataTables = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfilePicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMostRecentTaggedTogether)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCoverPhoto)).BeginInit();
@@ -346,7 +346,6 @@
             // 
             // tabPageDataTables
             // 
-            this.tabPageDataTables.Controls.Add(this.buttonRefresDataGridView);
             this.tabPageDataTables.Controls.Add(this.statusStrip1);
             this.tabPageDataTables.Controls.Add(this.dataGridView);
             this.tabPageDataTables.Controls.Add(this.buttonFetchData);
@@ -857,15 +856,10 @@
             this.tabControl.Tag = "";
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
-            // buttonRefresDataGridView
+            // timerDataTables
             // 
-            this.buttonRefresDataGridView.Location = new System.Drawing.Point(243, 8);
-            this.buttonRefresDataGridView.Name = "buttonRefresDataGridView";
-            this.buttonRefresDataGridView.Size = new System.Drawing.Size(79, 28);
-            this.buttonRefresDataGridView.TabIndex = 5;
-            this.buttonRefresDataGridView.Text = "Refresh View";
-            this.buttonRefresDataGridView.UseVisualStyleBackColor = true;
-            this.buttonRefresDataGridView.Click += new System.EventHandler(this.buttonRefresDataGridView_Click);
+            this.timerDataTables.Interval = 2000;
+            this.timerDataTables.Tick += new System.EventHandler(this.timerDataTables_Tick);
             // 
             // FormMain
             // 
@@ -984,6 +978,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
-        private System.Windows.Forms.Button buttonRefresDataGridView;
+        private System.Windows.Forms.Timer timerDataTables;
     }
 }

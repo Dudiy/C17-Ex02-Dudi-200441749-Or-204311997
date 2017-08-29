@@ -432,7 +432,7 @@ i_Comment.Message);
         {
             m_DataTableManager = new FacebookDataTableManager();
             initComboBoxDataTableBindingSelection();
-            m_DataTablesTabWasInitialized = true;
+            m_DataTablesTabWasInitialized = true;            
         }
 
         private void initComboBoxDataTableBindingSelection()
@@ -451,7 +451,8 @@ i_Comment.Message);
                 if (m_DataTableBindedToView.DataTable.Rows.Count == 0 || m_DataTableBindedToView is FacebookPhotosDataTable)
                 {
                     FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
-                    this.m_DataTableBindedToView.PopulateRowsCompleted += () => dataGridView.Invoke(new Action(refreshDataGridView));
+                    //this.m_DataTableBindedToView.PopulateRowsCompleted += () => dataGridView.Invoke(new Action(refreshDataGridView));
+                    this.timerDataTables.Start();
                     m_DataTableBindedToView.PopulateRows(collection);
                 }
 
@@ -888,19 +889,27 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
         }
 
-        private void buttonRefresDataGridView_Click(object sender, EventArgs e)
-        {
-            refreshDataGridView();
-        }
-
         private void refreshDataGridView()
         {
+
             toolStripStatusLabel.Visible = true;
             dataGridView.Refresh();
             int totalRows = m_DataTableBindedToView.TotalRows;
             int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
-            toolStripStatusLabel.Text = totalRows == loadedRows ?
-                "All rows loaded" : string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
+            if (totalRows == loadedRows)
+            {
+                toolStripStatusLabel.Text = "All rows loaded";
+                timerDataTables.Stop();
+            }
+            else
+            {
+                toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
+            }
+        }
+
+        private void timerDataTables_Tick(object sender, EventArgs e)
+        {
+            refreshDataGridView();
         }
     }
 }

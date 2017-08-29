@@ -15,8 +15,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     public class FacebookPhotosDataTable : FacebookDataTable
     {
-        public Album[] AlbumsToLoad { get; set; }
+        private Thread populateRowsThread;
 
+        private bool abortSelected;
+        public Album[] AlbumsToLoad { get; set; }
         internal FacebookPhotosDataTable()
             : base("Photos", typeof(Photo))
         {
@@ -37,6 +39,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
+            if (populateRowsThread != null && populateRowsThread.IsAlive)
+            {
+                abortSelected = true;
+            }
+
             DataTable.Rows.Clear();
             getTotalPhotos();
 
@@ -45,36 +52,41 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 PopulateRowsStarting.Invoke();
             }
 
-            lock (m_PopulateRowsLock)
-            {
-                if (DataTable.Rows.Count == 0)
-                {
-                    new Thread(() => populateRows(i_Collection)).Start();
-                }
-            }
+
+            populateRowsThread = new Thread(() => populateRows(i_Collection));
+            populateRowsThread.Start();
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> myPhotos)
         {
-            foreach (FacebookObject facebookObject in myPhotos)
+            lock (m_PopulateRowsLock)
             {
-                if (facebookObject is Photo photo)
+                foreach (FacebookObject facebookObject in myPhotos)
                 {
-                    string photoTags = buildTagsString(photo);
+                    if (facebookObject is Photo photo)
+                    {
+                        string photoTags = buildTagsString(photo);
 
-                    DataTable.Rows.Add(
-                        photo,
-                        photo.Album.Name,
-                        photo.CreatedTime,
-                        photo.LikedBy?.Count ?? 0,
-                        photo.Comments?.Count ?? 0,
-                        photoTags);
+                        DataTable.Rows.Add(
+                            photo,
+                            photo.Album.Name,
+                            photo.CreatedTime,
+                            photo.LikedBy?.Count ?? 0,
+                            photo.Comments?.Count ?? 0,
+                            photoTags);
+                    }
+
+                    if (abortSelected)
+                    {
+                        abortSelected = false;
+                        break;
+                    }
                 }
 
-            }
-            if (PopulateRowsCompleted != null)
-            {
-                PopulateRowsCompleted.Invoke();
+                if (PopulateRowsCompleted != null)
+                {
+                    PopulateRowsCompleted.Invoke();
+                }
             }
         }
 
