@@ -12,6 +12,10 @@ using System.Threading;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
+    using System.Windows.Forms;
+
+    using Timer = System.Threading.Timer;
+
     public class FacebookLikedPagesDataTable : FacebookDataTable
     {
         internal FacebookLikedPagesDataTable()
@@ -40,18 +44,21 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
             lock (m_PopulateRowsLock)
             {
-                foreach (Page page in likedPages)
+                foreach (FacebookObject facebookObject in likedPages)
                 {
-                    DataTable.Rows.Add(
-                        page,
-                        page.Name,
-                        page.Phone,
-                        page.Category,
-                        page.Description,
-                        page.Website);
-                    if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                    if (facebookObject is Page page)
                     {
-                        TenRowsInserted.Invoke();
+                        DataTable.Rows.Add(
+                            page,
+                            page.Name,
+                            page.Phone,
+                            page.Category,
+                            page.Description,
+                            page.Website);
+                        if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                        {
+                            TenRowsInserted.Invoke();
+                        }
                     }
                 }
 

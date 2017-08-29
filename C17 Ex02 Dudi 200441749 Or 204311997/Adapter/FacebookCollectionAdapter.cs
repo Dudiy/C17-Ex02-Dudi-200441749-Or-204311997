@@ -7,10 +7,13 @@ using System.Text;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+    using System.Threading;
+
     class FacebookCollectionAdapter<T> : IFacebookCollection<T>
         where T : class
     {
         // TODO like event ? no m_ ?
+        public Action FetchFinished;
         private Func<FacebookObjectCollection<FacebookObject>> m_FetchDataDelegate;
         public Album[] AlbumsToLoad { get; set; }
 
@@ -35,7 +38,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public FacebookObjectCollection<FacebookObject> FetchDataWithProgressBar()
         {
-            return m_FetchDataDelegate.Invoke();
+            FacebookObjectCollection<FacebookObject> fetchedCollection = m_FetchDataDelegate.Invoke();
+
+            if (this.FetchFinished != null)
+            {
+                this.FetchFinished.Invoke();
+            }
+
+            return fetchedCollection;
         }
 
         public FacebookObjectCollection<T> UnboxCollection(FacebookObjectCollection<FacebookObject> i_Collection)
@@ -64,9 +74,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private FacebookObjectCollection<FacebookObject> fetchFriends()
         {
             FacebookObjectCollection<FacebookObject> friendsList = new FacebookObjectCollection<FacebookObject>();
-            ProgressBarWindow progressBarWindow = new ProgressBarWindow("friends");
-
-            progressBarWindow.MaxValue = FacebookApplication.LoggedInUser.Friends.Count;
+            ProgressBarWindow progressBarWindow = new ProgressBarWindow(FacebookApplication.LoggedInUser.Friends.Count, "friends");
             progressBarWindow.Show();
             foreach (User friend in FacebookApplication.LoggedInUser.Friends)
             {
@@ -81,17 +89,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         // =================================== Pages =====================================
 
-        //public FacebookCollectionAdapter(FacebookObjectCollection<Page> i_LikedPages)
-        //{
-        //    m_FetchDataDelegate = new Func<FacebookObjectCollection<FacebookObject>>(() => fetchLikedPages());
-        //}
-
         private FacebookObjectCollection<FacebookObject> fetchLikedPages()
         {
             FacebookObjectCollection<FacebookObject> likedPagesList = new FacebookObjectCollection<FacebookObject>();
-            ProgressBarWindow progressBarWindow = new ProgressBarWindow("liked pages");
-
-            progressBarWindow.MaxValue = FacebookApplication.LoggedInUser.LikedPages.Count;
+            ProgressBarWindow progressBarWindow = new ProgressBarWindow(FacebookApplication.LoggedInUser.LikedPages.Count, "liked pages");
             progressBarWindow.Show();
             foreach (Page page in FacebookApplication.LoggedInUser.LikedPages)
             {

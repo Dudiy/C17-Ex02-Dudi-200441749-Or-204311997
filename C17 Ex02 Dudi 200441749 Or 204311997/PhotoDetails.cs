@@ -49,7 +49,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             if (numOfComments > k_MinNumOfCommentsForProgressBar)
             {
-                commentsProgressBar = new ProgressBarWindow(0, numOfComments, "comments");
+                commentsProgressBar = new ProgressBarWindow(numOfComments, "comments");
                 commentsProgressBar.Show();
             }
 

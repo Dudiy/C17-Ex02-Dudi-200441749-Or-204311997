@@ -36,26 +36,27 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     new Thread(() => populateRows(i_Collection)).Start();
                 }
 
-                if (PopulateRowsCompleted != null)
-                {
-                    PopulateRowsCompleted.Invoke();
-                }
+                PopulateRowsCompleted?.Invoke();
             }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> friendsList)
         {
-            foreach (User friend in friendsList)
+            foreach (FacebookObject facebookObject in friendsList)
             {
-                DataTable.Rows.Add(
-                    friend,
-                    friend.FirstName,
-                    friend.LastName,
-                    friend.Gender != null ? friend.Gender.ToString() : string.Empty);
-
-                if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                if (facebookObject is User friend)
                 {
-                    TenRowsInserted.Invoke();
+                    DataTable.Rows.Add(
+                        friend,
+                        friend.FirstName,
+                        friend.LastName,
+                        friend.Gender != null ? friend.Gender.ToString() : string.Empty);
+                    //getMostRecentPost(friend));
+
+                    if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
+                    {
+                        TenRowsInserted.Invoke();
+                    }
                 }
             }
         }
