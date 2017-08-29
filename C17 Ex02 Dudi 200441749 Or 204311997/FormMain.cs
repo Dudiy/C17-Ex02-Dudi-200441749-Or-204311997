@@ -452,7 +452,7 @@ i_Comment.Message);
                 {
                     FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
                     //this.m_DataTableBindedToView.PopulateRowsCompleted += () => dataGridView.Invoke(new Action(refreshDataGridView));
-                    this.timerDataTables.Start();
+                    timerDataTables.Start();
                     m_DataTableBindedToView.PopulateRows(collection);
                 }
 
