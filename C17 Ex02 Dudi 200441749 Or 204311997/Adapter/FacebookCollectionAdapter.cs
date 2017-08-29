@@ -27,11 +27,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 case eFacebookCollectionType.LikedPages:
                     m_FetchDataDelegate = fetchLikedPages;
                     break;
-                case eFacebookCollectionType.MyAlbumPhotos:
+                case eFacebookCollectionType.AlbumPhotos:
                     m_FetchDataDelegate = fetchMyPhotos;
                     break;
                 case eFacebookCollectionType.PhotosTaggedIn:
                     m_FetchDataDelegate = fetchPhotosTaggedIn;
+                    break;
+                case eFacebookCollectionType.Albums:
+                    m_FetchDataDelegate = fetchAlbums;
                     break;
             }
         }
@@ -152,6 +155,36 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             progressBarWindow.Close();
 
             return photosTaggedIn;
+        }
+
+        private FacebookObjectCollection<FacebookObject> fetchAlbums()
+        {
+            FacebookObjectCollection<FacebookObject> myAlbumsList = new FacebookObjectCollection<FacebookObject>();
+            ProgressBarWindow progressBarWindow = new ProgressBarWindow("my photos");
+
+            if (AlbumsToLoad == null)
+            {
+                AlbumsToLoad = FacebookApplication.LoggedInUser.Albums.ToArray();
+            }
+
+            foreach (Album album in AlbumsToLoad)
+            {
+                progressBarWindow.MaxValue += (int)album.Count;
+            }
+
+            progressBarWindow.Show();
+            foreach (Album album in AlbumsToLoad)
+            {
+                foreach (Photo photo in album.Photos)
+                {
+                    progressBarWindow.ProgressValue++;
+                }
+                myAlbumsList.Add(album);
+            }
+
+            progressBarWindow.Close();
+
+            return myAlbumsList;
         }
     }
 }

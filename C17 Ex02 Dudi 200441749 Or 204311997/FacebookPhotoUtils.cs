@@ -1,117 +1,77 @@
-﻿/*
- * C17_Ex01: FacebookPhotoUtils.cs
- * 
- * Written by:
- * 204311997 - Or Mantzur
- * 200441749 - Dudi Yecheskel 
-*/
-using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using FacebookWrapper.ObjectModel;
+﻿///*
+// * C17_Ex01: FacebookPhotoUtils.cs
+// * 
+// * Written by:
+// * 204311997 - Or Mantzur
+// * 200441749 - Dudi Yecheskel 
+//*/
+//using System;
+//using System.Windows.Forms;
+//using System.Collections.Generic;
+//using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
-{
-    public static class FacebookPhotoUtils
-    {
-        //public static int GetTotalPhotosUploadedByUser(User i_User)
-        //{
-        //    List<Album> albums = new List<Album>(i_User.Albums.Count);
-        //    int totalPhotos = 0;
+//namespace C17_Ex01_Dudi_200441749_Or_204311997
+//{
+//    public static class FacebookPhotoUtils
+//    {
+//        public static Album[] GetAllUserAlbumsAsArray()
+//        {
+//            List<Album> albums = new List<Album>();
 
-        //    if (i_User.Albums.Count > 0)
-        //    {
-        //        albums.AddRange(i_User.Albums);
-        //        totalPhotos = GetTotalPhotosInAlbumArray(albums.ToArray());
-        //    }
+//            foreach (Album album in FacebookApplication.LoggedInUser.Albums)
+//            {
+//                albums.Add(album);
+//            }
 
-        //    return totalPhotos;
-        //    //int photoCounter = 0;
+//            return albums.ToArray();
+//        }
+//    }
+//}
+//        //public static List<Photo> GetAllUserPhotos(User i_User, ref int i_ProgressValue)
+//        //{
+//        //    List<Photo> photos = new List<Photo>(GetTotalPhotosUploadedByUser(i_User));
 
-        //    //foreach (Album album in i_User.Albums)
-        //    //{
-        //    //    //cast to int - very unlikely that a user has that many albums
-        //    //    photoCounter += Math.Min((int)(album.Count ?? 0), FacebookApplication.k_MaxPhotosInAlbum);
-        //    //}
+//        //    i_ProgressValue = 0;
+//        //    foreach (Album album in i_User.Albums)
+//        //    {
+//        //        photos.AddRange(album.Photos);
+//        //        i_ProgressValue += (int)(album.Count ?? 0);
+//        //    }
 
-        //    //return photoCounter;
-        //}
+//        //    return photos;
+//        //}
 
-        public static int GetTotalPhotosInAlbumArray(Album[] i_Albums)
-        {
-            int photoCounter = 0;
+//        //public static int GetTotalPhotosUploadedByUser(User i_User)
+//        //{
+//        //    List<Album> albums = new List<Album>(i_User.Albums.Count);
+//        //    int totalPhotos = 0;
 
-            foreach (Album album in i_Albums)
-            {
-                //cast to int - very unlikely that a user has that many albums
-                photoCounter += Math.Min((int)(album.Count ?? 0), FacebookApplication.k_MaxPhotosInAlbum);
-            }
+//        //    if (i_User.Albums.Count > 0)
+//        //    {
+//        //        albums.AddRange(i_User.Albums);
+//        //        totalPhotos = GetTotalPhotosInAlbumArray(albums.ToArray());
+//        //    }
 
-            return photoCounter;
-        }
+//        //    return totalPhotos;
+//        //    //int photoCounter = 0;
 
-        public static Album[] GetAllUserAlbumsAsArray()
-        {
-            List<Album> albums = new List<Album>();
+//        //    //foreach (Album album in i_User.Albums)
+//        //    //{
+//        //    //    //cast to int - very unlikely that a user has that many albums
+//        //    //    photoCounter += Math.Min((int)(album.Count ?? 0), FacebookApplication.k_MaxPhotosInAlbum);
+//        //    //}
 
-            foreach (Album album in FacebookApplication.LoggedInUser.Albums)
-            {
-                albums.Add(album);
-            }
+//        //    //return photoCounter;
+//        //}
+//        //public static int GetTotalPhotosInAlbumArray(Album[] i_Albums)
+//        //{
+//        //    int photoCounter = 0;
 
-            return albums.ToArray();
-        }
+//        //    foreach (Album album in i_Albums)
+//        //    {
+//        //        //cast to int - very unlikely that a user has that many albums
+//        //        photoCounter += Math.Min((int)(album.Count ?? 0), FacebookApplication.k_MaxPhotosInAlbum);
+//        //    }
 
-        //public static List<Photo> GetAllUserPhotos(User i_User, ref int i_ProgressValue)
-        //{
-        //    List<Photo> photos = new List<Photo>(GetTotalPhotosUploadedByUser(i_User));
-
-        //    i_ProgressValue = 0;
-        //    foreach (Album album in i_User.Albums)
-        //    {
-        //        photos.AddRange(album.Photos);
-        //        i_ProgressValue += (int)(album.Count ?? 0);
-        //    }
-
-        //    return photos;
-        //}
-
-        // 
-        public static Dictionary<Album, List<Photo>> GetPhotosByOwnerAndTags(User i_User, User i_Tagged, Album[] albums)
-        {
-            Dictionary<Album, List<Photo>> photos = new Dictionary<Album, List<Photo>>();
-            int photosToSearch;
-
-            if (albums.Length > 0)
-            {
-                photosToSearch = GetTotalPhotosInAlbumArray(albums);
-
-                foreach (Album album in albums)
-                {
-                    List<Photo> photosInAlbum = new List<Photo>();
-                    foreach (Photo photo in album.Photos)
-                    {
-                        if (photo.Tags != null)
-                        {
-                            foreach (PhotoTag tag in photo.Tags)
-                            {
-                                if (tag.User.Id == i_Tagged.Id)
-                                {
-                                    photosInAlbum.Add(photo);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (photosInAlbum.Count > 0)
-                    {
-                        photos.Add(album, photosInAlbum);
-                    }
-                }
-            }
-
-            return photos;
-        }
-    }
-}
+//        //    return photoCounter;
+//        //}

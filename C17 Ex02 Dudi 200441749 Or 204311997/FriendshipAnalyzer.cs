@@ -104,5 +104,39 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             return numComments;
         }
+
+        public static Dictionary<Album, List<Photo>> GetPhotosByOwnerAndTags(User i_User, User i_Tagged, FacebookObjectCollection<Album> i_Albums)
+        {
+            Dictionary<Album, List<Photo>> photos = new Dictionary<Album, List<Photo>>();
+
+            if (i_Albums.Count > 0)
+            {
+                foreach (Album album in i_Albums)
+                {
+                    List<Photo> photosInAlbum = new List<Photo>();
+                    foreach (Photo photo in album.Photos)
+                    {
+                        if (photo.Tags != null)
+                        {
+                            foreach (PhotoTag tag in photo.Tags)
+                            {
+                                if (tag.User.Id == i_Tagged.Id)
+                                {
+                                    photosInAlbum.Add(photo);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (photosInAlbum.Count > 0)
+                    {
+                        photos.Add(album, photosInAlbum);
+                    }
+                }
+            }
+
+            return photos;
+        }
     }
 }
