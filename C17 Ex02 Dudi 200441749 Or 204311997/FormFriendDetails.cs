@@ -1,5 +1,5 @@
 ﻿/*
- * C17_Ex01: FriendDetails.cs
+ * C17_Ex01: FormFriendDetails.cs
  * 
  * Written by:
  * 204311997 - Or Mantzur
@@ -11,11 +11,11 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class FriendDetails : Form
+    public partial class FormFriendDetails : Form
     {
         private User m_Friend;
 
-        public FriendDetails(User i_Friend)
+        public FormFriendDetails(User i_Friend)
         {
             InitializeComponent();
             m_Friend = i_Friend;

@@ -7,8 +7,6 @@ using System.Text;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using System.Threading;
-
     class FacebookCollectionAdapter<T> : IFacebookCollection<T>
         where T : class
     {
@@ -43,9 +41,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             FacebookObjectCollection<FacebookObject> fetchedCollection = m_FetchDataDelegate.Invoke();
 
-            if (this.FetchFinished != null)
+            if (FetchFinished != null)
             {
-                this.FetchFinished.Invoke();
+                FetchFinished.Invoke();
             }
 
             return fetchedCollection;
@@ -69,11 +67,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         }
 
         // =================================== Friends =====================================
-        //public FacebookCollectionAdapter(FacebookObjectCollection<User> i_FriendsCollection)
-        //{            
-        //    m_FetchDataDelegate = new Func<FacebookObjectCollection<FacebookObject>>(() => fetchFriends());
-        //}
-
         private FacebookObjectCollection<FacebookObject> fetchFriends()
         {
             FacebookObjectCollection<FacebookObject> friendsList = new FacebookObjectCollection<FacebookObject>();
@@ -96,6 +89,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             FacebookObjectCollection<FacebookObject> likedPagesList = new FacebookObjectCollection<FacebookObject>();
             ProgressBarWindow progressBarWindow = new ProgressBarWindow(FacebookApplication.LoggedInUser.LikedPages.Count, "liked pages");
+
             progressBarWindow.Show();
             foreach (Page page in FacebookApplication.LoggedInUser.LikedPages)
             {
@@ -142,9 +136,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private FacebookObjectCollection<FacebookObject> fetchPhotosTaggedIn()
         {
             FacebookObjectCollection<FacebookObject> photosTaggedIn = new FacebookObjectCollection<FacebookObject>();
-            ProgressBarWindow progressBarWindow = new ProgressBarWindow("Photos tagged in");
+            ProgressBarWindow progressBarWindow = new ProgressBarWindow(FacebookApplication.LoggedInUser.PhotosTaggedIn.Count, "Photos tagged in");
 
-            progressBarWindow.MaxValue = FacebookApplication.LoggedInUser.PhotosTaggedIn.Count;
             progressBarWindow.Show();
             foreach (Photo photo in FacebookApplication.LoggedInUser.PhotosTaggedIn)
             {

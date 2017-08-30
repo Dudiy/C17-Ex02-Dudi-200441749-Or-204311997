@@ -1,6 +1,6 @@
 ﻿namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class FriendDetails
+    public partial class FormFriendDetails
     {
         /// <summary>
         /// Required designer variable.
@@ -182,7 +182,7 @@
             this.labelLastName.Text = "Friend Last Name";
             this.labelLastName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // FriendDetails
+            // FormFriendDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -200,7 +200,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FriendDetails";
+            this.Name = "FormFriendDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "friendDetails";
             ((System.ComponentModel.ISupportInitialize)(this.largePictureBoxLikedPage)).EndInit();

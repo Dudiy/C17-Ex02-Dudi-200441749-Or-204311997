@@ -89,5 +89,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Picture_not_found {
+            get {
+                object obj = ResourceManager.GetObject("Picture_not_found", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

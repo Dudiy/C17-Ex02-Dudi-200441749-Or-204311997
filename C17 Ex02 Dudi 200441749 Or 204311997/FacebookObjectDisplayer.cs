@@ -26,8 +26,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
             else if (objectToDisplay is User)
             {
-                FriendDetails friendDetails = new FriendDetails(objectToDisplay as User);
-                friendDetails.Show();
+                FormFriendDetails formFriendDetails = new FormFriendDetails(objectToDisplay as User);
+                formFriendDetails.Show();
             }
             else if (objectToDisplay is Page)
             {

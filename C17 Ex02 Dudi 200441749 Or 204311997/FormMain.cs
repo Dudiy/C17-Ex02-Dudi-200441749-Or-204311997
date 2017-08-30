@@ -14,9 +14,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     public partial class FormMain : Form
     {
+        private const bool k_UseCollectionAdapter = true;
         private const byte k_PictureBoxIncreaseSizeOnMouseHover = 20;
         private static readonly Size sr_FriendProfilePicSize = new Size(90, 90);
         private static readonly Size sr_MinimumWindowSize = new Size(AppSettings.k_DefaultMainFormWidth, AppSettings.k_DefaultMainFormHeight);
+        private readonly object r_UpdateAboutMeFriendsLock = new object();
+        private readonly object r_UpdateLikedPagesLock = new object();
+        private readonly object r_InitLastPostLock = new object();
         private FacebookDataTableManager m_DataTableManager;
         private FacebookDataTable m_DataTableBindedToView;
         private FriendshipAnalyzer m_FriendshipAnalyzer;
@@ -24,8 +28,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private bool m_DataTablesTabWasInitialized = false;
         private bool m_FriendshipAnalyzerTabWasInitialized = false;
         private bool m_LogoutClicked = false;
-        private readonly object r_UpdateAboutMeFriendsLock = new object();
-        private readonly object r_InitLastPostLock = new object();
 
         public FormMain()
         {
@@ -94,9 +96,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             try
             {
                 new Thread(updateAboutMeFriends).Start();
-                new Thread(initLikedPages).Start();
-                new Thread(initLastPost).Start();
-                new Thread(initPostTags).Start();
+                new Thread(() => updateLikedPages(!k_UseCollectionAdapter)).Start();
+                new Thread(updateMostRecentPost).Start();
+                new Thread(this.initFriendsListForNewPostTags).Start();
             }
             catch
             {
@@ -104,15 +106,117 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void initLikedPages()
+        private void updateAboutMeFriends()
         {
-            FacebookObjectCollection<Page> likedPages = FacebookApplication.LoggedInUser.LikedPages;
-            //new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages)
-            //.FetchDataWithProgressBar();
-            listBoxLikedPage.Invoke(new Action(() => likedPagesBindingSource.DataSource = likedPages));
+            try
+            {
+                lock (r_UpdateAboutMeFriendsLock)
+                {
+                    FacebookApplication.LoggedInUser.ReFetch("friends");
+                    flowLayoutPanelAboutMeFriends.Invoke(new Action(() => flowLayoutPanelAboutMeFriends.Controls.Clear()));
+
+                    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
+                    {
+                        GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend.PictureLargeURL, friend);
+                        friendsProfilePic.MouseClick += FriendProfile_MouseClick;
+                        flowLayoutPanelAboutMeFriends.Invoke(new Action(() =>
+                            flowLayoutPanelAboutMeFriends.Controls.Add(friendsProfilePic)));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Error while loading user's friend. error message: {0}", ex.Message));
+            }
         }
 
-        private void initPostTags()
+        private void updateLikedPages(bool i_UseCollectionAdapter)
+        {
+            lock (r_UpdateLikedPagesLock)
+            {
+                FacebookObjectCollection<Page> likedPages;
+
+                if (i_UseCollectionAdapter)
+                {
+                    FacebookCollectionAdapter<Page> collectionAdapter = new FacebookCollectionAdapter<Page>(eFacebookCollectionType.LikedPages);
+                    FacebookObjectCollection<FacebookObject> list = collectionAdapter.FetchDataWithProgressBar();
+                    likedPages = collectionAdapter.UnboxCollection(list);
+                }
+                else
+                {
+                    likedPages = FacebookApplication.LoggedInUser.LikedPages;
+                }
+
+                listBoxLikedPage.Invoke(new Action(() =>
+                    {
+                        likedPagesBindingSource.DataSource = likedPages;
+                        listBoxLikedPage.ClearSelected();
+                    }));
+            }
+        }
+
+        private void updateMostRecentPost()
+        {
+            lock (r_InitLastPostLock)
+            {
+                if (FacebookApplication.LoggedInUser != null)
+                {
+                    panelLastPost.Invoke(new Action(() => setLastPostControls(null)));
+                    FacebookApplication.LoggedInUser.ReFetch("posts");
+                    if (FacebookApplication.LoggedInUser.Posts.Count != 0)
+                    {
+                        panelLastPost.Invoke(new Action(() => setLastPostControls(FacebookApplication.LoggedInUser.Posts[0])));
+                    }
+                    else
+                    {
+                        MessageBox.Show("No available posts");
+                    }
+                }
+            }
+        }
+
+        // updates all controls of the lastPost panel, null parameter to reset all
+        private void setLastPostControls(Post i_Post)
+        {
+            if (i_Post != null)
+            {
+                // posted message
+                textBoxLastPostMessage.Text = i_Post.Message ?? "[No post message]";
+                // posted photo
+                if (!string.IsNullOrEmpty(i_Post.PictureURL))
+                {
+                    pictureBoxLastPost.Load(i_Post.PictureURL);                    
+                }
+
+                // people who liked the post
+                listBoxPostLiked.DisplayMember = "Name";
+                foreach (User friendWhoLiked in i_Post.LikedBy)
+                {
+                    listBoxPostLiked.Items.Add(friendWhoLiked);
+                }
+
+                // post comments
+                listBoxPostComment.DisplayMember = "Message";
+                foreach (Comment comment in i_Post.Comments)
+                {
+                    listBoxPostComment.Items.Add(comment);
+                }
+            }
+            else
+            {
+                clearLastPostControls();
+            }
+        }
+
+        private void clearLastPostControls()
+        {
+            textBoxLastPostMessage.Text = "Fetching....";
+            listBoxPostLiked.Items.Clear();
+            listBoxPostComment.Items.Clear();
+            pictureBoxLastPost.Image = null;
+        }
+
+        private void initFriendsListForNewPostTags()
         {
             FacebookObjectCollection<User> friends = FacebookApplication.LoggedInUser.Friends;
 
@@ -123,81 +227,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }));
         }
 
-        private void updateAboutMeFriends()
-        {
-            try
-            {
-                lock (r_UpdateAboutMeFriendsLock)
-                {
-                    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
-                    {
-                        GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend);
-                        friendsProfilePic.MouseClick += FriendProfile_MouseClick;
-                        flowLayoutPanelAboutMeFriends.Invoke(new Action(() =>
-                            flowLayoutPanelAboutMeFriends.Controls.Add(friendsProfilePic)));
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Error while loading user's friend");
-            }
-        }
-
-        private void initLastPost()
-        {
-            lock (r_InitLastPostLock)
-            {
-                if (FacebookApplication.LoggedInUser.Posts.Count != 0)
-                {
-                    clearLastPost();
-                    getLastPost();
-                }
-                else
-                {
-                    MessageBox.Show("No available posts");
-                }
-            }
-        }
-
-        private void clearLastPost()
-        {
-            listBoxPostLiked.Invoke(new Action(() => listBoxPostLiked.Items.Clear()));
-            listBoxPostComment.Invoke(new Action(() => listBoxPostComment.Items.Clear()));
-            pictureBoxLastPost.Invoke(new Action(() => pictureBoxLastPost.Image = null));
-        }
-
-        private void getLastPost()
-        {
-            Post myLastPosts = FacebookApplication.LoggedInUser.Posts[0];
-
-            textBoxLastPostMessage.Invoke(new Action(() =>
-            {
-                textBoxLastPostMessage.Text = (myLastPosts != null && myLastPosts.Message != null) ?
-                    myLastPosts.Message : "[No post message]";
-            }));
-            if (myLastPosts != null && myLastPosts.PictureURL != null)
-            {
-                pictureBoxLastPost.Load(myLastPosts.PictureURL);
-                listBoxPostLiked.DisplayMember = "Name";
-                foreach (User friendWhoLiked in myLastPosts.LikedBy)
-                {
-                    listBoxPostLiked.Invoke(new Action(() => listBoxPostLiked.Items.Add(friendWhoLiked)));
-                }
-
-                listBoxPostComment.DisplayMember = "Message";
-                foreach (Comment comment in myLastPosts.Comments)
-                {
-                    listBoxPostComment.Invoke(new Action(() => listBoxPostComment.Items.Add(comment)));
-                }
-            }
-        }
-
         private void ListBoxPostLiked_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            User friend = ((ListBox)sender).SelectedItem as User;
-
-            if (friend != null)
+            if (((ListBox)sender).SelectedItem is User friend)
             {
                 MessageBox.Show(friend.Name + " Liked your post!");
             }
@@ -222,26 +254,6 @@ i_Comment.Message);
             }
         }
 
-        private void FriendProfile_MouseEnter(object sender, EventArgs e)
-        {
-            PictureBox pictureBoxSelected = sender as PictureBox;
-
-            if (pictureBoxSelected != null)
-            {
-                increasePictureBoxSize(pictureBoxSelected, k_PictureBoxIncreaseSizeOnMouseHover);
-            }
-        }
-
-        private void FriendProfile_MouseLeave(object sender, EventArgs e)
-        {
-            PictureBox pictureBoxSelected = sender as PictureBox;
-
-            if (pictureBoxSelected != null)
-            {
-                increasePictureBoxSize(pictureBoxSelected, -k_PictureBoxIncreaseSizeOnMouseHover);
-            }
-        }
-
         private void FriendProfile_MouseClick(object sender, MouseEventArgs e)
         {
             displayFriendDetailsInAboutMeTab(sender as PictureBox);
@@ -249,24 +261,15 @@ i_Comment.Message);
 
         private void displayFriendDetailsInAboutMeTab(PictureBox i_PictureBoxSelected)
         {
-            if (i_PictureBoxSelected != null)
+            if (i_PictureBoxSelected != null && i_PictureBoxSelected.Tag is User friendSelected)
             {
-                User friendSelected = i_PictureBoxSelected.Tag as User;
-
-                if (friendSelected != null)
-                {
-                    FriendDetails friendDetails = new FriendDetails(friendSelected);
-
-                    friendDetails.ShowDialog();
-                }
+                new FormFriendDetails(friendSelected).ShowDialog();
             }
         }
 
         private void buttonRefreshFriends_Click(object sender, EventArgs e)
         {
-            FacebookApplication.LoggedInUser.ReFetch("friends");
-            flowLayoutPanelAboutMeFriends.Controls.Clear();
-            updateAboutMeFriends();
+            new Thread(updateAboutMeFriends).Start();
         }
 
         private void URL_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -279,10 +282,7 @@ i_Comment.Message);
 
         private void buttonRefreshLikedPage_Click(object sender, EventArgs e)
         {
-            FacebookCollectionAdapter<Page> collectionAdapter = new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages);
-            FacebookObjectCollection<FacebookObject> list = collectionAdapter.FetchDataWithProgressBar();
-
-            likedPagesBindingSource.DataSource = collectionAdapter.UnboxCollection(list);
+            new Thread(() => updateLikedPages(k_UseCollectionAdapter)).Start();
         }
 
         private void buttonPost_Click(object sender, EventArgs e)
@@ -303,16 +303,16 @@ i_Comment.Message);
                     MessageBox.Show(successPostMessage);
                     richTextBoxStatusPost.Clear();
                     listBoxPostTags.ClearSelected();
-                    refreshLastPost();
+                    new Thread(updateMostRecentPost).Start();
                 }
                 else
                 {
-                    MessageBox.Show("You mush enter a status text");
+                    MessageBox.Show("Cannot post an empty status, please input some text and try again");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error posting status");
+                MessageBox.Show(string.Format("Error while posting status: {0}", ex.Message));
             }
         }
 
@@ -330,9 +330,10 @@ i_Comment.Message);
             return !string.IsNullOrEmpty(friendID) ? friendID.Remove(friendID.Length - 1) : null;
         }
 
+        // maybe we should delete this button, friends aren't added so frequently
         private void buttonRefreshTagFriends_Click(object sender, EventArgs e)
         {
-            FacebookApplication.LoggedInUser.ReFetch();
+            FacebookApplication.LoggedInUser.ReFetch("friends");
             friendsBindingSource.DataSource = FacebookApplication.LoggedInUser.Friends;
             listBoxPostTags.ClearSelected();
         }
@@ -378,13 +379,14 @@ i_Comment.Message);
                 {
                     Post postedItem = FacebookApplication.LoggedInUser.PostPhoto(m_PostPicturePath, i_Title: richTextBoxPostPhoto.Text);
 
+                    // TODO do we need to check if postedItem != null?
                     MessageBox.Show("The photo was successfully posted!");
                     richTextBoxPostPhoto.Clear();
-                    refreshLastPost();
+                    new Thread(updateMostRecentPost).Start();
                 }
                 else
                 {
-                    MessageBox.Show("You mush add a photo");
+                    MessageBox.Show("No photo added, please add a photo and try again");
                 }
             }
             catch
@@ -395,20 +397,13 @@ i_Comment.Message);
 
         private void buttonRefreshLastPost_Click(object sender, EventArgs e)
         {
-            refreshLastPost();
-        }
-
-        private void refreshLastPost()
-        {
-            FacebookApplication.LoggedInUser.ReFetch();
-            initLastPost();
+            new Thread(updateMostRecentPost).Start();
         }
 
         private void pictureBoxLastPost_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Photo photo = ((PictureBox)sender).Tag as Photo;
-
-            if (photo != null)
+            // TODO doesn't work because the tag is string, if we can pull the Photo from post update the tag and this will work
+            if (((PictureBox)sender).Tag is Photo photo)
             {
                 PhotoDetails photoDetails = new PhotoDetails(photo);
                 photoDetails.Show();

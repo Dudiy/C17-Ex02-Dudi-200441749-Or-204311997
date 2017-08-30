@@ -83,13 +83,14 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FriendDetails.cs">
+    <Compile Include="FormFriendDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FriendDetails.Designer.cs">
-      <DependentUpon>FriendDetails.cs</DependentUpon>
+    <Compile Include="FormFriendDetails.Designer.cs">
+      <DependentUpon>FormFriendDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="FriendshipAnalyzer.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GrowingPictureBoxProxy.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -123,8 +124,8 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FriendDetails.resx">
-      <DependentUpon>FriendDetails.cs</DependentUpon>
+    <EmbeddedResource Include="FormFriendDetails.resx">
+      <DependentUpon>FormFriendDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PhotoDetails.resx">
       <DependentUpon>PhotoDetails.cs</DependentUpon>
@@ -171,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Picture not found.JPG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
