@@ -24,8 +24,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private bool m_DataTablesTabWasInitialized = false;
         private bool m_FriendshipAnalyzerTabWasInitialized = false;
         private bool m_LogoutClicked = false;
-        private object m_UpdateAboutMeFriendsLock = new object();
-        private object m_InitLastPostLock = new object();
+        private readonly object r_UpdateAboutMeFriendsLock = new object();
+        private readonly object r_InitLastPostLock = new object();
 
         public FormMain()
         {
@@ -41,11 +41,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private void initMainForm()
         {
-            String userName = FacebookApplication.LoggedInUser.Name ?? string.Empty;
+            string userName = FacebookApplication.LoggedInUser.Name ?? string.Empty;
             Text = userName;
             labelUserName.Text = userName;
             MinimumSize = sr_MinimumWindowSize;
-            new Thread(fetchProfileAndCoverPhotos).Start(); ;
+            new Thread(fetchProfileAndCoverPhotos).Start();
             initAboutMeTab();
         }
 
@@ -102,9 +102,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 MessageBox.Show("Error while fetching data from the Facebook server");
             }
-
-            listBoxPostLiked.MouseDoubleClick += ListBoxPostLiked_MouseDoubleClick;
-            listBoxPostComment.MouseDoubleClick += ListBoxPostComment_MouseDoubleClick;
         }
 
         private void initLikedPages()
@@ -130,23 +127,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             try
             {
-                lock (m_UpdateAboutMeFriendsLock)
+                lock (r_UpdateAboutMeFriendsLock)
                 {
                     foreach (User friend in FacebookApplication.LoggedInUser.Friends)
                     {
-                        PictureBox friendProfile = new PictureBox()
-                        {
-                            Image = friend.ImageLarge,
-                            Size = sr_FriendProfilePicSize,
-                            SizeMode = PictureBoxSizeMode.Zoom,
-                            Tag = friend
-                        };
-
-                        friendProfile.MouseEnter += FriendProfile_MouseEnter;
-                        friendProfile.MouseLeave += FriendProfile_MouseLeave;
-                        friendProfile.MouseClick += FriendProfile_MouseClick;
+                        GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend);
+                        friendsProfilePic.MouseClick += FriendProfile_MouseClick;
                         flowLayoutPanelAboutMeFriends.Invoke(new Action(() =>
-                            flowLayoutPanelAboutMeFriends.Controls.Add(friendProfile)));
+                            flowLayoutPanelAboutMeFriends.Controls.Add(friendsProfilePic)));
                     }
                 }
             }
@@ -158,7 +146,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private void initLastPost()
         {
-            lock (m_InitLastPostLock)
+            lock (r_InitLastPostLock)
             {
                 if (FacebookApplication.LoggedInUser.Posts.Count != 0)
                 {
@@ -432,7 +420,7 @@ i_Comment.Message);
         {
             m_DataTableManager = new FacebookDataTableManager();
             initComboBoxDataTableBindingSelection();
-            m_DataTablesTabWasInitialized = true;            
+            m_DataTablesTabWasInitialized = true;
         }
 
         private void initComboBoxDataTableBindingSelection()

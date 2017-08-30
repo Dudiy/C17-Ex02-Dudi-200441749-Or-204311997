@@ -90,6 +90,9 @@
       <DependentUpon>FriendDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="FriendshipAnalyzer.cs" />
+    <Compile Include="GrowingPictureBoxProxy.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="IDisplayable.cs" />
     <Compile Include="PhotoDetails.cs">
       <SubType>Form</SubType>
