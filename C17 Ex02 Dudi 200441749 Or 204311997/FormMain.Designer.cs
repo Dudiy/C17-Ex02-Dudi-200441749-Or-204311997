@@ -199,7 +199,7 @@
             this.pictureBoxProfilePicture.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxProfilePicture.Image")));
             this.pictureBoxProfilePicture.Location = new System.Drawing.Point(25, 84);
             this.pictureBoxProfilePicture.Name = "pictureBoxProfilePicture";
-            this.pictureBoxProfilePicture.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.pictureBoxProfilePicture.Padding = new System.Windows.Forms.Padding(1);
             this.pictureBoxProfilePicture.Size = new System.Drawing.Size(81, 79);
             this.pictureBoxProfilePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxProfilePicture.TabIndex = 2;
@@ -233,9 +233,9 @@
             this.tabPageFriendshipAnalyzer.Controls.Add(this.panelGeneralInfo);
             this.tabPageFriendshipAnalyzer.Controls.Add(this.flowLayoutPanelFriendshipAnalyzer);
             this.tabPageFriendshipAnalyzer.Location = new System.Drawing.Point(4, 29);
-            this.tabPageFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageFriendshipAnalyzer.Name = "tabPageFriendshipAnalyzer";
-            this.tabPageFriendshipAnalyzer.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageFriendshipAnalyzer.Padding = new System.Windows.Forms.Padding(2);
             this.tabPageFriendshipAnalyzer.Size = new System.Drawing.Size(1164, 549);
             this.tabPageFriendshipAnalyzer.TabIndex = 2;
             this.tabPageFriendshipAnalyzer.Text = "Friendship Analyzer";
@@ -352,7 +352,7 @@
             this.tabPageDataTables.Controls.Add(this.comboBoxDataTableBindingSelection);
             this.tabPageDataTables.Location = new System.Drawing.Point(4, 29);
             this.tabPageDataTables.Name = "tabPageDataTables";
-            this.tabPageDataTables.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageDataTables.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageDataTables.Size = new System.Drawing.Size(1164, 549);
             this.tabPageDataTables.TabIndex = 1;
             this.tabPageDataTables.Text = "Data Tables";
@@ -387,13 +387,11 @@
             // 
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView.BackgroundColor = System.Drawing.Color.LightCyan;
             this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Location = new System.Drawing.Point(3, 39);
-            this.dataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView.MultiSelect = false;
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
@@ -407,7 +405,7 @@
             // buttonFetchData
             // 
             this.buttonFetchData.Location = new System.Drawing.Point(159, 8);
-            this.buttonFetchData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFetchData.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFetchData.Name = "buttonFetchData";
             this.buttonFetchData.Size = new System.Drawing.Size(79, 28);
             this.buttonFetchData.TabIndex = 2;
@@ -420,7 +418,7 @@
             this.comboBoxDataTableBindingSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDataTableBindingSelection.FormattingEnabled = true;
             this.comboBoxDataTableBindingSelection.Location = new System.Drawing.Point(7, 12);
-            this.comboBoxDataTableBindingSelection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxDataTableBindingSelection.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxDataTableBindingSelection.Name = "comboBoxDataTableBindingSelection";
             this.comboBoxDataTableBindingSelection.Size = new System.Drawing.Size(149, 21);
             this.comboBoxDataTableBindingSelection.TabIndex = 1;
@@ -442,7 +440,7 @@
             this.tabPageAboutMe.Controls.Add(this.labelMyLastPost);
             this.tabPageAboutMe.Location = new System.Drawing.Point(4, 29);
             this.tabPageAboutMe.Name = "tabPageAboutMe";
-            this.tabPageAboutMe.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageAboutMe.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageAboutMe.Size = new System.Drawing.Size(1164, 549);
             this.tabPageAboutMe.TabIndex = 0;
             this.tabPageAboutMe.Text = "About Me";
@@ -734,7 +732,7 @@
             this.flowLayoutPanelAboutMeFriends.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanelAboutMeFriends.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelAboutMeFriends.Name = "flowLayoutPanelAboutMeFriends";
-            this.flowLayoutPanelAboutMeFriends.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.flowLayoutPanelAboutMeFriends.Padding = new System.Windows.Forms.Padding(10);
             this.flowLayoutPanelAboutMeFriends.Size = new System.Drawing.Size(257, 463);
             this.flowLayoutPanelAboutMeFriends.TabIndex = 6;
             // 
@@ -857,7 +855,6 @@
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 0;
             this.tabControl.Tag = "";
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // timerDataTables
             // 

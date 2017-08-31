@@ -52,6 +52,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                         friend.LastName,
                         friend.Gender != null ? friend.Gender.ToString() : string.Empty);
                     //getMostRecentPost(friend));
+                    
 
                     if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
                     {

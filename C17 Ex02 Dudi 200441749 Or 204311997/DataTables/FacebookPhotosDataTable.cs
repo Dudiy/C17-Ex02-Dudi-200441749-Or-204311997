@@ -17,6 +17,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
     {
         private Thread populateRowsThread;
 
+        private Action populateRowsThreadInterrupted;
         private bool abortRunningThread;
         public Album[] AlbumsToLoad { get; set; }
         internal FacebookPhotosDataTable()
@@ -39,8 +40,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            this.abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;
-            DataTable.Rows.Clear();
+            abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;                        
             TotalRows = i_Collection.Count;
 
             if (PopulateRowsStarting != null)
@@ -48,7 +48,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 PopulateRowsStarting.Invoke();
             }
 
-
+            while (abortRunningThread)
+            {
+                Thread.Sleep(100);
+            }
+            DataTable.Rows.Clear();
             populateRowsThread = new Thread(() => populateRows(i_Collection));
             populateRowsThread.Start();
         }
@@ -72,9 +76,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                             photoTags);
                     }
 
-                    if (this.abortRunningThread)
+                    if (abortRunningThread)
                     {
-                        this.abortRunningThread = false;
+                        abortRunningThread = false;
                         break;
                     }
                 }

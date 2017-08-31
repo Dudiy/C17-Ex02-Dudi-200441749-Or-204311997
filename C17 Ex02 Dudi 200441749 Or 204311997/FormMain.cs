@@ -25,9 +25,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private FacebookDataTable m_DataTableBindedToView;
         private FriendshipAnalyzer m_FriendshipAnalyzer;
         private string m_PostPicturePath;
-        private bool m_DataTablesTabWasInitialized = false;
-        private bool m_FriendshipAnalyzerTabWasInitialized = false;
-        private bool m_LogoutClicked = false;
+        private bool m_LogoutClicked;
 
         public FormMain()
         {
@@ -48,6 +46,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             labelUserName.Text = userName;
             MinimumSize = sr_MinimumWindowSize;
             new Thread(fetchProfileAndCoverPhotos).Start();
+            // lazy load the two tabs not visible
+            tabControl.TabPages[1].HandleCreated += (i_Sender, i_Args) => initDataTablesTab();
+            tabControl.TabPages[2].HandleCreated += (i_Sender, i_Args) => initFriendshipAnalyzerTab();
             initAboutMeTab();
         }
 
@@ -415,7 +416,6 @@ i_Comment.Message);
         {
             m_DataTableManager = new FacebookDataTableManager();
             initComboBoxDataTableBindingSelection();
-            m_DataTablesTabWasInitialized = true;
         }
 
         private void initComboBoxDataTableBindingSelection()
@@ -430,14 +430,13 @@ i_Comment.Message);
             {
                 dataGridView.DataSource = null;
                 m_DataTableBindedToView = (FacebookDataTable)comboBoxDataTableBindingSelection.SelectedItem;
-                dataGridView.DataSource = m_DataTableBindedToView.DataTable;
                 if (m_DataTableBindedToView.DataTable.Rows.Count == 0 || m_DataTableBindedToView is FacebookPhotosDataTable)
                 {
                     FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
-                    //this.m_DataTableBindedToView.PopulateRowsCompleted += () => dataGridView.Invoke(new Action(refreshDataGridView));
-                    timerDataTables.Start();
                     m_DataTableBindedToView.PopulateRows(collection);
+                    timerDataTables.Start();
                 }
+                dataGridView.DataSource = m_DataTableBindedToView.DataTable;
 
                 if (dataGridView.Columns["ObjectDisplayed"] != null)
                 {
@@ -449,24 +448,6 @@ i_Comment.Message);
                     MessageBox.Show("The requested table could not be loaded, please try again");
                 }
             }
-        }
-
-        private void FinishedDataTablePopulation()
-        {
-            Invoke(new Action(() =>
-            {
-                dataGridView.Refresh();
-                toolStripProgressBar.ProgressBar.Visible = false;
-            }));
-        }
-
-        private void startingDataTablePopulation()
-        {
-            Invoke(new Action(() =>
-            {
-                toolStripProgressBar.ProgressBar.Visible = true;
-                toolStripProgressBar.Maximum = m_DataTableBindedToView.TotalRows;
-            }));
         }
 
         private FacebookObjectCollection<FacebookObject> fetchCollectionWithAdapter(Type i_DataTableType)
@@ -490,23 +471,10 @@ i_Comment.Message);
             }
             else
             {
-                throw new NotImplementedException("unknow data table type while fetching facebook collection");
+                throw new NotImplementedException("The given data table type is not supported");
             }
 
             return collection;
-        }
-
-        private void updateToolstripProgressBar()
-        {
-            Invoke(new Action(() =>
-            {
-                //toolStripProgressBar.Value++;
-                toolStripProgressBar.Value = dataGridView.Rows.Count;
-                if (dataGridView.Rows.Count % 20 == 0)
-                {
-                    dataGridView.Refresh();
-                }
-            }));
         }
 
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -521,7 +489,7 @@ i_Comment.Message);
 
         private void displayDetailsForRowObject(DataGridViewRow i_RowSelected)
         {
-            object selectedObject = i_RowSelected.Cells["ObjectDisplayed"].Value;
+            object selectedObject = i_RowSelected.Cells["ObjectDisplayed"].Value;            
             m_DataTableBindedToView.ObjectToDisplay = selectedObject;
             m_DataTableBindedToView.DisplayObject();
         }
@@ -544,7 +512,6 @@ i_Comment.Message);
         {
             m_FriendshipAnalyzer = new FriendshipAnalyzer();
             initFriendsPhotosBar();
-            m_FriendshipAnalyzerTabWasInitialized = true;
         }
 
         private void initFriendsPhotosBar()
@@ -873,39 +840,26 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
         }
 
         // ================================================ Other methods ==============================================
-        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!m_DataTablesTabWasInitialized && tabControl.SelectedTab == tabPageDataTables)
-            {
-                initDataTablesTab();
-            }
-            else if (!m_FriendshipAnalyzerTabWasInitialized && tabControl.SelectedTab == tabPageFriendshipAnalyzer)
-            {
-                initFriendshipAnalyzerTab();
-            }
-        }
-
         private void refreshDataGridView()
         {
-
-            //toolStripStatusLabel.Visible = true;
-            //dataGridView.Refresh();
-            //int totalRows = m_DataTableBindedToView.TotalRows;
-            //int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
-            //if (totalRows == loadedRows)
-            //{
-            //    toolStripStatusLabel.Text = "All rows loaded";
-            //    timerDataTables.Stop();
-            //}
-            //else
-            //{
-            //    toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
-            //}
+            toolStripStatusLabel.Visible = true;
+            dataGridView.Refresh();
+            int totalRows = m_DataTableBindedToView.TotalRows;
+            int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
+            if (totalRows == loadedRows)
+            {
+                toolStripStatusLabel.Text = "All rows loaded";
+                timerDataTables.Stop();
+            }
+            else
+            {
+                toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
+            }
         }
 
         private void timerDataTables_Tick(object sender, EventArgs e)
         {
-            //refreshDataGridView();
+            refreshDataGridView();
         }
     }
 }
