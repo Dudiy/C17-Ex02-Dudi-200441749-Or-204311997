@@ -11,6 +11,7 @@ using System.Windows.Forms;
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     using System.Threading;
+    using System.Windows.Forms.VisualStyles;
 
     public partial class ProgressBarWindow : Form
     {
@@ -21,7 +22,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             InitializeComponent();
             progressBar.Minimum = 0;
             progressBar.Maximum = i_MaxValue;
-            labelLoading.Text = string.Format("Loading {0}...", i_Description);            
+            labelLoading.Text = string.Format("Loading {0}...", i_Description);
         }
 
         public ProgressBarWindow(string i_Description)
@@ -56,9 +57,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 if (value <= progressBar.Maximum)
                 {
-                    progressBar.Invoke(new Action(() => progressBar.Value = value));
-                    labelLoadedPercent.Text = string.Format("{0:P0}", (float)value / progressBar.Maximum);
-                    Refresh();
+                    Invoke(new Action(() =>
+                            {
+                                progressBar.Value = value;
+                                labelLoadedPercent.Text = string.Format("{0:P0}", (float)value / progressBar.Maximum);
+                                Refresh();
+                            }));
                 }
                 else
                 {
@@ -68,6 +72,11 @@ progressBar.Minimum,
 progressBar.Maximum));
                 }
             }
-        } 
+        }
+
+        public new void Close()
+        {
+            Invoke(new Action(() => base.Close()));
+        }
     }
 }

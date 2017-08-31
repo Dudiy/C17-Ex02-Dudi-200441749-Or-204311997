@@ -27,6 +27,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private string m_PostPicturePath;
         private bool m_LogoutClicked;
 
+
+
         public FormMain()
         {
             InitializeComponent();
@@ -560,15 +562,32 @@ i_Comment.Message);
             FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
             ProgressBarWindow progressBar = new ProgressBarWindow(2 * allPhotos.Count, "statistics"); // likes + comments
 
-            // TODO thread doesn't work
             progressBar.Show();
-            int numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos, () => progressBar.ProgressValue++);
-            labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numPhotosFriendLiked);
-            int numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos, () => progressBar.ProgressValue++);
-
-            labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numOfPhotosFriendCommented);
-            progressBar.Close();
+            new Thread(() => m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos, () => progressBar.ProgressValue++)).Start();
+            new Thread(() => m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos, () => progressBar.ProgressValue++)).Start();
+            m_FriendshipAnalyzer.FinishedFetchingLikesAndComments += () =>
+                {
+                    finishedFetchingLikesAndComments();
+                    progressBar.Close();
+                };
             getMostRecentPhotoTogether();
+        }
+
+        private void finishedFetchingLikesAndComments()
+        {
+            panelGeneralInfo.Invoke(
+                new Action(() =>
+                        {
+                            labelNumLikes.Text = string.Format(
+"Number of times {0} liked my photos: {1}",
+m_FriendshipAnalyzer.Friend.FirstName,
+m_FriendshipAnalyzer.NumPhotosFriendLiked);
+                            labelNumComments.Text = string.Format(
+"Number of times {0} commented on my photos: {1}",
+m_FriendshipAnalyzer.Friend.FirstName,
+m_FriendshipAnalyzer.NumPhotosFriendCommented);
+                        }));
+
         }
 
         private void fetchPhotosTaggedTogether()

@@ -14,8 +14,23 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     public class FriendshipAnalyzer
     {
+        private bool finishedFetchingComments;
+        private bool finishedFetchingLikes;
         private User m_LoggedInUser = FacebookApplication.LoggedInUser;
+
         public User Friend { get; set; }
+
+        public int NumPhotosFriendLiked { get; private set; }
+
+        public int NumPhotosFriendCommented { get; private set; }
+        
+        public event Action FinishedFetchingLikesAndComments;
+
+        public FriendshipAnalyzer()
+        {
+            NumPhotosFriendLiked = 0;
+            NumPhotosFriendCommented = 0;
+        }
 
         public List<Photo> PhotosTaggedTogether(FacebookObjectCollection<Photo> i_PhotosTaggedIn)
         {
@@ -70,24 +85,23 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public int GetNumberOfPhotosFriendLiked(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
         {
             int numLikes = 0;
+            finishedFetchingLikes = false;
 
             foreach (Photo photo in i_Photos)
             {
                 if (photo.LikedBy.Find(user => user.Id == Friend.Id) != null)
                 {
+                    NumPhotosFriendLiked++;
                     numLikes++;
                 }
 
-                //foreach (User user in photo.LikedBy)
-                //{
-                //    if (user.Id == Friend.Id)
-                //    {
-                //        numLikes++;
-                //        break;
-                //    }
-                //}
-
                 i_PromoteProgressBar.Invoke();
+            }
+
+            finishedFetchingLikes = true;
+            if (FinishedFetchingLikesAndComments != null && finishedFetchingComments)
+            {
+                FinishedFetchingLikesAndComments.Invoke();
             }
 
             return numLikes;
@@ -96,12 +110,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public int GetNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
         {
             int numComments = 0;
+            finishedFetchingComments = false;
 
             foreach (Photo photo in i_Photos)
             {
                 if (photo.Comments.Find(user => user.Id == Friend.Id) != null)
                 {
                     numComments++;
+                    NumPhotosFriendCommented++;
                 }
 
                 //foreach (Comment comment in photo.Comments)
@@ -114,6 +130,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 //}
 
                 i_PromoteProgressBar.Invoke();
+            }
+
+            finishedFetchingComments = true;
+            if (FinishedFetchingLikesAndComments != null && finishedFetchingLikes)
+            {
+                FinishedFetchingLikesAndComments.Invoke();
             }
 
             return numComments;
