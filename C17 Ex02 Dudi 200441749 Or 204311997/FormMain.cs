@@ -96,7 +96,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                new Thread(updateAboutMeFriends).Start();
+                new Thread(() => UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends, FriendProfile_MouseClick)).Start();
                 new Thread(() => updateLikedPages(!k_UseCollectionAdapter)).Start();
                 new Thread(updateMostRecentPost).Start();
                 new Thread(this.initFriendsListForNewPostTags).Start();
@@ -107,30 +107,33 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void updateAboutMeFriends()
-        {
-            try
-            {
-                lock (r_UpdateAboutMeFriendsLock)
-                {
-                    FacebookApplication.LoggedInUser.ReFetch("friends");
-                    flowLayoutPanelAboutMeFriends.Invoke(new Action(() => flowLayoutPanelAboutMeFriends.Controls.Clear()));
+        //private void updateAboutMeFriends()
+        //{
+        //    UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends);
+        //}
+        //private void updateAboutMeFriends()
+        //{
+        //    try
+        //    {
+        //        lock (r_UpdateAboutMeFriendsLock)
+        //        {
+        //            FacebookApplication.LoggedInUser.ReFetch("friends");
+        //            flowLayoutPanelAboutMeFriends.Invoke(new Action(() => flowLayoutPanelAboutMeFriends.Controls.Clear()));
 
-                    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
-                    {
-                        GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend.PictureLargeURL, friend);
-                        friendsProfilePic.MouseClick += FriendProfile_MouseClick;
-                        flowLayoutPanelAboutMeFriends.Invoke(new Action(() =>
-                            flowLayoutPanelAboutMeFriends.Controls.Add(friendsProfilePic)));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format("Error while loading user's friend. error message: {0}", ex.Message));
-            }
-        }
-
+        //            foreach (User friend in FacebookApplication.LoggedInUser.Friends)
+        //            {
+        //                GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend.PictureLargeURL, friend);
+        //                friendsProfilePic.MouseClick += FriendProfile_MouseClick;
+        //                flowLayoutPanelAboutMeFriends.Invoke(new Action(() =>
+        //                    flowLayoutPanelAboutMeFriends.Controls.Add(friendsProfilePic)));
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(string.Format("Error while loading user's friend. error message: {0}", ex.Message));
+        //    }
+        //}
         private void updateLikedPages(bool i_UseCollectionAdapter)
         {
             lock (r_UpdateLikedPagesLock)
@@ -186,7 +189,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 // posted photo
                 if (!string.IsNullOrEmpty(i_Post.PictureURL))
                 {
-                    pictureBoxLastPost.Load(i_Post.PictureURL);                    
+                    pictureBoxLastPost.Load(i_Post.PictureURL);
                 }
 
                 // people who liked the post
@@ -270,7 +273,7 @@ i_Comment.Message);
 
         private void buttonRefreshFriends_Click(object sender, EventArgs e)
         {
-            new Thread(updateAboutMeFriends).Start();
+            new Thread(() => UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends, FriendProfile_MouseClick)).Start();
         }
 
         private void URL_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -477,6 +480,30 @@ i_Comment.Message);
             return collection;
         }
 
+        private void displayDetailsForRowObject(DataGridViewRow i_RowSelected)
+        {
+            object selectedObject = i_RowSelected.Cells["ObjectDisplayed"].Value;
+            m_DataTableBindedToView.ObjectToDisplay = selectedObject;
+            m_DataTableBindedToView.DisplayObject();
+        }
+
+        private void refreshDataGridView()
+        {
+            toolStripStatusLabel.Visible = true;
+            dataGridView.Refresh();
+            int totalRows = m_DataTableBindedToView.TotalRows;
+            int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
+            if (totalRows == loadedRows)
+            {
+                toolStripStatusLabel.Text = "All rows loaded";
+                timerDataTables.Stop();
+            }
+            else
+            {
+                toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
+            }
+        }
+
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (((DataGridView)sender).SelectedCells.Count > 0)
@@ -485,13 +512,6 @@ i_Comment.Message);
                 rowSelected.Selected = true;
                 displayDetailsForRowObject(rowSelected);
             }
-        }
-
-        private void displayDetailsForRowObject(DataGridViewRow i_RowSelected)
-        {
-            object selectedObject = i_RowSelected.Cells["ObjectDisplayed"].Value;            
-            m_DataTableBindedToView.ObjectToDisplay = selectedObject;
-            m_DataTableBindedToView.DisplayObject();
         }
 
         private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -507,37 +527,48 @@ i_Comment.Message);
             fetchDataForDataTablesTab();
         }
 
+        private void timerDataTables_Tick(object sender, EventArgs e)
+        {
+            refreshDataGridView();
+        }
         // ================================================ Friendship analyzer Tab ==============================================
         private void initFriendshipAnalyzerTab()
         {
             m_FriendshipAnalyzer = new FriendshipAnalyzer();
-            initFriendsPhotosBar();
+            new Thread(() => UpdateFriendsLayoutPanel(flowLayoutPanelFriendshipAnalyzer, friendshipAnalyzerFriendsDockPhoto_MouseClick)).Start();
         }
 
-        private void initFriendsPhotosBar()
+        private void friendSelectionChanged()
         {
-            try
-            {
-                foreach (User friend in FacebookApplication.LoggedInUser.Friends)
-                {
-                    PictureBox friendshipAnalyzerFriendsDockPhoto = new PictureBox()
-                    {
-                        Image = friend.ImageLarge,
-                        Size = sr_FriendProfilePicSize,
-                        SizeMode = PictureBoxSizeMode.Zoom,
-                        Tag = friend
-                    };
+            User selectedFriend = m_FriendshipAnalyzer.Friend;
 
-                    friendshipAnalyzerFriendsDockPhoto.MouseEnter += friendshipAnalyzerFriendsDockPhoto_MouseEnter;
-                    friendshipAnalyzerFriendsDockPhoto.MouseLeave += friendshipAnalyzerFriendsDockPhoto_MouseLeave;
-                    friendshipAnalyzerFriendsDockPhoto.MouseClick += friendshipAnalyzerFriendsDockPhoto_MouseClick;
-                    flowLayoutPanelFriendshipAnalyzer.Controls.Add(friendshipAnalyzerFriendsDockPhoto);
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Error getting list of friends");
-            }
+            panelGeneralInfo.Visible = false;
+            clearAllTreeViews();
+            labelFirstName.Text = selectedFriend.FirstName;
+            labelLastName.Text = selectedFriend.LastName;
+            labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
+            labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
+            buttonFetchMyPhotosFriendIsIn.Text = string.Format("Fetch photos of mine {0} is in", selectedFriend.FirstName);
+            buttonFetchPhotosOfFriendIAmTaggedIn.Text = string.Format("Fetch {0}'s Photos I am Tagged in", selectedFriend.FirstName);
+            panelGeneralInfo.Visible = true;
+        }
+
+        private void friendshipAnalyzerFetchGeneralData()
+        {
+            FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
+            FacebookObjectCollection<FacebookObject> boxAllPhotosTaggedIn = allPhotosAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
+            ProgressBarWindow progressBar = new ProgressBarWindow(2 * allPhotos.Count, "statistics"); // likes + comments
+
+            // TODO thread doesn't work
+            progressBar.Show();
+            int numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos, () => progressBar.ProgressValue++);
+            labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numPhotosFriendLiked);
+            int numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos, () => progressBar.ProgressValue++);
+
+            labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numOfPhotosFriendCommented);
+            progressBar.Close();
+            getMostRecentPhotoTogether();
         }
 
         private void fetchPhotosTaggedTogether()
@@ -549,19 +580,23 @@ i_Comment.Message);
             Dictionary<string, List<Photo>> photosGroupedByOwner = m_FriendshipAnalyzer.GroupPhotoListByOwner(photosTaggedTogether);
 
             treeViewTaggedTogether.Nodes.Clear();
-            foreach (KeyValuePair<string, List<Photo>> UserPhotos in photosGroupedByOwner)
+            foreach (KeyValuePair<string, List<Photo>> userPhotos in photosGroupedByOwner)
             {
-                TreeNode fromNode = new TreeNode(string.Format("Photos by {0}", UserPhotos.Value[0].From.Name));
+                TreeNode fromNode = new TreeNode(string.Format("Photos by {0}", userPhotos.Value[0].From.Name))
+                {
+                    Tag = userPhotos.Value[0].From
+                };
 
-                fromNode.Tag = UserPhotos.Value[0].From;
-                foreach (Photo photo in UserPhotos.Value)
+                foreach (Photo photo in userPhotos.Value)
                 {
                     TreeNode photoNode = new TreeNode(string.Format(
 @"{0} - {1}",
 photo.CreatedTime.ToString(),
-string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name));
+string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name))
+                    {
+                        Tag = photo
+                    };
 
-                    photoNode.Tag = photo;
                     fromNode.Nodes.Add(photoNode);
                 }
 
@@ -571,9 +606,8 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name));
 
         private void fetchPhotosOfFriendInMyPhotos()
         {
-            FacebookObjectCollection<Album> albums = fetchAlbums();
-            Dictionary<Album, List<Photo>> photos = FriendshipAnalyzer.GetPhotosByOwnerAndTags(
-                FacebookApplication.LoggedInUser, m_FriendshipAnalyzer.Friend, albums);
+            FacebookObjectCollection<Album> albums = fetchAlbums(FacebookApplication.LoggedInUser);
+            Dictionary<Album, List<Photo>> photos = FriendshipAnalyzer.GetPhotosFromAlbumsUserIsTaggedIn(m_FriendshipAnalyzer.Friend, albums);
 
             treeViewPhotosOfFriendInMyPhotos.Nodes.Clear();
             if (photos == null || photos.Count == 0)
@@ -602,11 +636,12 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
         }
 
-        private static FacebookObjectCollection<Album> fetchAlbums()
+        // TODO why static?
+        private static FacebookObjectCollection<Album> fetchAlbums(User i_User)
         {
-            AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
+            AlbumsSelector albumSelector = new AlbumsSelector(i_User);
             Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
-            FacebookCollectionAdapter<Album> albumsAdapter = new FacebookCollectionAdapter<Album>(eFacebookCollectionType.AlbumPhotos)
+            FacebookCollectionAdapter<Album> albumsAdapter = new FacebookCollectionAdapter<Album>(eFacebookCollectionType.Albums)
             {
                 AlbumsToLoad = selectedAlbums
             };
@@ -619,9 +654,8 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
 
         private void fetchPhotosOfMeInFriendsPhotos()
         {
-            FacebookObjectCollection<Album> albums = fetchAlbums();
-            Dictionary<Album, List<Photo>> photos = FriendshipAnalyzer.GetPhotosByOwnerAndTags(
-                m_FriendshipAnalyzer.Friend, FacebookApplication.LoggedInUser, albums);
+            FacebookObjectCollection<Album> albums = fetchAlbums(m_FriendshipAnalyzer.Friend);
+            Dictionary<Album, List<Photo>> photos = FriendshipAnalyzer.GetPhotosFromAlbumsUserIsTaggedIn(FacebookApplication.LoggedInUser, albums);
 
             treeViewPhotosOfFriendIAmTaggedIn.Nodes.Clear();
             if (photos == null || photos.Count == 0)
@@ -676,50 +710,13 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             photoTreeViewDoubleClicked(e.Node);
         }
 
-        private void friendshipAnalyzerFriendsDockPhoto_MouseLeave(object sender, EventArgs e)
-        {
-            PictureBox pictureBoxSelected = sender as PictureBox;
-
-            if (pictureBoxSelected != null)
-            {
-                increasePictureBoxSize(pictureBoxSelected, -k_PictureBoxIncreaseSizeOnMouseHover);
-            }
-        }
-
-        private void friendshipAnalyzerFriendsDockPhoto_MouseEnter(object sender, EventArgs e)
-        {
-            PictureBox pictureBoxSelected = sender as PictureBox;
-
-            if (pictureBoxSelected != null)
-            {
-                increasePictureBoxSize(pictureBoxSelected, k_PictureBoxIncreaseSizeOnMouseHover);
-            }
-        }
-
         private void friendshipAnalyzerFriendsDockPhoto_MouseClick(object sender, MouseEventArgs e)
         {
-            User friend = ((PictureBox)sender).Tag as User;
-
-            if (friend != null)
+            if (((PictureBox)sender).Tag is User friend)
             {
                 m_FriendshipAnalyzer.Friend = friend;
                 friendSelectionChanged();
             }
-        }
-
-        private void friendSelectionChanged()
-        {
-            User selectedFriend = m_FriendshipAnalyzer.Friend;
-
-            panelGeneralInfo.Visible = false;
-            clearAllTreeViews();
-            labelFirstName.Text = selectedFriend.FirstName;
-            labelLastName.Text = selectedFriend.LastName;
-            labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
-            labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
-            buttonFetchMyPhotosFriendIsIn.Text = string.Format("Fetch photos of mine {0} is in", selectedFriend.FirstName);
-            buttonFetchPhotosOfFriendIAmTaggedIn.Text = string.Format("Fetch {0}'s Photos I am Tagged in", selectedFriend.FirstName);
-            panelGeneralInfo.Visible = true;
         }
 
         private void clearAllTreeViews()
@@ -788,26 +785,6 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             friendshipAnalyzerFetchGeneralData();
         }
 
-        private void friendshipAnalyzerFetchGeneralData()
-        {
-            FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
-            FacebookObjectCollection<FacebookObject> boxAllPhotosTaggedIn = allPhotosAdapter.FetchDataWithProgressBar();
-            FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
-            ProgressBarWindow progressBar = new ProgressBarWindow(2 * allPhotos.Count, "Statistic"); // likes + comments
-
-            // TODO thread doesn't work
-            progressBar.Show();
-            int numPhotosFriendLiked = m_FriendshipAnalyzer.GetNumberOfPhotosFriendLiked(allPhotos,
-            () => progressBar.ProgressValue++);
-
-            labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numPhotosFriendLiked);
-            int numOfPhotosFriendCommented = m_FriendshipAnalyzer.GetNumberOfPhotosFriendCommented(allPhotos,
-                () => progressBar.ProgressValue++);
-
-            labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", m_FriendshipAnalyzer.Friend.FirstName, numOfPhotosFriendCommented);
-            progressBar.Close();
-            getMostRecentPhotoTogether();
-        }
 
         //private void countLikes(FacebookObjectCollection<Photo> allPhotos, ProgressBarWindow progressBar)
         //{
@@ -840,26 +817,28 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
         }
 
         // ================================================ Other methods ==============================================
-        private void refreshDataGridView()
+        private void UpdateFriendsLayoutPanel(FlowLayoutPanel i_FlowLayoutPanel, MouseEventHandler i_OnMouseEventHandlerouseClick)
         {
-            toolStripStatusLabel.Visible = true;
-            dataGridView.Refresh();
-            int totalRows = m_DataTableBindedToView.TotalRows;
-            int loadedRows = m_DataTableBindedToView.DataTable.Rows.Count;
-            if (totalRows == loadedRows)
+            try
             {
-                toolStripStatusLabel.Text = "All rows loaded";
-                timerDataTables.Stop();
-            }
-            else
-            {
-                toolStripStatusLabel.Text = string.Format("loaded {0}/{1} rows", loadedRows, totalRows);
-            }
-        }
+                lock (r_UpdateAboutMeFriendsLock)
+                {
+                    FacebookApplication.LoggedInUser.ReFetch("friends");
+                    i_FlowLayoutPanel.Invoke(new Action(() => i_FlowLayoutPanel.Controls.Clear()));
 
-        private void timerDataTables_Tick(object sender, EventArgs e)
-        {
-            refreshDataGridView();
+                    foreach (User friend in FacebookApplication.LoggedInUser.Friends)
+                    {
+                        GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend.PictureLargeURL, friend);
+                        friendsProfilePic.MouseClick += i_OnMouseEventHandlerouseClick;
+                        i_FlowLayoutPanel.Invoke(new Action(() => i_FlowLayoutPanel.Controls.Add(friendsProfilePic)));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Error while loading user's friend. error message: {0}", ex.Message));
+            }
         }
     }
 }
+

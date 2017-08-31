@@ -21,7 +21,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             List<Photo> photosTaggedTogether = new List<Photo>();
 
-            foreach (Photo photo in photosTaggedTogether)
+            foreach (Photo photo in i_PhotosTaggedIn)
             {
                 if (photo.Tags != null)
                 {
@@ -73,14 +73,19 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             foreach (Photo photo in i_Photos)
             {
-                foreach (User user in photo.LikedBy)
+                if (photo.LikedBy.Find(user => user.Id == Friend.Id) != null)
                 {
-                    if (user.Id == Friend.Id)
-                    {
-                        numLikes++;
-                        break;
-                    }
+                    numLikes++;
                 }
+
+                //foreach (User user in photo.LikedBy)
+                //{
+                //    if (user.Id == Friend.Id)
+                //    {
+                //        numLikes++;
+                //        break;
+                //    }
+                //}
 
                 i_PromoteProgressBar.Invoke();
             }
@@ -94,14 +99,19 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             foreach (Photo photo in i_Photos)
             {
-                foreach (Comment comment in photo.Comments)
+                if (photo.Comments.Find(user => user.Id == Friend.Id) != null)
                 {
-                    if (comment.From.Id == Friend.Id)
-                    {
-                        numComments++;
-                        break;
-                    }
+                    numComments++;
                 }
+
+                //foreach (Comment comment in photo.Comments)
+                //{
+                //    if (comment.From.Id == Friend.Id)
+                //    {
+                //        numComments++;
+                //        break;
+                //    }
+                //}
 
                 i_PromoteProgressBar.Invoke();
             }
@@ -109,7 +119,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return numComments;
         }
 
-        public static Dictionary<Album, List<Photo>> GetPhotosByOwnerAndTags(User i_User, User i_Tagged, FacebookObjectCollection<Album> i_Albums)
+        public static Dictionary<Album, List<Photo>> GetPhotosFromAlbumsUserIsTaggedIn(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
         {
             Dictionary<Album, List<Photo>> photos = new Dictionary<Album, List<Photo>>();
 

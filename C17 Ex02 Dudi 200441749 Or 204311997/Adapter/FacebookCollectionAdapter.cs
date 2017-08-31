@@ -115,7 +115,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             foreach (Album album in AlbumsToLoad)
             {
-                progressBarWindow.MaxValue += (int)album.Count;
+                progressBarWindow.MaxValue += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
             }
 
             progressBarWindow.Show();
@@ -162,7 +162,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             foreach (Album album in AlbumsToLoad)
             {
-                progressBarWindow.MaxValue += (int)album.Count;
+                progressBarWindow.MaxValue += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
             }
 
             progressBarWindow.Show();
