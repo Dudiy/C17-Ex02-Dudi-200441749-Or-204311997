@@ -48,5 +48,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 Size.Width + (negator * AmountToGrow),
                 Size.Height + (negator * AmountToGrow));
         }
+
+        public void Reset()
+        {
+            Image = Resources.Picture_not_found;
+            Tag = null;
+        }
     }
 }

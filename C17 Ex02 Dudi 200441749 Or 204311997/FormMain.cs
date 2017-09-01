@@ -12,6 +12,8 @@ using C17_Ex01_Dudi_200441749_Or_204311997.Adapter;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+    using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
+
     public partial class FormMain : Form
     {
         private const bool k_UseCollectionAdapter = true;
@@ -536,6 +538,7 @@ i_Comment.Message);
         // ================================================ Friendship analyzer Tab ==============================================
         private void initFriendshipAnalyzerTab()
         {
+            setEventHandlers();
             m_FriendshipAnalyzer = new FriendshipAnalyzer();
             new Thread(() => UpdateFriendsLayoutPanel(flowLayoutPanelFriendshipAnalyzer, friendshipAnalyzerFriendsDockPhoto_MouseClick)).Start();
         }
@@ -546,6 +549,7 @@ i_Comment.Message);
 
             panelGeneralInfo.Visible = false;
             clearAllTreeViews();
+            this.pictureBoxMostRecentTaggedTogether.Reset();
             labelFirstName.Text = selectedFriend.FirstName;
             labelLastName.Text = selectedFriend.LastName;
             labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
@@ -587,7 +591,6 @@ m_FriendshipAnalyzer.NumPhotosFriendLiked);
 m_FriendshipAnalyzer.Friend.FirstName,
 m_FriendshipAnalyzer.NumPhotosFriendCommented);
                         }));
-
         }
 
         private void fetchPhotosTaggedTogether()
@@ -703,9 +706,17 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
         }
 
+        private void setEventHandlers()
+        {
+            treeViewPhotosOfFriendInMyPhotos.NodeMouseDoubleClick += (sender, e) => photoTreeViewDoubleClicked(e.Node);
+            treeViewTaggedTogether.NodeMouseDoubleClick += (sender, e) => photoTreeViewDoubleClicked(e.Node);
+            buttonFetchPhotosOfFriendIAmTaggedIn.Click += (sender, e) => fetchPhotosOfMeInFriendsPhotos();
+        }
+
+        // TODO delete
         private void treeViewPhotosOfFriendInMyPhotos_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            photoTreeViewDoubleClicked(e.Node);
+            //photoTreeViewDoubleClicked(e.Node);
         }
 
         private void photoTreeViewDoubleClicked(TreeNode i_SelectedNode)
@@ -724,9 +735,10 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             }
         }
 
+        // TODO delete
         private void treeViewTaggedTogether_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            photoTreeViewDoubleClicked(e.Node);
+            //photoTreeViewDoubleClicked(e.Node);
         }
 
         private void friendshipAnalyzerFriendsDockPhoto_MouseClick(object sender, MouseEventArgs e)
@@ -744,23 +756,17 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             treeViewPhotosOfFriendInMyPhotos.Nodes.Clear();
             treeViewTaggedTogether.Nodes.Clear();
         }
-
-        private void increasePictureBoxSize(PictureBox i_PictureBox, int i_Size)
-        {
-            int newWidth = i_PictureBox.Size.Width + i_Size;
-            int newHeight = i_PictureBox.Size.Height + i_Size;
-
-            i_PictureBox.Size = new Size(newWidth, newHeight);
-        }
-
+        
+        // TODO 
         private void buttonFetchPhotosOfFriendIAmTaggedIn_Click(object sender, EventArgs e)
         {
-            fetchPhotosOfMeInFriendsPhotos();
+            //fetchPhotosOfMeInFriendsPhotos();
         }
 
+        // TODO delete
         private void buttonFetchTaggedTogether_Click(object sender, EventArgs e)
         {
-            fetchPhotosTaggedTogether();
+            //fetchPhotosTaggedTogether();
         }
 
         private void buttonFetchMyPhotosFriendIsIn_Click(object sender, EventArgs e)
@@ -768,35 +774,9 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             fetchPhotosOfFriendInMyPhotos();
         }
 
-        private void pictureBoxMostRecentTaggedTogether_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (((PictureBox)sender).Tag is Photo photo)
-            {
-                PhotoDetails photoDetails = new PhotoDetails(photo);
-
-                photoDetails.Show();
-            }
-        }
-
         private void treeViewPhotosOfFriendIAmTaggedIn_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             photoTreeViewDoubleClicked(e.Node);
-        }
-
-        private void pictureBoxMostRecentTaggedTogether_MouseHover(object sender, EventArgs e)
-        {
-            if (sender is PictureBox pictureBox)
-            {
-                increasePictureBoxSize(pictureBox, k_PictureBoxIncreaseSizeOnMouseHover);
-            }
-        }
-
-        private void pictureBoxMostRecentTaggedTogether_MouseLeave(object sender, EventArgs e)
-        {
-            if (sender is PictureBox pictureBox)
-            {
-                increasePictureBoxSize(pictureBox, -k_PictureBoxIncreaseSizeOnMouseHover);
-            }
         }
 
         private void buttonFetchGeneralData_Click(object sender, EventArgs e)
@@ -856,6 +836,16 @@ string.IsNullOrEmpty(photo.Name) ? "[No Name]" : photo.Name);
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Error while loading user's friend. error message: {0}", ex.Message));
+            }
+        }
+
+        private void pictureBoxMostRecentTaggedTogether_Click(object sender, EventArgs e)
+        {
+            if (((PictureBox)sender).Tag is Photo photo)
+            {
+                PhotoDetails photoDetails = new PhotoDetails(photo);
+
+                photoDetails.Show();
             }
         }
     }
