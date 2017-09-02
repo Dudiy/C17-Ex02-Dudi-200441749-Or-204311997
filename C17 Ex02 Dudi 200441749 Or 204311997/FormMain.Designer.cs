@@ -178,7 +178,6 @@
             this.buttonFetchPhotosOfFriendIAmTaggedIn.TabIndex = 10;
             this.buttonFetchPhotosOfFriendIAmTaggedIn.Text = "Fetch Friend\'s Photos I am Tagged in";
             this.buttonFetchPhotosOfFriendIAmTaggedIn.UseVisualStyleBackColor = true;
-            this.buttonFetchPhotosOfFriendIAmTaggedIn.Click += new System.EventHandler(this.buttonFetchPhotosOfFriendIAmTaggedIn_Click);
             // 
             // buttonFetchTaggedTogether
             // 
@@ -189,7 +188,6 @@
             this.buttonFetchTaggedTogether.TabIndex = 8;
             this.buttonFetchTaggedTogether.Text = "Fetch photos tagged together";
             this.buttonFetchTaggedTogether.UseVisualStyleBackColor = true;
-            this.buttonFetchTaggedTogether.Click += new System.EventHandler(this.buttonFetchTaggedTogether_Click);
             // 
             // buttonFetchMyPhotosFriendIsIn
             // 
