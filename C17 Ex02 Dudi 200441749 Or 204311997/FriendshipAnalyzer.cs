@@ -7,23 +7,28 @@
 */
 using System;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+
+    using Facebook;
+
     public class FriendshipAnalyzer
     {
-        private bool finishedFetchingComments;
-        private bool finishedFetchingLikes;
-        private User m_LoggedInUser = FacebookApplication.LoggedInUser;
-
+        private bool m_FinishedFetchingComments;
+        private bool m_FinishedFetchingLikes;
+        private List<Comment> commentsByFriend = new List<Comment>();
+        private List<Photo> photosFriendLiked = new List<Photo>();
         public User Friend { get; set; }
 
         public int NumPhotosFriendLiked { get; private set; }
 
         public int NumPhotosFriendCommented { get; private set; }
-        
+
         public event Action FinishedFetchingLikesAndComments;
 
         public FriendshipAnalyzer()
@@ -40,13 +45,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 if (photo.Tags != null)
                 {
-                    foreach (PhotoTag tag in photo.Tags)
+                    if (photo.Tags.Find(tag => tag.User.Id == Friend.Id) != null)
                     {
-                        if (tag.User.Id == Friend.Id)
-                        {
-                            photosTaggedTogether.Add(photo);
-                            break;
-                        }
+                        photosTaggedTogether.Add(photo);
                     }
                 }
             }
@@ -82,66 +83,114 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return i_PhotosTaggedTogether.Count > 0 ? i_PhotosTaggedTogether[0] : null;
         }
 
-        public int GetNumberOfPhotosFriendLiked(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
+        public void CountNumberOfPhotosFriendLiked(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
         {
-            int numLikes = 0;
-            finishedFetchingLikes = false;
-
-            foreach (Photo photo in i_Photos)
+            NumPhotosFriendLiked = 0;
+            m_FinishedFetchingLikes = false;
+            try
             {
-                if (photo.LikedBy.Find(user => user.Id == Friend.Id) != null)
+                foreach (Photo photo in i_Photos)
                 {
-                    NumPhotosFriendLiked++;
-                    numLikes++;
+                    if (photo.LikedBy.Find(user => user.Id == Friend.Id) != null)
+                    {
+                        photosFriendLiked.Add(photo);
+                        NumPhotosFriendLiked++;
+                    }
+
+                    i_PromoteProgressBar.Invoke();
                 }
-
-                i_PromoteProgressBar.Invoke();
             }
-
-            finishedFetchingLikes = true;
-            if (FinishedFetchingLikesAndComments != null && finishedFetchingComments)
+            catch (Exception e)
             {
-                FinishedFetchingLikesAndComments.Invoke();
-            }
+                if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
+                {
 
-            return numLikes;
+                    string message = string.Format(
+                        @"Error while counting likes:
+{0}",
+                        e.Message);
+                    MessageBox.Show(message);
+                }
+            }
+            finally
+            {
+                m_FinishedFetchingLikes = true;
+                fetchComplete();
+            }
         }
 
-        public int GetNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
+        private void fetchComplete()
         {
-            int numComments = 0;
-            finishedFetchingComments = false;
-
-            foreach (Photo photo in i_Photos)
+            if (m_FinishedFetchingComments && m_FinishedFetchingLikes)
             {
-                if (photo.Comments.Find(user => user.Id == Friend.Id) != null)
+                if (FinishedFetchingLikesAndComments != null)
                 {
-                    numComments++;
-                    NumPhotosFriendCommented++;
+                    FinishedFetchingLikesAndComments.Invoke();
                 }
-
-                //foreach (Comment comment in photo.Comments)
-                //{
-                //    if (comment.From.Id == Friend.Id)
-                //    {
-                //        numComments++;
-                //        break;
-                //    }
-                //}
-
-                i_PromoteProgressBar.Invoke();
             }
-
-            finishedFetchingComments = true;
-            if (FinishedFetchingLikesAndComments != null && finishedFetchingLikes)
-            {
-                FinishedFetchingLikesAndComments.Invoke();
-            }
-
-            return numComments;
         }
 
-        public static Dictionary<Album, List<Photo>> GetPhotosFromAlbumsUserIsTaggedIn(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
+        public void CountNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
+        {
+            NumPhotosFriendCommented = 0;
+            m_FinishedFetchingComments = false;
+            try
+            {
+                foreach (Photo photo in i_Photos)
+                {
+                    Comment commentByFriend = photo.Comments.Find(comment => comment.From.Id == Friend.Id);
+                    if (commentByFriend != null)
+                    {
+                        this.commentsByFriend.Add(commentByFriend);
+                        NumPhotosFriendCommented++;
+                    }
+
+                    i_PromoteProgressBar.Invoke();
+                }
+            }
+            catch (Exception e)
+            {
+                if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
+                {
+                    string message = string.Format(
+                        @"Error while counting comments:
+{0}",
+                        e.Message);
+                    MessageBox.Show(message);
+                }
+            }
+            finally
+            {
+                this.m_FinishedFetchingComments = true;
+                this.fetchComplete();
+            }
+        }
+
+        public List<Photo> test(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
+        {
+            List<Photo> photos = new List<Photo>();
+
+            if (i_Albums.Count > 0)
+            {
+                foreach (Album album in i_Albums)
+                {
+                    foreach (Photo photo in album.Photos)
+                    {
+                        if (photo.Tags != null)
+                        {
+                            if (photo.Tags.Find(tag => tag.User.Id == i_Tagged.Id) != null)
+                            {
+                                photos.Add(photo);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return photos;
+        }
+
+        public Dictionary<Album, List<Photo>> GetPhotosFromAlbumsUserIsTaggedIn(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
         {
             Dictionary<Album, List<Photo>> photos = new Dictionary<Album, List<Photo>>();
 
@@ -154,13 +203,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     {
                         if (photo.Tags != null)
                         {
-                            foreach (PhotoTag tag in photo.Tags)
+                            if (photo.Tags.Find(tag => tag.User.Id == i_Tagged.Id) != null)
                             {
-                                if (tag.User.Id == i_Tagged.Id)
-                                {
-                                    photosInAlbum.Add(photo);
-                                    break;
-                                }
+                                photosInAlbum.Add(photo);
                             }
                         }
                     }
@@ -169,6 +214,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     {
                         photos.Add(album, photosInAlbum);
                     }
+
+                    //TODO delete
+                    break;
                 }
             }
 

@@ -32,6 +32,7 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.labelLoading = new System.Windows.Forms.Label();
             this.labelLoadedPercent = new System.Windows.Forms.Label();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // progressBar
@@ -60,17 +61,31 @@
             this.labelLoadedPercent.TabIndex = 3;
             this.labelLoadedPercent.Text = "0%";
             // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(179, 78);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(81, 30);
+            this.buttonCancel.TabIndex = 4;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Visible = false;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
             // ProgressBarWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(272, 76);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(272, 77);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.labelLoadedPercent);
             this.Controls.Add(this.labelLoading);
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ProgressBarWindow";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Loading...";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -82,5 +97,6 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label labelLoading;
         private System.Windows.Forms.Label labelLoadedPercent;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }

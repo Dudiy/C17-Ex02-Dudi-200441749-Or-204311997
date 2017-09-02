@@ -10,24 +10,38 @@ using System.Windows.Forms;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using System.Threading;
-    using System.Windows.Forms.VisualStyles;
-
     public partial class ProgressBarWindow : Form
     {
+        private const int HEIGHT_WITH_CANCEL = 176;
+
+        private const int HEIGHT_WITHOUT_CANCEL = 133;
         public object m_ProgressValueLock = new object();
+
+        private bool CancleEnabled;
+
+        public ProgressBarWindow(string i_Description)
+            : this(0, i_Description)
+        {
+        }
 
         public ProgressBarWindow(int i_MaxValue, string i_Description)
         {
             InitializeComponent();
+            CancleEnabled = false;
             progressBar.Minimum = 0;
             progressBar.Maximum = i_MaxValue;
             labelLoading.Text = string.Format("Loading {0}...", i_Description);
         }
 
-        public ProgressBarWindow(string i_Description)
-            : this(0, i_Description)
+        public bool CancelEnabled
         {
+            get { return CancleEnabled; }
+            set
+            {
+                CancleEnabled = value;
+                buttonCancel.Visible = value;
+                //Height = value ? HEIGHT_WITH_CANCEL : HEIGHT_WITHOUT_CANCEL;
+            }
         }
 
         public int MaxValue
@@ -57,12 +71,24 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 if (value <= progressBar.Maximum)
                 {
-                    Invoke(new Action(() =>
-                            {
-                                progressBar.Value = value;
-                                labelLoadedPercent.Text = string.Format("{0:P0}", (float)value / progressBar.Maximum);
-                                Refresh();
-                            }));
+                    try
+                    {
+                        Invoke(
+                            new Action(
+                                () =>
+                                    {
+                                        progressBar.Value = value;
+                                        labelLoadedPercent.Text = string.Format(
+                                            "{0:P0}",
+                                            (float)value / progressBar.Maximum);
+                                        Refresh();
+                                    }));
+                    }
+                    catch (ObjectDisposedException e)
+                    {
+                        // Do nothing if the window is disposed
+                    }
+
                 }
                 else
                 {
@@ -76,7 +102,20 @@ progressBar.Maximum));
 
         public new void Close()
         {
-            Invoke(new Action(() => base.Close()));
+            if (!IsDisposed)
+            {
+                Invoke(new Action(() => base.Close()));
+            }
+        }
+
+        //public new void Show()
+        //{
+        //    new Thread(() => ShowDialog()).Start();
+        //}
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

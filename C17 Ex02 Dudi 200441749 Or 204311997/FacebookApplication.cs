@@ -12,6 +12,9 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+    using System.Collections.Generic;
+    using System.Threading;
+
     public static class FacebookApplication
     {
         public const int k_CollectionLimit = 500;
@@ -22,25 +25,74 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private static bool s_IsFirstLogoutCall = true;
         private static Form s_MainForm;
 
+        private static Timer appTimer;
+
+        private static readonly List<Thread> sr_Threads = new List<Thread>();
+
         public static void Run()
         {
-            FacebookService.s_CollectionLimit = k_CollectionLimit;
-
-            ExitSelected = false;
-            AppSettings = AppSettings.LoadFromFile();
-            while (!ExitSelected)
+            try
             {
-                loginToFacebook();
-                if (!ExitSelected && LoggedInUser != null)
+                // timer that starts after 10 seconds and removes all disposed threads every 30 seconds
+                appTimer = new Timer(i_State => removeDisposedThreads(), null, 10000, 30000);
+                FacebookService.s_CollectionLimit = k_CollectionLimit;
+
+                ExitSelected = false;
+                AppSettings = AppSettings.LoadFromFile();
+                while (!ExitSelected)
                 {
-                    showMainForm();
+                    loginToFacebook();
+                    if (!ExitSelected && LoggedInUser != null)
+                    {
+                        showMainForm();
+                    }
+                }
+
+                // We get here only after ExitSelected is true
+                exitApplication();
+            }
+            catch (Exception e)
+            {
+                // TODO delete
+                MessageBox.Show("Exception while showing main form: " + e.Message);
+            }
+        }
+
+        public static Thread StartThread(ThreadStart i_ThreadStart)
+        {
+            Thread newThread = new Thread(i_ThreadStart);
+            sr_Threads.Add(newThread);
+            newThread.Start();
+            return newThread;
+        }
+
+        private static void removeDisposedThreads()
+        {
+            List<Thread> disposedThreads = new List<Thread>();
+            foreach (Thread thread in sr_Threads)
+            {
+                if (!thread.IsAlive)
+                {
+                    disposedThreads.Add(thread);
                 }
             }
 
-            // We get here only after ExitSelected is true
-            exitApplication();
+            foreach (Thread thread in disposedThreads)
+            {
+                sr_Threads.Remove(thread);
+            }
         }
 
+        public static void KillAllRunningThreads()
+        {
+            foreach (Thread thread in sr_Threads)
+            {
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                }
+            }
+        }
         // used as a method to call after successfully invoking FacebookService.Logout
         public static void Logout()
         {
