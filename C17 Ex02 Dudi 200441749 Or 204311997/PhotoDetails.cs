@@ -11,7 +11,6 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading;
 
@@ -21,7 +20,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     {
         private const byte k_MinNumOfCommentsForProgressBar = 5;
         private Photo m_Photo;
-        private ProgressBarWindow m_CommentsProgressBar = null;
 
         private Thread m_LikesCounterThread;
 
@@ -33,6 +31,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             m_Photo = i_Photo;
             initDetailsPane();
             pictureBox.LoadAsync(m_Photo.PictureNormalURL);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            m_LikesCounterThread = FacebookApplication.StartThread(initLikes);
+            m_CommentsCounterThread = FacebookApplication.StartThread(initComments);
         }
 
         private void initDetailsPane()
@@ -49,11 +54,8 @@ Album:
 m_Photo.Album != null ? m_Photo.Album.Name : "No Album Name");
             labelLikes.Text = string.Format(
 @"
-Likes: 
-({0}):",
+Likes ({0}):",
 m_Photo.LikedBy.Count);
-            m_LikesCounterThread = FacebookApplication.StartThread(initLikes);
-            m_CommentsCounterThread = FacebookApplication.StartThread(initComments);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -64,28 +66,19 @@ m_Photo.LikedBy.Count);
 
         private void initLikes()
         {
-            listBoxLikes.DisplayMember = "Name";
-            foreach (User liker in m_Photo.LikedBy)
-            {
-                listBoxLikes.Items.Add(liker);
-            }
+            listBoxLikes.Invoke(
+                new Action(() =>
+                        {
+
+                            listBoxLikes.DisplayMember = "Name";
+                            foreach (User liker in m_Photo.LikedBy)
+                            {
+                                listBoxLikes.Items.Add(liker);
+                            }
+                        }));
         }
 
         private void initComments()
-        {
-            int numOfComments = m_Photo.Comments.Count;
-            m_CommentsProgressBar = null;
-
-            if (numOfComments > k_MinNumOfCommentsForProgressBar)
-            {
-                m_CommentsProgressBar = new ProgressBarWindow(numOfComments, "comments");
-                m_CommentsProgressBar.Show();
-            }
-
-            this.insertCommentsAsTreeNodes();
-        }
-
-        private void insertCommentsAsTreeNodes()
         {
             try
             {

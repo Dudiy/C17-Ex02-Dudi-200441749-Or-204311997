@@ -31,22 +31,22 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PhotoDetails));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.listBoxLikes = new System.Windows.Forms.ListBox();
-            this.labelLikes = new System.Windows.Forms.Label();
-            this.labelAlbum = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.labelName = new System.Windows.Forms.Label();
+            this.labelAlbum = new System.Windows.Forms.Label();
+            this.labelLikes = new System.Windows.Forms.Label();
+            this.listBoxLikes = new System.Windows.Forms.ListBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.treeViewComments = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabelCommentsProgress = new System.Windows.Forms.ToolStripLabel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.treeViewComments = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.toolStrip1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -69,27 +69,29 @@
             this.splitContainer1.SplitterDistance = 325;
             this.splitContainer1.TabIndex = 1;
             // 
-            // listBoxLikes
+            // flowLayoutPanel1
             // 
-            this.listBoxLikes.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.listBoxLikes.FormattingEnabled = true;
-            this.listBoxLikes.ItemHeight = 20;
-            this.listBoxLikes.Location = new System.Drawing.Point(0, 398);
-            this.listBoxLikes.Name = "listBoxLikes";
-            this.listBoxLikes.Size = new System.Drawing.Size(325, 204);
-            this.listBoxLikes.TabIndex = 3;
-            this.listBoxLikes.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxLikes_MouseDoubleClick);
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Controls.Add(this.labelName);
+            this.flowLayoutPanel1.Controls.Add(this.labelAlbum);
+            this.flowLayoutPanel1.Controls.Add(this.labelLikes);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 295);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(325, 103);
+            this.flowLayoutPanel1.TabIndex = 4;
+            this.flowLayoutPanel1.WrapContents = false;
             // 
-            // labelLikes
+            // labelName
             // 
-            this.labelLikes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelLikes.AutoSize = true;
-            this.labelLikes.Location = new System.Drawing.Point(3, 40);
-            this.labelLikes.Name = "labelLikes";
-            this.labelLikes.Size = new System.Drawing.Size(62, 20);
-            this.labelLikes.TabIndex = 1;
-            this.labelLikes.Text = "Likes: ";
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(3, 0);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(59, 20);
+            this.labelName.TabIndex = 1;
+            this.labelName.Text = "Name: ";
             // 
             // labelAlbum
             // 
@@ -102,16 +104,25 @@
             this.labelAlbum.TabIndex = 1;
             this.labelAlbum.Text = "Album: ";
             // 
-            // labelName
+            // labelLikes
             // 
-            this.labelName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(3, 0);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(62, 20);
-            this.labelName.TabIndex = 1;
-            this.labelName.Text = "Name: ";
+            this.labelLikes.AutoSize = true;
+            this.labelLikes.Location = new System.Drawing.Point(3, 40);
+            this.labelLikes.Name = "labelLikes";
+            this.labelLikes.Size = new System.Drawing.Size(54, 20);
+            this.labelLikes.TabIndex = 1;
+            this.labelLikes.Text = "Likes: ";
+            // 
+            // listBoxLikes
+            // 
+            this.listBoxLikes.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.listBoxLikes.FormattingEnabled = true;
+            this.listBoxLikes.ItemHeight = 20;
+            this.listBoxLikes.Location = new System.Drawing.Point(0, 398);
+            this.listBoxLikes.Name = "listBoxLikes";
+            this.listBoxLikes.Size = new System.Drawing.Size(325, 204);
+            this.listBoxLikes.TabIndex = 3;
+            this.listBoxLikes.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxLikes_MouseDoubleClick);
             // 
             // pictureBox
             // 
@@ -124,14 +135,6 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
-            // 
-            // treeViewComments
-            // 
-            this.treeViewComments.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewComments.Location = new System.Drawing.Point(0, 0);
-            this.treeViewComments.Name = "treeViewComments";
-            this.treeViewComments.Size = new System.Drawing.Size(339, 602);
-            this.treeViewComments.TabIndex = 0;
             // 
             // toolStrip1
             // 
@@ -152,18 +155,13 @@
             this.toolStripLabelCommentsProgress.Size = new System.Drawing.Size(187, 25);
             this.toolStripLabelCommentsProgress.Text = "No comments to load";
             // 
-            // flowLayoutPanel1
+            // treeViewComments
             // 
-            this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.Controls.Add(this.labelName);
-            this.flowLayoutPanel1.Controls.Add(this.labelAlbum);
-            this.flowLayoutPanel1.Controls.Add(this.labelLikes);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 295);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(325, 103);
-            this.flowLayoutPanel1.TabIndex = 4;
+            this.treeViewComments.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewComments.Location = new System.Drawing.Point(0, 0);
+            this.treeViewComments.Name = "treeViewComments";
+            this.treeViewComments.Size = new System.Drawing.Size(339, 602);
+            this.treeViewComments.TabIndex = 0;
             // 
             // PhotoDetails
             // 
@@ -178,11 +176,11 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

@@ -42,19 +42,16 @@
             this.pictureBoxCoverPhoto = new System.Windows.Forms.PictureBox();
             this.tabPageFriendshipAnalyzer = new System.Windows.Forms.TabPage();
             this.panelGeneralInfo = new System.Windows.Forms.Panel();
-            this.treeViewPhotosFriendCommentedOn = new C17_Ex01_Dudi_200441749_Or_204311997.FacebookPhotosTreeViewProxy();
-            this.treeViewPhotosFriendLiked = new System.Windows.Forms.TreeView();
-            this.buttonFetchPhotosFriendLiked = new System.Windows.Forms.Button();
-            this.buttonFetchPhotosFriendCommentedOn = new System.Windows.Forms.Button();
+            this.listBoxPhotosCommentedOn = new System.Windows.Forms.ListBox();
+            this.treeViewPhotosOfFriendIAmTaggedIn = new C17_Ex01_Dudi_200441749_Or_204311997.FacebookPhotosTreeViewProxy();
+            this.treeViewTaggedTogether = new C17_Ex01_Dudi_200441749_Or_204311997.FacebookPhotosTreeViewProxy();
+            this.treeViewPhotosOfFriendInMyPhotos = new C17_Ex01_Dudi_200441749_Or_204311997.FacebookPhotosTreeViewProxy();
             this.pictureBoxMostRecentTaggedTogether = new C17_Ex01_Dudi_200441749_Or_204311997.GrowingPictureBoxProxy();
             this.buttonFetchGeneralData = new System.Windows.Forms.Button();
             this.labelNumComments = new System.Windows.Forms.Label();
             this.labelLastName = new System.Windows.Forms.Label();
             this.labelFirstName = new System.Windows.Forms.Label();
             this.labelNumLikes = new System.Windows.Forms.Label();
-            this.treeViewTaggedTogether = new System.Windows.Forms.TreeView();
-            this.treeViewPhotosOfFriendInMyPhotos = new System.Windows.Forms.TreeView();
-            this.treeViewPhotosOfFriendIAmTaggedIn = new System.Windows.Forms.TreeView();
             this.flowLayoutPanelFriendshipAnalyzer = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageDataTables = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -141,7 +138,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 411);
+            this.label1.Location = new System.Drawing.Point(21, 546);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(256, 20);
@@ -244,10 +241,10 @@
             // panelGeneralInfo
             // 
             this.panelGeneralInfo.AutoScroll = true;
-            this.panelGeneralInfo.Controls.Add(this.treeViewPhotosFriendCommentedOn);
-            this.panelGeneralInfo.Controls.Add(this.treeViewPhotosFriendLiked);
-            this.panelGeneralInfo.Controls.Add(this.buttonFetchPhotosFriendLiked);
-            this.panelGeneralInfo.Controls.Add(this.buttonFetchPhotosFriendCommentedOn);
+            this.panelGeneralInfo.Controls.Add(this.listBoxPhotosCommentedOn);
+            this.panelGeneralInfo.Controls.Add(this.treeViewPhotosOfFriendIAmTaggedIn);
+            this.panelGeneralInfo.Controls.Add(this.treeViewTaggedTogether);
+            this.panelGeneralInfo.Controls.Add(this.treeViewPhotosOfFriendInMyPhotos);
             this.panelGeneralInfo.Controls.Add(this.pictureBoxMostRecentTaggedTogether);
             this.panelGeneralInfo.Controls.Add(this.buttonFetchGeneralData);
             this.panelGeneralInfo.Controls.Add(this.labelNumComments);
@@ -258,9 +255,6 @@
             this.panelGeneralInfo.Controls.Add(this.labelNumLikes);
             this.panelGeneralInfo.Controls.Add(this.label1);
             this.panelGeneralInfo.Controls.Add(this.buttonFetchPhotosOfFriendIAmTaggedIn);
-            this.panelGeneralInfo.Controls.Add(this.treeViewTaggedTogether);
-            this.panelGeneralInfo.Controls.Add(this.treeViewPhotosOfFriendInMyPhotos);
-            this.panelGeneralInfo.Controls.Add(this.treeViewPhotosOfFriendIAmTaggedIn);
             this.panelGeneralInfo.Location = new System.Drawing.Point(202, 8);
             this.panelGeneralInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelGeneralInfo.Name = "panelGeneralInfo";
@@ -268,43 +262,42 @@
             this.panelGeneralInfo.TabIndex = 1;
             this.panelGeneralInfo.Visible = false;
             // 
-            // treeViewPhotosFriendCommentedOn
+            // listBoxPhotosCommentedOn
             // 
-            this.treeViewPhotosFriendCommentedOn.Location = new System.Drawing.Point(1540, 63);
-            this.treeViewPhotosFriendCommentedOn.Name = "treeViewPhotosFriendCommentedOn";
-            this.treeViewPhotosFriendCommentedOn.Size = new System.Drawing.Size(370, 739);
-            this.treeViewPhotosFriendCommentedOn.TabIndex = 19;
+            this.listBoxPhotosCommentedOn.FormattingEnabled = true;
+            this.listBoxPhotosCommentedOn.ItemHeight = 20;
+            this.listBoxPhotosCommentedOn.Location = new System.Drawing.Point(25, 355);
+            this.listBoxPhotosCommentedOn.Name = "listBoxPhotosCommentedOn";
+            this.listBoxPhotosCommentedOn.Size = new System.Drawing.Size(346, 144);
+            this.listBoxPhotosCommentedOn.TabIndex = 23;
+            this.listBoxPhotosCommentedOn.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxPhotosCommentedOn_MouseDoubleClick);
             // 
-            // treeViewPhotosFriendLiked
+            // treeViewPhotosOfFriendIAmTaggedIn
             // 
-            this.treeViewPhotosFriendLiked.Location = new System.Drawing.Point(1918, 62);
-            this.treeViewPhotosFriendLiked.Name = "treeViewPhotosFriendLiked";
-            this.treeViewPhotosFriendLiked.Size = new System.Drawing.Size(372, 739);
-            this.treeViewPhotosFriendLiked.TabIndex = 18;
+            this.treeViewPhotosOfFriendIAmTaggedIn.Location = new System.Drawing.Point(1164, 63);
+            this.treeViewPhotosOfFriendIAmTaggedIn.Name = "treeViewPhotosOfFriendIAmTaggedIn";
+            this.treeViewPhotosOfFriendIAmTaggedIn.Size = new System.Drawing.Size(370, 739);
+            this.treeViewPhotosOfFriendIAmTaggedIn.TabIndex = 22;
             // 
-            // buttonFetchPhotosFriendLiked
+            // treeViewTaggedTogether
             // 
-            this.buttonFetchPhotosFriendLiked.Location = new System.Drawing.Point(1918, 6);
-            this.buttonFetchPhotosFriendLiked.Name = "buttonFetchPhotosFriendLiked";
-            this.buttonFetchPhotosFriendLiked.Size = new System.Drawing.Size(372, 46);
-            this.buttonFetchPhotosFriendLiked.TabIndex = 16;
-            this.buttonFetchPhotosFriendLiked.Text = "fetch photos friend liked";
-            this.buttonFetchPhotosFriendLiked.UseVisualStyleBackColor = true;
+            this.treeViewTaggedTogether.Location = new System.Drawing.Point(784, 64);
+            this.treeViewTaggedTogether.Name = "treeViewTaggedTogether";
+            this.treeViewTaggedTogether.Size = new System.Drawing.Size(370, 739);
+            this.treeViewTaggedTogether.TabIndex = 21;
             // 
-            // buttonFetchPhotosFriendCommentedOn
+            // treeViewPhotosOfFriendInMyPhotos
             // 
-            this.buttonFetchPhotosFriendCommentedOn.Location = new System.Drawing.Point(1540, 6);
-            this.buttonFetchPhotosFriendCommentedOn.Name = "buttonFetchPhotosFriendCommentedOn";
-            this.buttonFetchPhotosFriendCommentedOn.Size = new System.Drawing.Size(372, 46);
-            this.buttonFetchPhotosFriendCommentedOn.TabIndex = 15;
-            this.buttonFetchPhotosFriendCommentedOn.Text = "fetch photos friend commented on";
-            this.buttonFetchPhotosFriendCommentedOn.UseVisualStyleBackColor = true;
+            this.treeViewPhotosOfFriendInMyPhotos.Location = new System.Drawing.Point(399, 64);
+            this.treeViewPhotosOfFriendInMyPhotos.Name = "treeViewPhotosOfFriendInMyPhotos";
+            this.treeViewPhotosOfFriendInMyPhotos.Size = new System.Drawing.Size(370, 739);
+            this.treeViewPhotosOfFriendInMyPhotos.TabIndex = 20;
             // 
             // pictureBoxMostRecentTaggedTogether
             // 
             this.pictureBoxMostRecentTaggedTogether.AmountToGrow = 20;
             this.pictureBoxMostRecentTaggedTogether.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxMostRecentTaggedTogether.Image")));
-            this.pictureBoxMostRecentTaggedTogether.Location = new System.Drawing.Point(23, 448);
+            this.pictureBoxMostRecentTaggedTogether.Location = new System.Drawing.Point(24, 583);
             this.pictureBoxMostRecentTaggedTogether.Name = "pictureBoxMostRecentTaggedTogether";
             this.pictureBoxMostRecentTaggedTogether.PictureSize = new System.Drawing.Size(90, 90);
             this.pictureBoxMostRecentTaggedTogether.Size = new System.Drawing.Size(314, 204);
@@ -326,7 +319,7 @@
             // 
             // labelNumComments
             // 
-            this.labelNumComments.Location = new System.Drawing.Point(20, 332);
+            this.labelNumComments.Location = new System.Drawing.Point(20, 303);
             this.labelNumComments.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelNumComments.Name = "labelNumComments";
             this.labelNumComments.Size = new System.Drawing.Size(370, 49);
@@ -363,33 +356,6 @@
             this.labelNumLikes.TabIndex = 2;
             this.labelNumLikes.Text = "Number of times {0} liked my photos";
             this.labelNumLikes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // treeViewTaggedTogether
-            // 
-            this.treeViewTaggedTogether.Location = new System.Drawing.Point(780, 63);
-            this.treeViewTaggedTogether.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.treeViewTaggedTogether.Name = "treeViewTaggedTogether";
-            this.treeViewTaggedTogether.Size = new System.Drawing.Size(370, 739);
-            this.treeViewTaggedTogether.TabIndex = 9;
-            this.treeViewTaggedTogether.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewTaggedTogether_NodeMouseDoubleClick);
-            // 
-            // treeViewPhotosOfFriendInMyPhotos
-            // 
-            this.treeViewPhotosOfFriendInMyPhotos.Location = new System.Drawing.Point(399, 62);
-            this.treeViewPhotosOfFriendInMyPhotos.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.treeViewPhotosOfFriendInMyPhotos.Name = "treeViewPhotosOfFriendInMyPhotos";
-            this.treeViewPhotosOfFriendInMyPhotos.Size = new System.Drawing.Size(370, 739);
-            this.treeViewPhotosOfFriendInMyPhotos.TabIndex = 6;
-            this.treeViewPhotosOfFriendInMyPhotos.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewPhotosOfFriendInMyPhotos_NodeMouseDoubleClick);
-            // 
-            // treeViewPhotosOfFriendIAmTaggedIn
-            // 
-            this.treeViewPhotosOfFriendIAmTaggedIn.Location = new System.Drawing.Point(1161, 62);
-            this.treeViewPhotosOfFriendIAmTaggedIn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.treeViewPhotosOfFriendIAmTaggedIn.Name = "treeViewPhotosOfFriendIAmTaggedIn";
-            this.treeViewPhotosOfFriendIAmTaggedIn.Size = new System.Drawing.Size(370, 739);
-            this.treeViewPhotosOfFriendIAmTaggedIn.TabIndex = 11;
-            this.treeViewPhotosOfFriendIAmTaggedIn.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewPhotosOfFriendIAmTaggedIn_NodeMouseDoubleClick);
             // 
             // flowLayoutPanelFriendshipAnalyzer
             // 
@@ -1017,9 +983,7 @@
         private System.Windows.Forms.Button buttonLogout;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.TabPage tabPageFriendshipAnalyzer;
-        private System.Windows.Forms.TreeView treeViewPhotosOfFriendInMyPhotos;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelFriendshipAnalyzer;
-        private System.Windows.Forms.TreeView treeViewTaggedTogether;
         private System.Windows.Forms.TabPage tabPageDataTables;
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Button buttonFetchData;
@@ -1050,7 +1014,6 @@
         private System.Windows.Forms.Label labelNumLikes;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonFetchPhotosOfFriendIAmTaggedIn;
-        private System.Windows.Forms.TreeView treeViewPhotosOfFriendIAmTaggedIn;
         private System.Windows.Forms.Button buttonFetchMyPhotosFriendIsIn;
         private System.Windows.Forms.Button buttonFetchTaggedTogether;
         private System.Windows.Forms.Panel panelGeneralInfo;
@@ -1079,9 +1042,9 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.Timer timerDataTables;
         private GrowingPictureBoxProxy pictureBoxMostRecentTaggedTogether;
-        private System.Windows.Forms.TreeView treeViewPhotosFriendLiked;
-        private System.Windows.Forms.Button buttonFetchPhotosFriendLiked;
-        private System.Windows.Forms.Button buttonFetchPhotosFriendCommentedOn;
-        private FacebookPhotosTreeViewProxy treeViewPhotosFriendCommentedOn;
+        private FacebookPhotosTreeViewProxy treeViewPhotosOfFriendInMyPhotos;
+        private FacebookPhotosTreeViewProxy treeViewTaggedTogether;
+        private FacebookPhotosTreeViewProxy treeViewPhotosOfFriendIAmTaggedIn;
+        private System.Windows.Forms.ListBox listBoxPhotosCommentedOn;
     }
 }

@@ -16,8 +16,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             Album
         }        
 
-        public void SetValues(List<Photo> i_Photos, eGroupBy i_GroupBy)
+        public void SetValues(FacebookObjectCollection<Photo> i_Photos, eGroupBy i_GroupBy)
         {
+            Nodes.Clear();
+
             switch (i_GroupBy)
             {
                 case eGroupBy.Uploader:
@@ -31,7 +33,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void groupPhotosByAlbum(List<Photo> i_Photos)
+        private void groupPhotosByAlbum(FacebookObjectCollection<Photo> i_Photos)
         {
             foreach (Photo photo in i_Photos)
             {
@@ -50,7 +52,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void groupPhotosByUser(List<Photo> i_Photos)
+        private void groupPhotosByUser(FacebookObjectCollection<Photo> i_Photos)
         {
             foreach (Photo photo in i_Photos)
             {

@@ -14,15 +14,14 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-
-    using Facebook;
-
+    using C17_Ex01_Dudi_200441749_Or_204311997.Adapter;
     public class FriendshipAnalyzer
     {
         private bool m_FinishedFetchingComments;
         private bool m_FinishedFetchingLikes;
-        private List<Comment> commentsByFriend = new List<Comment>();
-        private List<Photo> photosFriendLiked = new List<Photo>();
+        // TODO change to property
+        public Dictionary<Comment, Photo> m_CommentsByFriend = new Dictionary<Comment, Photo>();
+        private FacebookObjectCollection<Photo> m_PhotosFriendLiked = new FacebookObjectCollection<Photo>();
         public User Friend { get; set; }
 
         public int NumPhotosFriendLiked { get; private set; }
@@ -37,9 +36,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             NumPhotosFriendCommented = 0;
         }
 
-        public List<Photo> PhotosTaggedTogether(FacebookObjectCollection<Photo> i_PhotosTaggedIn)
+        public FacebookObjectCollection<Photo> PhotosTaggedTogether(FacebookObjectCollection<Photo> i_PhotosTaggedIn)
         {
-            List<Photo> photosTaggedTogether = new List<Photo>();
+            FacebookObjectCollection<Photo> photosTaggedTogether = new FacebookObjectCollection<Photo>();
 
             foreach (Photo photo in i_PhotosTaggedIn)
             {
@@ -78,7 +77,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             return groupedPhotos;
         }
 
-        public Photo GetMostRecentPhotoTaggedTogether(List<Photo> i_PhotosTaggedTogether)
+        public Photo GetMostRecentPhotoTaggedTogether(FacebookObjectCollection<Photo> i_PhotosTaggedTogether)
         {
             return i_PhotosTaggedTogether.Count > 0 ? i_PhotosTaggedTogether[0] : null;
         }
@@ -93,7 +92,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 {
                     if (photo.LikedBy.Find(user => user.Id == Friend.Id) != null)
                     {
-                        photosFriendLiked.Add(photo);
+                        this.m_PhotosFriendLiked.Add(photo);
                         NumPhotosFriendLiked++;
                     }
 
@@ -130,6 +129,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
+        public void CountNumberOfPhotosFriendCommented(Action i_PromoteProgressBar)
+        {
+            FacebookCollectionAdapter<Photo> allPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
+            FacebookObjectCollection<FacebookObject> boxAllPhotosTaggedIn = allPhotosAdapter.FetchDataWithProgressBar();
+            FacebookObjectCollection<Photo> allPhotos = allPhotosAdapter.UnboxCollection(boxAllPhotosTaggedIn);
+
+            CountNumberOfPhotosFriendCommented(allPhotos, i_PromoteProgressBar);
+        }
+
         public void CountNumberOfPhotosFriendCommented(FacebookObjectCollection<Photo> i_Photos, Action i_PromoteProgressBar)
         {
             NumPhotosFriendCommented = 0;
@@ -140,8 +148,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 {
                     Comment commentByFriend = photo.Comments.Find(comment => comment.From.Id == Friend.Id);
                     if (commentByFriend != null)
-                    {
-                        this.commentsByFriend.Add(commentByFriend);
+                    {     
+                        m_CommentsByFriend.Add(commentByFriend, photo);
                         NumPhotosFriendCommented++;
                     }
 
@@ -166,9 +174,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        public List<Photo> test(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
+        public FacebookObjectCollection<Photo> GetPhotosFromAlbumsUserIsTaggedIn(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
         {
-            List<Photo> photos = new List<Photo>();
+            FacebookObjectCollection<Photo> photos = new FacebookObjectCollection<Photo>();
 
             if (i_Albums.Count > 0)
             {
@@ -184,39 +192,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                             }
                         }
                     }
-                }
-            }
-
-            return photos;
-        }
-
-        public Dictionary<Album, List<Photo>> GetPhotosFromAlbumsUserIsTaggedIn(User i_Tagged, FacebookObjectCollection<Album> i_Albums)
-        {
-            Dictionary<Album, List<Photo>> photos = new Dictionary<Album, List<Photo>>();
-
-            if (i_Albums.Count > 0)
-            {
-                foreach (Album album in i_Albums)
-                {
-                    List<Photo> photosInAlbum = new List<Photo>();
-                    foreach (Photo photo in album.Photos)
-                    {
-                        if (photo.Tags != null)
-                        {
-                            if (photo.Tags.Find(tag => tag.User.Id == i_Tagged.Id) != null)
-                            {
-                                photosInAlbum.Add(photo);
-                            }
-                        }
-                    }
-
-                    if (photosInAlbum.Count > 0)
-                    {
-                        photos.Add(album, photosInAlbum);
-                    }
-
-                    //TODO delete
-                    break;
                 }
             }
 

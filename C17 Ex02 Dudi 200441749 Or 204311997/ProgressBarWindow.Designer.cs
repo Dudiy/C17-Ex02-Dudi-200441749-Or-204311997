@@ -87,6 +87,7 @@
             this.Name = "ProgressBarWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Loading...";
+            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
