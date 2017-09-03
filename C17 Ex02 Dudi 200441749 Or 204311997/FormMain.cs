@@ -443,11 +443,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
             else if (i_DataTableType.Name == typeof(FacebookLikedPagesDataTable).Name)
             {
-                collection = new FacebookCollectionAdapter<Page>(Adapter.eFacebookCollectionType.LikedPages).FetchDataWithProgressBar();
+                collection = new FacebookCollectionAdapter<Page>(eFacebookCollectionType.LikedPages).FetchDataWithProgressBar();
             }
             else if (i_DataTableType.Name == typeof(FacebookFriendsDataTable).Name)
             {
-                collection = new FacebookCollectionAdapter<User>(Adapter.eFacebookCollectionType.Friends).FetchDataWithProgressBar();
+                collection = new FacebookCollectionAdapter<User>(eFacebookCollectionType.Friends).FetchDataWithProgressBar();
+            }
+            else if (i_DataTableType.Name == typeof(FacebookPostsDataTable).Name)
+            {
+                collection = new FacebookCollectionAdapter<Post>(eFacebookCollectionType.MyPosts).FetchDataWithProgressBar();
             }
             else
             {
@@ -760,6 +764,11 @@ friendWhoCommented.Name,
 i_Comment.Message);
                 MessageBox.Show(message);
             }
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

@@ -51,8 +51,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
             DataTable.Rows.Clear();
             populateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
-            //populateRowsThread = new Thread(() => populateRows(i_Collection));
-            //populateRowsThread.Start();
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> myPhotos)

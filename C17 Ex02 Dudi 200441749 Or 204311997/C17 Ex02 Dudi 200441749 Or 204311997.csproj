@@ -63,6 +63,7 @@
     <Compile Include="DataTables\eFacebookDataTableType.cs" />
     <Compile Include="DataTables\FacebookDataTableFactory.cs" />
     <Compile Include="Adapter\FacebookCollectionAdapter.cs" />
+    <Compile Include="DataTables\FacebookPostsDataTable.cs" />
     <Compile Include="FacebookPhotosTreeViewProxy.cs">
       <SubType>Component</SubType>
     </Compile>

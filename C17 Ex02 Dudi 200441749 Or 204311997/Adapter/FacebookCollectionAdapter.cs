@@ -38,6 +38,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 case eFacebookCollectionType.Albums:
                     m_FetchDataDelegate = fetchAlbums;
                     break;
+                case eFacebookCollectionType.MyPosts:
+                    this.m_FetchDataDelegate = fetchMyPosts;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i_CollectionType), i_CollectionType, null);
             }
@@ -46,8 +49,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public FacebookObjectCollection<FacebookObject> FetchDataWithProgressBar()
         {
             CancelDataFetching = false;
-            FacebookObjectCollection<FacebookObject> fetchedCollection = null;
-            fetchedCollection = this.m_FetchDataDelegate.Invoke();
+            FacebookObjectCollection<FacebookObject> fetchedCollection = m_FetchDataDelegate.Invoke();            
 
             if (FetchFinished != null)
             {
@@ -120,6 +122,29 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             m_ProgressBarWindow.Close();
 
             return likedPagesList;
+        }
+
+        // =================================== Posts =====================================
+        private FacebookObjectCollection<FacebookObject> fetchMyPosts()
+        {
+            FacebookObjectCollection<FacebookObject> myPostsList = new FacebookObjectCollection<FacebookObject>();
+            m_ProgressBarWindow = new ProgressBarWindow(FacebookApplication.LoggedInUser.Posts.Count, "my posts");
+            m_ProgressBarWindow.Show();
+            m_ProgressBarWindow.Closing += (sender, e) => CancelDataFetching = true;
+            foreach (Post post in FacebookApplication.LoggedInUser.Posts)
+            {
+                if (CancelDataFetching)
+                {
+                    break;
+                }
+
+                myPostsList.Add(post);
+                m_ProgressBarWindow.ProgressValue++;
+            }
+
+            this.m_ProgressBarWindow.Close();
+
+            return myPostsList;
         }
 
         // =================================== Photos =====================================

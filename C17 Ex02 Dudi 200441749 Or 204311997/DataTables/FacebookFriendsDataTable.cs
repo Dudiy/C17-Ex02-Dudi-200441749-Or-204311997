@@ -22,23 +22,19 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
             lock (m_PopulateRowsLock)
             {
                 if (DataTable.Rows.Count == 0)
                 {
                     new Thread(() => populateRows(i_Collection)).Start();
                 }
-
-                if (NotifyAbstractParent_PopulateRowsCompleted != null)
-                {
-                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
-                }
             }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> friendsList)
         {
+            TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
+
             foreach (FacebookObject facebookObject in friendsList)
             {
                 if (facebookObject is User friend)
@@ -49,6 +45,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                         friend.LastName,
                         friend.Gender != null ? friend.Gender.ToString() : string.Empty);
                     //getMostRecentPost(friend));
+                }
+
+                if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                {
+                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
                 }
             }
         }
