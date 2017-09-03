@@ -19,22 +19,23 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     {
         public const int k_CollectionLimit = 500;
         public const byte k_MaxPhotosInAlbum = 100;
-        public static User LoggedInUser { get; private set; }
-        public static AppSettings AppSettings { get; private set; }
-        public static bool ExitSelected { get; set; }
-        private static bool s_IsFirstLogoutCall = true;
-        private static Form s_MainForm;
-
-        private static Timer appTimer;
-
         private static readonly List<Thread> sr_Threads = new List<Thread>();
+        private static Form s_MainForm;
+        private static Timer s_AppTimer;
+        private static bool s_IsFirstLogoutCall = true;
+
+        public static User LoggedInUser { get; private set; }
+
+        public static AppSettings AppSettings { get; private set; }
+
+        public static bool ExitSelected { get; set; }
 
         public static void Run()
         {
             try
             {
                 // timer that starts after 10 seconds and removes all disposed threads every 30 seconds
-                appTimer = new Timer(i_State => removeDisposedThreads(), null, 10000, 30000);
+                s_AppTimer = new Timer(i_State => removeDisposedThreads(), null, 10000, 30000);
                 FacebookService.s_CollectionLimit = k_CollectionLimit;
 
                 ExitSelected = false;

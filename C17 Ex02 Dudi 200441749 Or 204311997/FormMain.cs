@@ -105,9 +105,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 FacebookApplication.StartThread(updateMostRecentPost);
                 FacebookApplication.StartThread(initFriendsListForNewPostTags);
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error while fetching data from the Facebook server");
+                MessageBox.Show(string.Format("Error while fetching data from the Facebook server: {0}", ex.Message));
             }
         }
 
@@ -122,8 +122,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     if (i_UseCollectionAdapter)
                     {
                         FacebookCollectionAdapter<Page> collectionAdapter = new FacebookCollectionAdapter<Page>(eFacebookCollectionType.LikedPages);
-                        FacebookObjectCollection<FacebookObject> list = collectionAdapter.FetchDataWithProgressBar();
-                        likedPages = collectionAdapter.UnboxCollection(list);
+                        FacebookObjectCollection<FacebookObject> likedPagesFromAdapter = collectionAdapter.FetchDataWithProgressBar();
+                        likedPages = collectionAdapter.UnboxCollection(likedPagesFromAdapter);
                     }
                     else
                     {
@@ -164,7 +164,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     }
                     catch (Exception e)
                     {
-                        // TODO delete?
                         MessageBox.Show("Error while getting most recent post: " + e.Message);
                     }
                 }
@@ -233,21 +232,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private void ListBoxPostComment_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            expandPostComment(((ListBox)sender).SelectedItem as Comment);
-        }
-
-        private void expandPostComment(Comment i_Comment)
-        {
-            if (i_Comment != null)
-            {
-                User friendWhoCommented = i_Comment.From;
-                string message = string.Format(
-@"{0} commented:
-{1}",
-friendWhoCommented.Name,
-i_Comment.Message);
-                MessageBox.Show(message);
-            }
+            showCommentAsMessageBox(((ListBox)sender).SelectedItem as Comment);
         }
 
         private void FriendProfile_MouseClick(object sender, MouseEventArgs e)
@@ -763,6 +748,18 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
             }
         }
 
+        private void showCommentAsMessageBox(Comment i_Comment)
+        {
+            if (i_Comment != null)
+            {
+                User friendWhoCommented = i_Comment.From;
+                string message = string.Format(
+@"{0} commented:
+{1}",
+friendWhoCommented.Name,
+i_Comment.Message);
+                MessageBox.Show(message);
+            }
+        }
     }
 }
-

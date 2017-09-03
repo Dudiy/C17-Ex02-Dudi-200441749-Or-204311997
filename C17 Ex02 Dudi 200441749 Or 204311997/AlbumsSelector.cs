@@ -15,14 +15,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     public partial class AlbumsSelector : Form
     {
         private const DialogResult k_AlbumSelectionSuccessful = DialogResult.Yes;
+        private readonly User r_AlbumsOwner;
+        private bool m_IgnoreCheckChangeEvents;
         public List<Album> SelectedAlbums { get; private set; }
-        private User m_AlbumsOwner;
-        private bool m_IgnoreCheckChangeEvents = false;
 
         public AlbumsSelector(User i_User)
         {
             InitializeComponent();
-            m_AlbumsOwner = i_User;
+            r_AlbumsOwner = i_User;
             initAlbumsList();
         }
 
@@ -36,7 +36,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private void initAlbumsList()
         {
             listBoxAlbums.DisplayMember = "Name";
-            foreach (Album album in m_AlbumsOwner.Albums)
+            foreach (Album album in this.r_AlbumsOwner.Albums)
             {
                 listBoxAlbums.Items.Add(album);
             }
@@ -44,7 +44,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public Album[] GetAlbumsSelection()
         {
-            this.ShowDialog();
+            ShowDialog();
 
             return SelectedAlbums.ToArray();
         }

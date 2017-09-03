@@ -10,7 +10,6 @@ using System.Text;
 using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
 using System.Threading;
-using System.Data;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
@@ -24,11 +23,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
             TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
-            if (PopulateRowsStarting != null)
-            {
-                PopulateRowsStarting.Invoke();
-            }
-
             lock (m_PopulateRowsLock)
             {
                 if (DataTable.Rows.Count == 0)
@@ -36,7 +30,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     new Thread(() => populateRows(i_Collection)).Start();
                 }
 
-                PopulateRowsCompleted?.Invoke();
+                if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                {
+                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                }
             }
         }
 
@@ -52,12 +49,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                         friend.LastName,
                         friend.Gender != null ? friend.Gender.ToString() : string.Empty);
                     //getMostRecentPost(friend));
-                    
-
-                    if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
-                    {
-                        TenRowsInserted.Invoke();
-                    }
                 }
             }
         }

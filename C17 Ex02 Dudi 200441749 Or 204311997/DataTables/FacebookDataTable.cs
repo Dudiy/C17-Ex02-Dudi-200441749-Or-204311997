@@ -16,14 +16,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
     public abstract class FacebookDataTable : IDisplayable
     {
-        public Action PopulateRowsStarting;
-        public Action TenRowsInserted;
-        public Action PopulateRowsCompleted;
+        private event Action PopulateRowsCompleted;
+        protected Action NotifyAbstractParent_PopulateRowsCompleted;
+        protected object m_PopulateRowsLock = new object();
+        protected Type m_ObjectTypeRepresentedByRow;
         public int TotalRows { get; protected set; }
         public DataTable DataTable { get; protected set; }
         public object ObjectToDisplay { get; set; }
-        protected Type m_ObjectTypeRepresentedByRow;
-        protected object m_PopulateRowsLock = new object();
 
         protected FacebookDataTable(string i_TableName, Type i_ObjectTypeRepresentedByRow)
         {
@@ -31,6 +30,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             DataTable = new DataTable(i_TableName);
             // all tables initially have a column that holds the current row object displayed
             DataTable.Columns.Add("ObjectDisplayed", typeof(object));
+            // only the abstract parent can invoke an event
+            NotifyAbstractParent_PopulateRowsCompleted += () =>
+                {
+                    if (PopulateRowsCompleted != null)
+                    {
+                        PopulateRowsCompleted.Invoke();
+                    }
+                };
             InitColumns();
         }
 
@@ -38,9 +45,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             get { return DataTable.TableName; }
         }
-
-        // using yield, the user of this method can know the fetch progression status (numbers of fetched item, total items, return value)
-        //public abstract IEnumerable<Tuple<int, int, object>> FetchDataTableValues();
 
         // adds all FacebookObjects of the given collection that are of type T to the data table rows
         public abstract void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection);

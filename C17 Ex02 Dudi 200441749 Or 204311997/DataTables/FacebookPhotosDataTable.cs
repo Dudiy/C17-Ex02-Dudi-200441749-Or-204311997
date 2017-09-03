@@ -42,16 +42,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
             abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;                        
             TotalRows = i_Collection.Count;
-
-            if (PopulateRowsStarting != null)
-            {
-                PopulateRowsStarting.Invoke();
-            }
-
+            
+            // if abort running thread is true wait for the currently running thread to stop
             while (abortRunningThread)
             {
                 Thread.Sleep(100);
             }
+
             DataTable.Rows.Clear();
             populateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
             //populateRowsThread = new Thread(() => populateRows(i_Collection));
@@ -84,9 +81,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     }
                 }
 
-                if (PopulateRowsCompleted != null)
+                if (NotifyAbstractParent_PopulateRowsCompleted != null)
                 {
-                    PopulateRowsCompleted.Invoke();
+                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
                 }
             }
         }

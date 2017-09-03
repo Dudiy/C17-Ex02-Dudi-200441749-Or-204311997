@@ -37,10 +37,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         private void populateRows(FacebookObjectCollection<FacebookObject> likedPages)
         {
             TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
-            if (PopulateRowsStarting != null)
-            {
-                PopulateRowsStarting.Invoke();
-            }
 
             lock (m_PopulateRowsLock)
             {
@@ -55,16 +51,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                             page.Category,
                             page.Description,
                             page.Website);
-                        if (TenRowsInserted != null && DataTable.Rows.Count % 10 == 0)
-                        {
-                            TenRowsInserted.Invoke();
-                        }
                     }
                 }
 
-                if (PopulateRowsCompleted != null)
+                if (NotifyAbstractParent_PopulateRowsCompleted != null)
                 {
-                    PopulateRowsCompleted.Invoke();
+                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
                 }
             }
         }

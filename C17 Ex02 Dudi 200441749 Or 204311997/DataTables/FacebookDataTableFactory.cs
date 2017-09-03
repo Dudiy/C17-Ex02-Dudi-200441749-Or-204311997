@@ -8,7 +8,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     internal static class FacebookDataTableFactory
     {
-        //todo change parameter to enum
         public static FacebookDataTable CreateTable(eFacebookDataTableType tableType)
         {
             FacebookDataTable tableCreated = null;
