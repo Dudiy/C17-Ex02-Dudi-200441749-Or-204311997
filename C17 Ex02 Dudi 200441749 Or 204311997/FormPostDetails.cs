@@ -1,51 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
-
     public partial class FormPostDetails : Form
     {
+        private readonly Post r_Post;
         private Thread m_InitNonBindedComponentsThread;
-        public Post Post { get; set; }
 
         public FormPostDetails()
         {
             InitializeComponent();
-            postsBindingSource.DataSource = Post;
+            postsBindingSource.DataSource = r_Post;
         }
 
         private void initNonBindedComponents()
         {
             try
             {
-                if (!string.IsNullOrEmpty(Post.PictureURL))
+                if (!string.IsNullOrEmpty(r_Post.PictureURL))
                 {
                     try
                     {
-                        pictureBoxPhoto.Load(Post.PictureURL);
+                        pictureBoxPhoto.Load(r_Post.PictureURL);
                     }
-                    catch (Exception e)
+                    catch
                     {
                         Invoke(new Action(() => MessageBox.Show(ActiveForm, "The PictureURL of this post is not supported")));
                     }
                 }
 
-                foreach (Comment postComment in Post.Comments)
+                foreach (Comment postComment in this.r_Post.Comments)
                 {
                     listBoxComments.Invoke(new Action(() => listBoxComments.Items.Add(new FacebookCommentProxy() { Comment = postComment })));
                 }
 
-                labelLikes.Invoke(new Action(() => labelLikes.Text = string.Format("Likes ({0}): ", Post.LikedBy.Count)));
+                labelLikes.Invoke(new Action(() => labelLikes.Text = string.Format("Likes ({0}): ", this.r_Post.LikedBy.Count)));
             }
             catch (Exception e)
             {
@@ -56,15 +49,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        protected override void OnShown(EventArgs e)
+        protected override void OnShown(EventArgs i_Args)
         {
-            base.OnShown(e);
-            FacebookApplication.StartThread(initNonBindedComponents);
+            base.OnShown(i_Args);
+            m_InitNonBindedComponentsThread = FacebookApplication.StartThread(initNonBindedComponents);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs i_Args)
         {
-            base.OnClosing(e);
+            base.OnClosing(i_Args);
             if (m_InitNonBindedComponentsThread != null && m_InitNonBindedComponentsThread.IsAlive)
             {
                 m_InitNonBindedComponentsThread.Abort();
@@ -74,7 +67,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public FormPostDetails(Post i_Post)
         {
             InitializeComponent();
-            Post = i_Post;
+            r_Post = i_Post;
             postsBindingSource.DataSource = i_Post;
         }
     }

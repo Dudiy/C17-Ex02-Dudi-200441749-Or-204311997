@@ -30,9 +30,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         }
 
         // ================================================ general form methods ================================================
-        protected override void OnShown(EventArgs e)
+        protected override void OnShown(EventArgs i_Args)
         {
-            base.OnShown(e);
+            base.OnShown(i_Args);
             initMainForm();
         }
 
@@ -62,9 +62,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs i_Args)
         {
-            base.OnClosing(e);
+            base.OnClosing(i_Args);
             FacebookApplication.KillAllRunningThreads();
 
             if (!m_LogoutClicked)
@@ -77,13 +77,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void buttonExit_Click(object sender, EventArgs e)
+        private void buttonExit_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.ExitSelected = true;
             Close();
         }
 
-        private void buttonLogout_Click(object sender, EventArgs e)
+        private void buttonLogout_Click(object i_Sender, EventArgs i_Args)
         {
             m_LogoutClicked = true;
             FacebookApplication.Logout();
@@ -95,7 +95,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // fetch and bind data from Facebook server
             try
             {
-                FacebookApplication.StartThread(() => UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends, FriendProfile_MouseClick));
+                FacebookApplication.StartThread(() => UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends, this.friendProfile_MouseClick));
                 FacebookApplication.StartThread(() => updateLikedPages(!k_UseCollectionAdapter));
                 FacebookApplication.StartThread(updateMostRecentPost);
                 FacebookApplication.StartThread(initFriendsListForNewPostTags);
@@ -216,25 +216,25 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }));
         }
 
-        private void ListBoxPostLiked_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void listBoxPostLiked_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((ListBox)sender).SelectedItem is User friend)
+            if (((ListBox)i_Sender).SelectedItem is User friend)
             {
-                MessageBox.Show(friend.Name + " Liked your post!");
+                MessageBox.Show(string.Format("{0} Liked your post!", friend.Name));
             }
         }
 
-        private void ListBoxPostComment_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void listBoxPostComment_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((ListBox)sender).SelectedItem is FacebookCommentProxy selectedComment)
+            if (((ListBox)i_Sender).SelectedItem is FacebookCommentProxy selectedComment)
             {
                 showCommentAsMessageBox(selectedComment.Comment);
             }
         }
 
-        private void FriendProfile_MouseClick(object sender, MouseEventArgs e)
+        private void friendProfile_MouseClick(object i_Sender, MouseEventArgs i_Args)
         {
-            displayFriendDetailsInAboutMeTab(sender as PictureBox);
+            displayFriendDetailsInAboutMeTab(i_Sender as PictureBox);
         }
 
         private void displayFriendDetailsInAboutMeTab(PictureBox i_PictureBoxSelected)
@@ -245,13 +245,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void buttonRefreshFriends_Click(object sender, EventArgs e)
+        private void buttonRefreshFriends_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.StartThread(
-                () => UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends, FriendProfile_MouseClick));
+                () => UpdateFriendsLayoutPanel(flowLayoutPanelAboutMeFriends, this.friendProfile_MouseClick));
         }
 
-        private void URL_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void url_LinkLabel_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_Args)
         {
             // Specify that the link was visited.
             linkLabelLikedPageURL.LinkVisited = true;
@@ -259,12 +259,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             System.Diagnostics.Process.Start(linkLabelLikedPageURL.Text);
         }
 
-        private void buttonRefreshLikedPage_Click(object sender, EventArgs e)
+        private void buttonRefreshLikedPage_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.StartThread(() => updateLikedPages(k_UseCollectionAdapter));
         }
 
-        private void buttonPost_Click(object sender, EventArgs e)
+        private void buttonPost_Click(object i_Sender, EventArgs i_Args)
         {
             postStatus();
         }
@@ -275,8 +275,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 if (!string.IsNullOrEmpty(richTextBoxStatusPost.Text))
                 {
-                    string friendID = createFriendsToTagStr();
-                    Status postedStatus = FacebookApplication.LoggedInUser.PostStatus(richTextBoxStatusPost.Text, i_TaggedFriendIDs: friendID);
+                    string friendId = createFriendsToTagStr();
+                    Status postedStatus = FacebookApplication.LoggedInUser.PostStatus(richTextBoxStatusPost.Text, i_TaggedFriendIDs: friendId);
                     string successPostMessage = string.Format("The Status: \"{0}\" was succefully posted!", postedStatus.Message);
                     MessageBox.Show(successPostMessage);
                     richTextBoxStatusPost.Clear();
@@ -296,32 +296,32 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private string createFriendsToTagStr()
         {
-            StringBuilder friendIDStringBuilder = new StringBuilder();
+            StringBuilder friendIdStringBuilder = new StringBuilder();
 
             foreach (User friend in listBoxPostTags.SelectedItems)
             {
-                friendIDStringBuilder.Append(friend.Id + ",");
+                friendIdStringBuilder.Append(friend.Id + ",");
             }
 
-            string friendID = friendIDStringBuilder.ToString();
+            string friendId = friendIdStringBuilder.ToString();
 
-            return !string.IsNullOrEmpty(friendID) ? friendID.Remove(friendID.Length - 1) : null;
+            return !string.IsNullOrEmpty(friendId) ? friendId.Remove(friendId.Length - 1) : null;
         }
 
         // maybe we should delete this button, friends aren't added so frequently
-        private void buttonRefreshTagFriends_Click(object sender, EventArgs e)
+        private void buttonRefreshTagFriends_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.LoggedInUser.ReFetch("friends");
             friendsBindingSource.DataSource = FacebookApplication.LoggedInUser.Friends;
             listBoxPostTags.ClearSelected();
         }
 
-        private void buttonClearPostTags_Click(object sender, EventArgs e)
+        private void buttonClearPostTags_Click(object i_Sender, EventArgs i_Args)
         {
             listBoxPostTags.ClearSelected();
         }
 
-        private void buttonAddPicture_Click(object sender, EventArgs e)
+        private void buttonAddPicture_Click(object i_Sender, EventArgs i_Args)
         {
             openPhotoForPost();
         }
@@ -344,7 +344,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void buttonPostPhoto_Click(object sender, EventArgs e)
+        private void buttonPostPhoto_Click(object i_Sender, EventArgs i_Args)
         {
             postPhoto();
         }
@@ -355,7 +355,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 if (!string.IsNullOrEmpty(m_PostPicturePath))
                 {
-                    Post postedItem = FacebookApplication.LoggedInUser.PostPhoto(m_PostPicturePath, i_Title: richTextBoxPostPhoto.Text);
+                    FacebookApplication.LoggedInUser.PostPhoto(m_PostPicturePath, i_Title: richTextBoxPostPhoto.Text);
 
                     // TODO do we need to check if postedItem != null?
                     MessageBox.Show("The photo was successfully posted!");
@@ -373,15 +373,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void buttonRefreshLastPost_Click(object sender, EventArgs e)
+        private void buttonRefreshLastPost_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.StartThread(updateMostRecentPost);
         }
 
-        private void pictureBoxLastPost_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void pictureBoxLastPost_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
             // TODO doesn't work because the tag is string, if we can pull the Photo from post update the tag and this will work
-            if (((PictureBox)sender).Tag is Photo photo)
+            if (((PictureBox)i_Sender).Tag is Photo photo)
             {
                 PhotoDetails photoDetails = new PhotoDetails(photo);
                 photoDetails.Show();
@@ -424,6 +424,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                         MessageBox.Show(string.Format("Error while fetching data for data table: {0}", e.Message));
                     }
                 }
+
                 dataGridView.DataSource = m_DataTableBindedToView.DataTable;
 
                 if (dataGridView.Columns["ObjectDisplayed"] != null)
@@ -445,7 +446,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
             {
                 AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.AlbumPhotos);
+                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
                 myPhotosAdapter.AlbumsToLoad = albumSelector.GetAlbumsSelection();
                 collection = myPhotosAdapter.FetchDataWithProgressBar();
             }
@@ -493,30 +494,30 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellDoubleClick(object i_Sender, DataGridViewCellEventArgs i_Args)
         {
-            if (((DataGridView)sender).SelectedCells.Count > 0)
+            if (((DataGridView)i_Sender).SelectedCells.Count > 0)
             {
-                DataGridViewRow rowSelected = ((DataGridView)sender).SelectedCells[0].OwningRow;
+                DataGridViewRow rowSelected = ((DataGridView)i_Sender).SelectedCells[0].OwningRow;
                 rowSelected.Selected = true;
                 displayDetailsForRowObject(rowSelected);
             }
         }
 
-        private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void dataGridView_CellMouseClick(object i_Sender, DataGridViewCellMouseEventArgs i_Args)
         {
-            if (((DataGridView)sender).SelectedCells.Count > 0)
+            if (((DataGridView)i_Sender).SelectedCells.Count > 0)
             {
-                ((DataGridView)sender).SelectedCells[0].OwningRow.Selected = true;
+                ((DataGridView)i_Sender).SelectedCells[0].OwningRow.Selected = true;
             }
         }
 
-        private void buttonFetchData_Click(object sender, EventArgs e)
+        private void buttonFetchData_Click(object i_Sender, EventArgs i_Args)
         {
             fetchDataForDataTablesTab();
         }
 
-        private void timerDataTables_Tick(object sender, EventArgs e)
+        private void timerDataTables_Tick(object i_Sender, EventArgs i_Args)
         {
             refreshDataGridView();
         }
@@ -564,7 +565,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             Thread getCommentsThread = FacebookApplication.StartThread(
                 () => m_FriendshipAnalyzer.CountNumberOfPhotosFriendCommented(() => progressBar.ProgressValue++));
             FriendSelectionChanged += () => progressBar.Close();
-            progressBar.Closing += (sender, e) =>
+            progressBar.Closing += (i_Sender, i_Args) =>
                 {
                     FriendSelectionChanged -= () => progressBar.Close();
                     if (progressBar.DialogResult == DialogResult.Cancel)
@@ -572,6 +573,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                         getCommentsThread.Abort();
                         getLikesThread.Abort();
                     }
+
                     buttonFetchGeneralData.Enabled = true;
                 };
             m_FriendshipAnalyzer.FinishedFetchingLikesAndComments += () =>
@@ -599,7 +601,6 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
                                 updateCommentsListBox();
                             }));
             }
-
         }
 
         private void fetchPhotosTaggedTogether()
@@ -642,11 +643,10 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void setEventHandlers()
         {
-            treeViewPhotosOfFriendInMyPhotos.NodeMouseDoubleClick += (sender, e) => photoTreeViewDoubleClicked(e.Node);
-            treeViewTaggedTogether.NodeMouseDoubleClick += (sender, e) => photoTreeViewDoubleClicked(e.Node);
-            buttonFetchPhotosOfFriendIAmTaggedIn.Click += (sender, e) => fetchPhotosOfMeInFriendsPhotos();
-            buttonFetchTaggedTogether.Click += (sender, e) => this.fetchPhotosTaggedTogether();
-
+            treeViewPhotosOfFriendInMyPhotos.NodeMouseDoubleClick += (i_Sender, i_Args) => photoTreeViewDoubleClicked(i_Args.Node);
+            treeViewTaggedTogether.NodeMouseDoubleClick += (i_Sender, i_Args) => photoTreeViewDoubleClicked(i_Args.Node);
+            buttonFetchPhotosOfFriendIAmTaggedIn.Click += (i_Sender, i_Args) => fetchPhotosOfMeInFriendsPhotos();
+            buttonFetchTaggedTogether.Click += (i_Sender, i_Args) => this.fetchPhotosTaggedTogether();
         }
 
         private void photoTreeViewDoubleClicked(TreeNode i_SelectedNode)
@@ -665,9 +665,9 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
             }
         }
 
-        private void friendshipAnalyzerFriendsDockPhoto_MouseClick(object sender, MouseEventArgs e)
+        private void friendshipAnalyzerFriendsDockPhoto_MouseClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((PictureBox)sender).Tag is User friend)
+            if (((PictureBox)i_Sender).Tag is User friend)
             {
                 m_FriendshipAnalyzer.Friend = friend;
                 if (FriendSelectionChanged != null)
@@ -684,12 +684,12 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
             treeViewTaggedTogether.Nodes.Clear();
         }
 
-        private void buttonFetchMyPhotosFriendIsIn_Click(object sender, EventArgs e)
+        private void buttonFetchMyPhotosFriendIsIn_Click(object i_Sender, EventArgs i_Args)
         {
             fetchPhotosOfFriendInMyPhotos();
         }
 
-        private void buttonFetchGeneralData_Click(object sender, EventArgs e)
+        private void buttonFetchGeneralData_Click(object i_Sender, EventArgs i_Args)
         {
             friendshipAnalyzerFetchGeneralData();
         }
@@ -708,9 +708,10 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
                 pictureBoxMostRecentTaggedTogether.Tag = mostRecentTaggedTogether;
             }
         }
-        private void pictureBoxMostRecentTaggedTogether_Click(object sender, EventArgs e)
+
+        private void pictureBoxMostRecentTaggedTogether_Click(object i_Sender, EventArgs i_Args)
         {
-            if (((PictureBox)sender).Tag is Photo photo)
+            if (((PictureBox)i_Sender).Tag is Photo photo)
             {
                 PhotoDetails photoDetails = new PhotoDetails(photo);
 
@@ -728,9 +729,9 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
             }
         }
 
-        private void listBoxPhotosCommentedOn_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void listBoxPhotosCommentedOn_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((ListBox)sender).SelectedItem is FacebookCommentProxy selectedComment)
+            if (((ListBox)i_Sender).SelectedItem is FacebookCommentProxy selectedComment)
             {
                 new PhotoDetails(m_FriendshipAnalyzer.CommentsByFriend[selectedComment.Comment]).Show();
             }
@@ -772,11 +773,6 @@ friendWhoCommented.Name,
 string.IsNullOrEmpty(i_Comment.Message) ? "[No Message]" : i_Comment.Message);
                 MessageBox.Show(message);
             }
-        }
-
-        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
         }
     }
 }

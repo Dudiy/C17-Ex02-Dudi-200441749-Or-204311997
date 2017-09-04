@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using FacebookWrapper.ObjectModel;
+using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
-
     public class GrowingPictureBoxProxy : PictureBox
     {
         private const bool k_Grow = true;
@@ -31,12 +29,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             Tag = i_Tag;
         }
 
-        protected override void OnMouseEnter(EventArgs e)
+        protected override void OnMouseEnter(EventArgs i_Args)
         {
             resize(k_Grow);
         }
 
-        protected override void OnMouseLeave(EventArgs e)
+        protected override void OnMouseLeave(EventArgs i_Args)
         {
             resize(!k_Grow);
         }

@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using FacebookWrapper.ObjectModel;
-
     public class FacebookPhotosTreeViewProxy : TreeView
-    {
+    {        
         public enum eGroupBy
         {
             Uploader,
             Album
-        }        
+        }
 
         public void SetValues(FacebookObjectCollection<Photo> i_Photos, eGroupBy i_GroupBy)
         {
@@ -71,14 +67,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        protected override void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e)
+        protected override void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs i_Args)
         {
-            if (e.Node.Tag is User selectedUser)
+            if (i_Args.Node.Tag is User selectedUser)
             {
                 PictureFrame profile = new PictureFrame(selectedUser.PictureLargeURL, selectedUser.Name);
                 profile.Show();
             }
-            else if (e.Node.Tag is Photo selectedPhoto)
+            else if (i_Args.Node.Tag is Photo selectedPhoto)
             {
                 PhotoDetails photoDetails = new PhotoDetails(selectedPhoto);
                 photoDetails.Show();

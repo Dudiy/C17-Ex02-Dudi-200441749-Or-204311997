@@ -31,15 +31,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private FacebookObjectCollection<Photo> m_AllPhotos;
 
-        public int NumPhotosFriendLiked { get; private set; }
-
-        public int NumPhotosFriendCommented { get; private set; }
-
-
         public FriendshipAnalyzer()
         {
-            NumPhotosFriendLiked = 0;
-            NumPhotosFriendCommented = 0;
             CommentsByFriend = new Dictionary<Comment, Photo>();
             PhotosFriendLiked = new FacebookObjectCollection<Photo>();
         }
@@ -61,6 +54,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                         }
                     }
                 }
+
                 return m_AllPhotos;
             }
         }
@@ -77,7 +71,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 }
             }
 
-            photosTaggedTogether.OrderBy(photo => photo.CreatedTime);
+            photosTaggedTogether.OrderBy(i_Photo => i_Photo.CreatedTime);
 
             return photosTaggedTogether;
         }
@@ -89,7 +83,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public void CountNumberOfPhotosFriendLiked(Action i_PromoteProgressBar)
         {
-            NumPhotosFriendLiked = 0;
             m_FinishedFetchingLikes = false;
             try
             {
@@ -97,8 +90,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 {
                     if (photo.LikedBy.Find(user => user.Id == Friend.Id) != null)
                     {
-                        this.PhotosFriendLiked.Add(photo);
-                        NumPhotosFriendLiked++;
+                        PhotosFriendLiked.Add(photo);
                     }
 
                     i_PromoteProgressBar.Invoke();
@@ -107,8 +99,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             catch (Exception e)
             {
                 if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
-                {
-
+                {                    
                     string message = string.Format("Error while counting likes: {0}", e.Message);
                     MessageBox.Show(message);
                 }
@@ -122,7 +113,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public void CountNumberOfPhotosFriendCommented(Action i_PromoteProgressBar)
         {
-            NumPhotosFriendCommented = 0;
             CommentsByFriend.Clear();
             m_FinishedFetchingComments = false;
             try
@@ -133,7 +123,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     if (commentByFriend != null)
                     {
                         CommentsByFriend.Add(commentByFriend, photo);
-                        NumPhotosFriendCommented++;
                     }
 
                     i_PromoteProgressBar.Invoke();

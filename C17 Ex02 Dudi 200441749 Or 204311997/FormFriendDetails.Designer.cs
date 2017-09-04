@@ -93,7 +93,7 @@
             this.linkLabelLikedPageURL.TabIndex = 24;
             this.linkLabelLikedPageURL.TabStop = true;
             this.linkLabelLikedPageURL.Text = "linkLabel1";
-            this.linkLabelLikedPageURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelLikedPageURL_LinkClicked);
+            this.linkLabelLikedPageURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelLikedPageUrl_LinkClicked);
             // 
             // labelLikedPageName
             // 
@@ -119,6 +119,7 @@
             this.listBoxLikedPage.Size = new System.Drawing.Size(170, 212);
             this.listBoxLikedPage.TabIndex = 22;
             this.listBoxLikedPage.ValueMember = "AccessToken";
+            this.listBoxLikedPage.SelectedIndexChanged += new System.EventHandler(this.listBoxLikedPage_SelectedIndexChanged);
             // 
             // labelLikedPage
             // 

@@ -7,7 +7,6 @@
  * 204311997 - Or Mantzur
  * 200441749 - Dudi Yecheskel 
 */
-using System;
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
 

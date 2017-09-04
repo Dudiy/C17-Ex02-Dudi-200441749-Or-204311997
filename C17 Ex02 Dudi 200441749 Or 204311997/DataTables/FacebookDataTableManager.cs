@@ -5,13 +5,10 @@
  * 204311997 - Or Mantzur
  * 200441749 - Dudi Yecheskel 
 */
-using System.Collections.Generic;
-using C17_Ex01_Dudi_200441749_Or_204311997.DataTables;
 using System;
-using FacebookWrapper.ObjectModel;
-using System.Threading;
+using System.Collections.Generic;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     public class FacebookDataTableManager
     {

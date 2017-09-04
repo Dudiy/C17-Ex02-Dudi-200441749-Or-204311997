@@ -6,17 +6,15 @@
  * 200441749 - Dudi Yecheskel 
 */
 using System;
-using System.Text;
-using System.Collections.Generic;
-using FacebookWrapper.ObjectModel;
 using System.Threading;
+using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     public class FacebookFriendsDataTable : FacebookDataTable
     {
         internal FacebookFriendsDataTable()
-            : base("Friends", typeof(User))
+            : base("Friends")
         {
         }
 
@@ -31,13 +29,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             }
         }
 
-        private void populateRows(FacebookObjectCollection<FacebookObject> friendsList)
+        private void populateRows(FacebookObjectCollection<FacebookObject> i_FriendsList)
         {
             try
             {
                 TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
 
-                foreach (FacebookObject facebookObject in friendsList)
+                foreach (FacebookObject facebookObject in i_FriendsList)
                 {
                     if (facebookObject is User friend)
                     {
@@ -46,7 +44,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                             friend.FirstName,
                             friend.LastName,
                             friend.Gender != null ? friend.Gender.ToString() : string.Empty);
-                        //getMostRecentPost(friend));
                     }
 
                     if (this.r_NotifyAbstractParentPopulateRowsCompleted != null)
@@ -72,21 +69,3 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         }
     }
 }
-
-//private string getMostRecentPost(User i_User)
-//{
-//    StringBuilder mostRecentPostStr = new StringBuilder();
-
-//    if (i_User != null && i_User.Posts[0] != null)
-//    {
-//        Post mostRecentPost = i_User.Posts[0];
-
-//        mostRecentPostStr.Append(mostRecentPost.CreatedTime);
-//        if (!string.IsNullOrEmpty(mostRecentPost.Message))
-//        {
-//            mostRecentPostStr.Append(string.Format(" - {0}", mostRecentPost.Message));
-//        }
-//    }
-
-//    return mostRecentPostStr.ToString();
-//}

@@ -386,7 +386,6 @@
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
-            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
             // 
             // toolStripStatusLabel
             // 
@@ -580,7 +579,7 @@
             this.linkLabelLikedPageURL.TabIndex = 10;
             this.linkLabelLikedPageURL.TabStop = true;
             this.linkLabelLikedPageURL.Text = "linkLabel1";
-            this.linkLabelLikedPageURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.URL_LinkLabel_LinkClicked);
+            this.linkLabelLikedPageURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.url_LinkLabel_LinkClicked);
             // 
             // labelLikedPageName
             // 
@@ -794,7 +793,7 @@
             this.listBoxPostComment.Name = "listBoxPostComment";
             this.listBoxPostComment.Size = new System.Drawing.Size(170, 95);
             this.listBoxPostComment.TabIndex = 20;
-            this.listBoxPostComment.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBoxPostComment_MouseDoubleClick);
+            this.listBoxPostComment.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxPostComment_MouseDoubleClick);
             // 
             // listBoxPostLiked
             // 
@@ -803,7 +802,7 @@
             this.listBoxPostLiked.Name = "listBoxPostLiked";
             this.listBoxPostLiked.Size = new System.Drawing.Size(91, 95);
             this.listBoxPostLiked.TabIndex = 11;
-            this.listBoxPostLiked.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBoxPostLiked_MouseDoubleClick);
+            this.listBoxPostLiked.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxPostLiked_MouseDoubleClick);
             // 
             // pictureBoxLastPost
             // 

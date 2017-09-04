@@ -12,12 +12,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     public partial class ProgressBarWindow : Form
     {
-        private const int HEIGHT_WITH_CANCEL = 176;
+        private readonly object r_ProgressValueLock = new object();
 
-        private const int HEIGHT_WITHOUT_CANCEL = 133;
-        public object m_ProgressValueLock = new object();
-
-        private bool CancleEnabled;
+        private bool m_CancleEnabled;
 
         public ProgressBarWindow(string i_Description)
             : this(0, i_Description)
@@ -27,7 +24,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public ProgressBarWindow(int i_MaxValue, string i_Description)
         {
             InitializeComponent();
-            CancleEnabled = false;
+            this.m_CancleEnabled = false;
             progressBar.Minimum = 0;
             progressBar.Maximum = i_MaxValue;
             labelLoading.Text = string.Format("Loading {0}...", i_Description);
@@ -35,12 +32,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public bool CancelEnabled
         {
-            get { return CancleEnabled; }
+            get { return m_CancleEnabled; }
             set
             {
-                CancleEnabled = value;
+                m_CancleEnabled = value;
                 buttonCancel.Visible = value;
-                //Height = value ? HEIGHT_WITH_CANCEL : HEIGHT_WITHOUT_CANCEL;
             }
         }
 
@@ -50,23 +46,16 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             set { progressBar.Maximum = Math.Min(value, FacebookApplication.k_CollectionLimit); }
         }
 
-        //public string Text
-        //{
-        //    set
-        //    {
-        //        labelLoading.Text = value;
-        //    }
-        //}
-
         public int ProgressValue
         {
             get
             {
-                lock (m_ProgressValueLock)
+                lock (this.r_ProgressValueLock)
                 {
                     return progressBar.Value;
                 }
             }
+
             set
             {
                 if (value <= progressBar.Maximum)
@@ -88,7 +77,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     {
                         // Do nothing if the window is disposed
                     }
-
                 }
                 else
                 {
@@ -108,7 +96,7 @@ progressBar.Maximum));
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object i_Sender, EventArgs i_Args)
         {
             Close();
         }

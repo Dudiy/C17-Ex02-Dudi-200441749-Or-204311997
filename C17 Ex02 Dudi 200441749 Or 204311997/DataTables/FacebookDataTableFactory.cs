@@ -1,18 +1,14 @@
-﻿using FacebookWrapper.ObjectModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
+﻿namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
+    using System;
+
     internal static class FacebookDataTableFactory
     {
-        public static FacebookDataTable CreateTable(eFacebookDataTableType tableType)
+        public static FacebookDataTable CreateTable(eFacebookDataTableType i_TableType)
         {
-            FacebookDataTable tableCreated = null;
+            FacebookDataTable tableCreated;
 
-            switch (tableType)
+            switch (i_TableType)
             {
                 case eFacebookDataTableType.Friends:                    
                     tableCreated = new FacebookFriendsDataTable();
@@ -27,7 +23,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     tableCreated = new FacebookPostsDataTable();
                     break;
                 default:
-                    break;
+                    throw new Exception("The given table type is not supported");
             }
 
             return tableCreated;

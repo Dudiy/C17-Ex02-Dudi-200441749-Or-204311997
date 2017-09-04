@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
-    using System.Windows.Forms;
-
-    class FacebookPostsDataTable : FacebookDataTable
+    internal class FacebookPostsDataTable : FacebookDataTable
     {
         public FacebookPostsDataTable()
-            : base("Posts", typeof(Post))
+            : base("Posts")
         {
         }
 

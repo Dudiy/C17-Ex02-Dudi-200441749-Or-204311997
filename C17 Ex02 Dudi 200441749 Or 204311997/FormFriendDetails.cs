@@ -13,21 +13,21 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     public partial class FormFriendDetails : Form
     {
-        private User m_Friend;
+        private readonly User r_Friend;
 
         public FormFriendDetails(User i_Friend)
         {
             InitializeComponent();
-            m_Friend = i_Friend;
-            userBindingSource.DataSource = m_Friend;
+            r_Friend = i_Friend;
+            userBindingSource.DataSource = r_Friend;
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void OnLoad(EventArgs i_Args)
         {
-            base.OnLoad(e);
+            base.OnLoad(i_Args);
             labelLikedPage.Text = string.Format(
 @"Pages that {0} liked",
-m_Friend.FirstName);
+r_Friend.FirstName);
             if (!string.IsNullOrEmpty(labelBirthday.Text))
             {
                 labelBirthdayTitle.Visible = false;
@@ -35,12 +35,12 @@ m_Friend.FirstName);
             }
         }
 
-        private void listBoxLikedPage_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxLikedPage_SelectedIndexChanged(object i_Sender, EventArgs i_Args)
         {
-            likedPagesBindingSource.DataSource = ((ListBox)sender).SelectedItem as Page;
+            likedPagesBindingSource.DataSource = ((ListBox)i_Sender).SelectedItem as Page;
         }
 
-        private void linkLabelLikedPageURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelLikedPageUrl_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_Args)
         {
             // Specify that the link was visited.
             linkLabelLikedPageURL.LinkVisited = true;

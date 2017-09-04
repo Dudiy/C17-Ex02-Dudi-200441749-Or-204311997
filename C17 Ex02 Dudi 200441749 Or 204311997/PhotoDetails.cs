@@ -7,18 +7,15 @@
 */
 using System;
 using System.Windows.Forms;
+using System.ComponentModel;
+using System.Threading;
+using Facebook;
 using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using System.ComponentModel;
-    using System.Threading;
-
-    using Facebook;
-
     public partial class PhotoDetails : Form
     {
-        private const byte k_MinNumOfCommentsForProgressBar = 5;
         private Photo m_Photo;
 
         private Thread m_LikesCounterThread;
@@ -33,9 +30,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             pictureBox.LoadAsync(m_Photo.PictureNormalURL);
         }
 
-        protected override void OnShown(EventArgs e)
+        protected override void OnShown(EventArgs i_Args)
         {
-            base.OnShown(e);
+            base.OnShown(i_Args);
             m_LikesCounterThread = FacebookApplication.StartThread(initLikes);
             m_CommentsCounterThread = FacebookApplication.StartThread(initComments);
         }
@@ -58,7 +55,7 @@ Likes ({0}):",
 m_Photo.LikedBy.Count);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs i_Args)
         {
             m_LikesCounterThread.Abort();
             m_CommentsCounterThread.Abort();
@@ -69,7 +66,6 @@ m_Photo.LikedBy.Count);
             listBoxLikes.Invoke(
                 new Action(() =>
                         {
-
                             listBoxLikes.DisplayMember = "Name";
                             foreach (User liker in m_Photo.LikedBy)
                             {
@@ -133,7 +129,7 @@ m_Photo.LikedBy.Count);
             }
         }
 
-        private void listBoxLikes_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void listBoxLikes_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
             User selectedUser = listBoxLikes.SelectedItem as User;
 

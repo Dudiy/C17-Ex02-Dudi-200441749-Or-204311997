@@ -13,8 +13,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     public abstract class FacebookDataTable : IDisplayable
     {
-        private Type m_ObjectTypeRepresentedByRow;
-
         private event Action PopulateRowsCompleted;
         // TODO does this need a prefix?
         protected readonly Action r_NotifyAbstractParentPopulateRowsCompleted;
@@ -27,9 +25,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public object ObjectToDisplay { get; set; }
 
-        protected FacebookDataTable(string i_TableName, Type i_ObjectTypeRepresentedByRow)
+        protected FacebookDataTable(string i_TableName)
         {
-            m_ObjectTypeRepresentedByRow = i_ObjectTypeRepresentedByRow;
             DataTable = new DataTable(i_TableName);
             // all tables initially have a column that holds the current row object displayed
             DataTable.Columns.Add("ObjectDisplayed", typeof(object));

@@ -7,63 +7,62 @@
 */
 using System;
 using System.Text;
-using System.Collections.Generic;
-using FacebookWrapper.ObjectModel;
 using System.Threading;
+using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
-    using System.CodeDom;
-    using System.Windows.Forms;
-
     public class FacebookPhotosDataTable : FacebookDataTable
     {
-        private Thread populateRowsThread;
-
+        private Thread m_PopulateRowsThread;
         private Action populateRowsThreadInterrupted;
-        private bool abortRunningThread;
+        private bool m_AbortRunningThread;
+
         public Album[] AlbumsToLoad { get; set; }
+
         internal FacebookPhotosDataTable()
-            : base("Photos", typeof(Photo))
+            : base("Photos")
         {
         }
 
-        private void getTotalPhotos()
-        {
-            lock (this.r_PopulateRowsLock)
-            {
-                TotalRows = 0;
-
-                foreach (Album album in FacebookApplication.LoggedInUser.Albums)
-                {
-                    TotalRows += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
-                }
-            }
-        }
-
+        // TODO delete?
+        // private void getTotalPhotos()
+        // {
+        //     lock (r_PopulateRowsLock)
+        //     {
+        //         TotalRows = 0;
+        //         foreach (Album album in FacebookApplication.LoggedInUser.Albums)
+        //         {
+        //             if (album.Count != null)
+        //             {
+        //                 TotalRows += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
+        //             }
+        //         }
+        //     }
+        // }
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;
+            m_AbortRunningThread = m_PopulateRowsThread != null && m_PopulateRowsThread.IsAlive;
             TotalRows = i_Collection.Count;
 
-            //// if abort running thread is true wait for the currently running thread to stop
-            //while (abortRunningThread)
-            //{
-            //    Thread.Sleep(100);
-            //}
+            // if abort running thread is true wait for the currently running thread to stop
+            while (m_AbortRunningThread)
+            {
+                Thread.Sleep(100);
+            }
 
-            lock (this.r_PopulateRowsLock)
+            lock (r_PopulateRowsLock)
             {
                 DataTable.Rows.Clear();
-                populateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
+                m_PopulateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
             }
         }
 
-        private void populateRows(FacebookObjectCollection<FacebookObject> myPhotos)
+        private void populateRows(FacebookObjectCollection<FacebookObject> i_MyPhotos)
         {
             try
             {
-                foreach (FacebookObject facebookObject in myPhotos)
+                foreach (FacebookObject facebookObject in i_MyPhotos)
                 {
                     if (facebookObject is Photo photo)
                     {
@@ -78,16 +77,16 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                             photoTags);
                     }
 
-                    if (abortRunningThread)
+                    if (m_AbortRunningThread)
                     {
-                        abortRunningThread = false;
+                        m_AbortRunningThread = false;
                         break;
                     }
                 }
 
-                if (this.r_NotifyAbstractParentPopulateRowsCompleted != null)
+                if (r_NotifyAbstractParentPopulateRowsCompleted != null)
                 {
-                    this.r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
+                    r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
                 }
             }
             catch (Exception e)
@@ -108,7 +107,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             DataTable.Columns.Add("Tags", typeof(string));
         }
 
-        private static string buildTagsString(Photo i_Photo)
+        private string buildTagsString(Photo i_Photo)
         {
             StringBuilder photoTags = new StringBuilder();
 
@@ -125,6 +124,5 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
             return photoTags.ToString();
         }
-
     }
 }

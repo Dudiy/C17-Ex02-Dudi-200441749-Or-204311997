@@ -14,6 +14,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     public partial class FormLogin : Form
     {
         private const DialogResult k_LoginSuccesfull = DialogResult.Yes;
+
         public LoginResult LoginResult { get; private set; }
 
         public FormLogin()
@@ -25,7 +26,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
         }
 
-        private void buttonLogin_Click(object sender, EventArgs e)
+        private void buttonLogin_Click(object i_Sender, EventArgs i_Args)
         {
             try
             {
@@ -34,7 +35,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
             catch
             {
-                this.Show();
+                Show();
                 MessageBox.Show("Error logging in, please check internet connection and try again");
             }
         }
@@ -60,14 +61,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 "publish_actions");
         }
 
-        private void buttonExit_Click(object sender, EventArgs e)
+        private void buttonExit_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.ExitSelected = true;
-            //FacebookApplication.Logout();
             Close();
         }
 
-        private void checkBoxRememberMe_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxRememberMe_CheckedChanged(object i_Sender, EventArgs i_Args)
         {
             if (FacebookApplication.AppSettings != null)
             {

@@ -6,20 +6,15 @@
  * 200441749 - Dudi Yecheskel 
 */
 using System;
-using System.Collections.Generic;
-using FacebookWrapper.ObjectModel;
 using System.Threading;
+using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
-    using System.Windows.Forms;
-
-    using Timer = System.Threading.Timer;
-
     public class FacebookLikedPagesDataTable : FacebookDataTable
     {
         internal FacebookLikedPagesDataTable()
-            : base("Liked Pages", typeof(Page))
+            : base("Liked Pages")
         {
         }
 
@@ -34,13 +29,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             }
         }
 
-        private void populateRows(FacebookObjectCollection<FacebookObject> likedPages)
+        private void populateRows(FacebookObjectCollection<FacebookObject> i_LikedPages)
         {
             try
             {
                 TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
 
-                foreach (FacebookObject facebookObject in likedPages)
+                foreach (FacebookObject facebookObject in i_LikedPages)
                 {
                     if (facebookObject is Page page)
                     {
