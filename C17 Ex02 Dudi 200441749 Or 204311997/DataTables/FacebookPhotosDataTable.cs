@@ -13,6 +13,9 @@ using System.Threading;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
+    using System.CodeDom;
+    using System.Windows.Forms;
+
     public class FacebookPhotosDataTable : FacebookDataTable
     {
         private Thread populateRowsThread;
@@ -40,22 +43,25 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;                        
+            abortRunningThread = populateRowsThread != null && populateRowsThread.IsAlive;
             TotalRows = i_Collection.Count;
-            
-            // if abort running thread is true wait for the currently running thread to stop
-            while (abortRunningThread)
-            {
-                Thread.Sleep(100);
-            }
 
-            DataTable.Rows.Clear();
-            populateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
+            //// if abort running thread is true wait for the currently running thread to stop
+            //while (abortRunningThread)
+            //{
+            //    Thread.Sleep(100);
+            //}
+
+            lock (m_PopulateRowsLock)
+            {
+                DataTable.Rows.Clear();
+                populateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
+            }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> myPhotos)
         {
-            lock (m_PopulateRowsLock)
+            try
             {
                 foreach (FacebookObject facebookObject in myPhotos)
                 {
@@ -82,6 +88,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 if (NotifyAbstractParent_PopulateRowsCompleted != null)
                 {
                     NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                }
+            }
+            catch (Exception e)
+            {
+                if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
+                {
+                    throw new PopulateRowsException(this, e);
                 }
             }
         }

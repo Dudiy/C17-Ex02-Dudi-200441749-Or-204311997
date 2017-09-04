@@ -108,11 +108,6 @@ progressBar.Maximum));
             }
         }
 
-        //public new void Show()
-        //{
-        //    new Thread(() => ShowDialog()).Start();
-        //}
-
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             Close();

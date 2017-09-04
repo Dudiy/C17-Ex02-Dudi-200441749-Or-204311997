@@ -7,6 +7,8 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
+    using System.Windows.Forms;
+
     class FacebookPostsDataTable : FacebookDataTable
     {
         public FacebookPostsDataTable()
@@ -20,36 +22,49 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             {
                 if (DataTable.Rows.Count == 0)
                 {
-                    new Thread(() => populateRows(i_Collection)).Start();
+                    FacebookApplication.StartThread(() => populateRows(i_Collection));
                 }
             }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> i_Posts)
         {
-            TotalRows = FacebookApplication.LoggedInUser.Posts.Count;
-
-            foreach (FacebookObject facebookObject in i_Posts)
+            lock (m_PopulateRowsLock)
             {
-                if (facebookObject is Post post)
+                try
                 {
-                    DataTable.Rows.Add(
-                        post,
-                        string.IsNullOrEmpty(post.Message) ? "[No Message]" : post.Message,
-                        post.CreatedTime,
-                        post.LikedBy.Count,
-                        post.Comments.Count);
-                }
+                    TotalRows = FacebookApplication.LoggedInUser.Posts.Count;
 
-                if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                    foreach (FacebookObject facebookObject in i_Posts)
+                    {
+                        if (facebookObject is Post post)
+                        {
+                            DataTable.Rows.Add(
+                                post,
+                                string.IsNullOrEmpty(post.Message) ? "[No Message]" : post.Message,
+                                post.CreatedTime,
+                                post.LikedBy.Count,
+                                post.Comments.Count);
+                        }
+
+                        if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                        {
+                            NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                        }
+                    }
+                }
+                catch (Exception e)
                 {
-                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                    if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
+                    {
+                        throw new PopulateRowsException(this, e);
+                    }
                 }
             }
         }
 
         protected override void InitColumns()
-        {                        
+        {
             DataTable.Columns.Add("Message", typeof(string));
             DataTable.Columns.Add("Time Updated", typeof(DateTime));
             DataTable.Columns.Add("Num Likes", typeof(int));

@@ -4,16 +4,13 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
-using System.Collections.Generic;
+using System.Threading;
 using FacebookWrapper.ObjectModel;
 using C17_Ex01_Dudi_200441749_Or_204311997.DataTables;
-using System.Threading;
 using C17_Ex01_Dudi_200441749_Or_204311997.Adapter;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
-
     public partial class FormMain : Form
     {
         private const bool k_UseCollectionAdapter = true;
@@ -26,8 +23,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private FriendshipAnalyzer m_FriendshipAnalyzer;
         private string m_PostPicturePath;
         private bool m_LogoutClicked;
-
-
 
         public FormMain()
         {
@@ -414,9 +409,20 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 m_DataTableBindedToView = (FacebookDataTable)comboBoxDataTableBindingSelection.SelectedItem;
                 if (m_DataTableBindedToView.DataTable.Rows.Count == 0 || m_DataTableBindedToView is FacebookPhotosDataTable)
                 {
-                    FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
-                    m_DataTableBindedToView.PopulateRows(collection);
-                    timerDataTables.Start();
+                    try
+                    {
+                        FacebookObjectCollection<FacebookObject> collection = fetchCollectionWithAdapter(m_DataTableBindedToView.GetType());
+                        m_DataTableBindedToView.PopulateRows(collection);
+                        timerDataTables.Start();
+                    }
+                    catch (PopulateRowsException e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(string.Format("Error while fetching data for data table: {0}", e.Message));
+                    }
                 }
                 dataGridView.DataSource = m_DataTableBindedToView.DataTable;
 

@@ -26,30 +26,40 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             {
                 if (DataTable.Rows.Count == 0)
                 {
-                    new Thread(() => populateRows(i_Collection)).Start();
+                    FacebookApplication.StartThread(() => populateRows(i_Collection));
                 }
             }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> friendsList)
         {
-            TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
-
-            foreach (FacebookObject facebookObject in friendsList)
+            try
             {
-                if (facebookObject is User friend)
-                {
-                    DataTable.Rows.Add(
-                        friend,
-                        friend.FirstName,
-                        friend.LastName,
-                        friend.Gender != null ? friend.Gender.ToString() : string.Empty);
-                    //getMostRecentPost(friend));
-                }
+                TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
 
-                if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                foreach (FacebookObject facebookObject in friendsList)
                 {
-                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                    if (facebookObject is User friend)
+                    {
+                        DataTable.Rows.Add(
+                            friend,
+                            friend.FirstName,
+                            friend.LastName,
+                            friend.Gender != null ? friend.Gender.ToString() : string.Empty);
+                        //getMostRecentPost(friend));
+                    }
+
+                    if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                    {
+                        NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
+                {
+                    throw new PopulateRowsException(this, e);
                 }
             }
         }
@@ -63,20 +73,20 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
     }
 }
 
-        //private string getMostRecentPost(User i_User)
-        //{
-        //    StringBuilder mostRecentPostStr = new StringBuilder();
+//private string getMostRecentPost(User i_User)
+//{
+//    StringBuilder mostRecentPostStr = new StringBuilder();
 
-        //    if (i_User != null && i_User.Posts[0] != null)
-        //    {
-        //        Post mostRecentPost = i_User.Posts[0];
+//    if (i_User != null && i_User.Posts[0] != null)
+//    {
+//        Post mostRecentPost = i_User.Posts[0];
 
-        //        mostRecentPostStr.Append(mostRecentPost.CreatedTime);
-        //        if (!string.IsNullOrEmpty(mostRecentPost.Message))
-        //        {
-        //            mostRecentPostStr.Append(string.Format(" - {0}", mostRecentPost.Message));
-        //        }
-        //    }
+//        mostRecentPostStr.Append(mostRecentPost.CreatedTime);
+//        if (!string.IsNullOrEmpty(mostRecentPost.Message))
+//        {
+//            mostRecentPostStr.Append(string.Format(" - {0}", mostRecentPost.Message));
+//        }
+//    }
 
-        //    return mostRecentPostStr.ToString();
-        //}
+//    return mostRecentPostStr.ToString();
+//}

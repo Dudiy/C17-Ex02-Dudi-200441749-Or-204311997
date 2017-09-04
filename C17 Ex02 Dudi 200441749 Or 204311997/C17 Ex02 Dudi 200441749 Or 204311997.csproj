@@ -60,6 +60,7 @@
       <DependentUpon>AlbumsSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="DataTables\PopulateRowsException.cs" />
     <Compile Include="FacebookCommentProxy.cs" />
     <Compile Include="DataTables\eFacebookDataTableType.cs" />
     <Compile Include="DataTables\FacebookDataTableFactory.cs" />

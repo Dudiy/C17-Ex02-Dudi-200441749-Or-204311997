@@ -29,17 +29,17 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             {
                 if (DataTable.Rows.Count == 0)
                 {
-                    new Thread(() => populateRows(i_Collection)).Start();
+                    FacebookApplication.StartThread(() => populateRows(i_Collection));
                 }
             }
         }
 
         private void populateRows(FacebookObjectCollection<FacebookObject> likedPages)
         {
-            TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
-
-            lock (m_PopulateRowsLock)
+            try
             {
+                TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
+
                 foreach (FacebookObject facebookObject in likedPages)
                 {
                     if (facebookObject is Page page)
@@ -57,6 +57,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 if (NotifyAbstractParent_PopulateRowsCompleted != null)
                 {
                     NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                }
+            }
+            catch (Exception e)
+            {
+                if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
+                {
+                    throw new PopulateRowsException(this, e);
                 }
             }
         }
