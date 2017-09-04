@@ -95,6 +95,12 @@
     <Compile Include="FormFriendDetails.Designer.cs">
       <DependentUpon>FormFriendDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPostDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPostDetails.Designer.cs">
+      <DependentUpon>FormPostDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="FriendshipAnalyzer.cs" />
     <Compile Include="GrowingPictureBoxProxy.cs">
       <SubType>Component</SubType>
@@ -131,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormFriendDetails.resx">
       <DependentUpon>FormFriendDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPostDetails.resx">
+      <DependentUpon>FormPostDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PhotoDetails.resx">
       <DependentUpon>PhotoDetails.cs</DependentUpon>

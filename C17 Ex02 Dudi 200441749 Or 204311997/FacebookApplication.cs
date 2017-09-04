@@ -17,6 +17,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
     public static class FacebookApplication
     {
+        private const int k_TimeBeforeStartingTimer = 10 * 1000; // 10 seconds
+        private const int k_TimeBetweenTimerTicks = 60 * 1000;  // 1 minute
         public const int k_CollectionLimit = 500;
         public const byte k_MaxPhotosInAlbum = 100;
         private static readonly List<Thread> sr_Threads = new List<Thread>();
@@ -35,7 +37,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             try
             {
                 // timer that starts after 10 seconds and removes all disposed threads every 30 seconds
-                s_AppTimer = new Timer(i_State => removeDisposedThreads(), null, 10000, 30000);
+                s_AppTimer = new Timer(i_State => removeDisposedThreads(), null, k_TimeBeforeStartingTimer, k_TimeBetweenTimerTicks);
                 FacebookService.s_CollectionLimit = k_CollectionLimit;
 
                 ExitSelected = false;
@@ -70,6 +72,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private static void removeDisposedThreads()
         {
             List<Thread> disposedThreads = new List<Thread>();
+
             foreach (Thread thread in sr_Threads)
             {
                 if (!thread.IsAlive)
@@ -93,7 +96,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                     thread.Abort();
                 }
             }
+
+            sr_Threads.Clear();
         }
+
         // used as a method to call after successfully invoking FacebookService.Logout
         public static void Logout()
         {
@@ -202,7 +208,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
 
             // toggle isFirstLogoutCall
-            s_IsFirstLogoutCall = s_IsFirstLogoutCall ? false : true;
+            s_IsFirstLogoutCall = !s_IsFirstLogoutCall;
         }
 
         private static void closeAllForms()

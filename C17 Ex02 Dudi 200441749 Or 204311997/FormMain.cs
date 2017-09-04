@@ -116,9 +116,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
                     if (i_UseCollectionAdapter)
                     {
-                        FacebookCollectionAdapter<Page> collectionAdapter = new FacebookCollectionAdapter<Page>(eFacebookCollectionType.LikedPages);
-                        FacebookObjectCollection<FacebookObject> likedPagesFromAdapter = collectionAdapter.FetchDataWithProgressBar();
-                        likedPages = collectionAdapter.UnboxCollection(likedPagesFromAdapter);
+                        IFacebookCollection<Page> collection = new FacebookCollectionAdapter<Page>(eFacebookCollectionType.LikedPages);
+                        FacebookObjectCollection<FacebookObject> likedPagesFromAdapter = collection.FetchDataWithProgressBar();
+                        likedPages = collection.UnboxCollection(likedPagesFromAdapter);
                     }
                     else
                     {
@@ -445,7 +445,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
             {
                 AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-                FacebookCollectionAdapter<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.AlbumPhotos);
+                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(Adapter.eFacebookCollectionType.AlbumPhotos);
                 myPhotosAdapter.AlbumsToLoad = albumSelector.GetAlbumsSelection();
                 collection = myPhotosAdapter.FetchDataWithProgressBar();
             }
@@ -604,7 +604,7 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void fetchPhotosTaggedTogether()
         {
-            FacebookCollectionAdapter<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
+            IFacebookCollection<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
             FacebookObjectCollection<FacebookObject> boxPhotosTaggedIn = photosTaggedInAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Photo> photosTaggedIn = photosTaggedInAdapter.UnboxCollection(boxPhotosTaggedIn);
             FacebookObjectCollection<Photo> photosTaggedTogether = m_FriendshipAnalyzer.PhotosTaggedTogether(photosTaggedIn);
@@ -622,7 +622,7 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
         {
             AlbumsSelector albumSelector = new AlbumsSelector(i_User);
             Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
-            FacebookCollectionAdapter<Album> albumsAdapter = new FacebookCollectionAdapter<Album>(eFacebookCollectionType.Albums)
+            IFacebookCollection<Album> albumsAdapter = new FacebookCollectionAdapter<Album>(eFacebookCollectionType.Albums)
             {
                 AlbumsToLoad = selectedAlbums
             };
@@ -696,7 +696,7 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void getMostRecentPhotoTogether()
         {
-            FacebookCollectionAdapter<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
+            IFacebookCollection<Photo> photosTaggedInAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.PhotosTaggedIn);
             FacebookObjectCollection<FacebookObject> boxPhotosTaggedIn = photosTaggedInAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Photo> photosTaggedIn = photosTaggedInAdapter.UnboxCollection(boxPhotosTaggedIn);
             FacebookObjectCollection<Photo> photosTaggedTogether = m_FriendshipAnalyzer.PhotosTaggedTogether(photosTaggedIn);

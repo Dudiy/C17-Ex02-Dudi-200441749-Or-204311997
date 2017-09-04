@@ -34,6 +34,12 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 PictureFrame pictureFrame = new PictureFrame(((Page)objectToDisplay).PictureLargeURL);
                 pictureFrame.Show();
             }
+            else if (objectToDisplay is Post)
+            {
+                //FormPostDetails formPostDetails = new FormPostDetails() { Post = objectToDisplay as Post };
+                FormPostDetails formPostDetails = new FormPostDetails((Post)objectToDisplay);
+                formPostDetails.Show();
+            }
             else
             {
                 MessageBox.Show(string.Format("Showing toString(): ", objectToDisplay.ToString()));
