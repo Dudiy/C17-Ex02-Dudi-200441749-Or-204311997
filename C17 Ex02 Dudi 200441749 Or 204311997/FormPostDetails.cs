@@ -11,6 +11,7 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
+    using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
 
     public partial class FormPostDetails : Form
     {
@@ -27,10 +28,24 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             try
             {
+                if (!string.IsNullOrEmpty(Post.PictureURL))
+                {
+                    try
+                    {
+                        pictureBoxPhoto.Load(Post.PictureURL);
+                    }
+                    catch (Exception e)
+                    {
+                        Invoke(new Action(() => MessageBox.Show(ActiveForm, "The PictureURL of this post is not supported")));
+                    }
+                }
+
                 foreach (Comment postComment in Post.Comments)
                 {
                     listBoxComments.Invoke(new Action(() => listBoxComments.Items.Add(new FacebookCommentProxy() { Comment = postComment })));
                 }
+
+                labelLikes.Invoke(new Action(() => labelLikes.Text = string.Format("Likes ({0}): ", Post.LikedBy.Count)));
             }
             catch (Exception e)
             {

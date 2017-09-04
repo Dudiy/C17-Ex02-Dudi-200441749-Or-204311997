@@ -42,7 +42,7 @@
             this.likedByBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.listBoxLikes = new System.Windows.Forms.ListBox();
             this.listBoxComments = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelLikes = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBoxPhoto = new System.Windows.Forms.PictureBox();
             createdTimeLabel = new System.Windows.Forms.Label();
@@ -73,7 +73,7 @@
             this.tableLayoutPanel1.Controls.Add(this.labelCreatedTime, 1, 8);
             this.tableLayoutPanel1.Controls.Add(this.listBoxLikes, 1, 10);
             this.tableLayoutPanel1.Controls.Add(this.listBoxComments, 1, 11);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 10);
+            this.tableLayoutPanel1.Controls.Add(this.labelLikes, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 11);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -202,14 +202,14 @@
             this.listBoxComments.Size = new System.Drawing.Size(373, 136);
             this.listBoxComments.TabIndex = 8;
             // 
-            // label1
+            // labelLikes
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Likes";
+            this.labelLikes.AutoSize = true;
+            this.labelLikes.Location = new System.Drawing.Point(3, 60);
+            this.labelLikes.Name = "labelLikes";
+            this.labelLikes.Size = new System.Drawing.Size(32, 13);
+            this.labelLikes.TabIndex = 9;
+            this.labelLikes.Text = "Likes";
             // 
             // label2
             // 
@@ -222,11 +222,10 @@
             // 
             // pictureBoxPhoto
             // 
-            this.pictureBoxPhoto.DataBindings.Add(new System.Windows.Forms.Binding("ImageLocation", this.postsBindingSource, "PictureURL", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, "C17_Ex01_Dudi_200441749_Or_204311997.Properties.Resources.Picture_not_found"));
             this.pictureBoxPhoto.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxPhoto.ErrorImage = null;
             this.pictureBoxPhoto.Image = global::C17_Ex01_Dudi_200441749_Or_204311997.Properties.Resources.Picture_not_found;
-            this.pictureBoxPhoto.InitialImage = global::C17_Ex01_Dudi_200441749_Or_204311997.Properties.Resources.LoadingPhoto;
+            this.pictureBoxPhoto.InitialImage = global::C17_Ex01_Dudi_200441749_Or_204311997.Properties.Resources.Picture_not_found;
             this.pictureBoxPhoto.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxPhoto.Name = "pictureBoxPhoto";
             this.pictureBoxPhoto.Size = new System.Drawing.Size(458, 218);
@@ -268,7 +267,7 @@
         private System.Windows.Forms.ListBox listBoxLikes;
         private System.Windows.Forms.BindingSource likedByBindingSource;
         private System.Windows.Forms.ListBox listBoxComments;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelLikes;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.PictureBox pictureBoxPhoto;
     }
