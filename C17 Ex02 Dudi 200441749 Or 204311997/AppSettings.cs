@@ -17,12 +17,16 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private const string k_SettingsFilePath = "AppSettings.xml";
         public const int k_DefaultMainFormWidth = 1200;
         public const int k_DefaultMainFormHeight = 800;
-        //private static readonly object sr_CreationLock = new object();
         private static readonly Size sr_DefaultFormSize = new Size(k_DefaultMainFormHeight, k_DefaultMainFormHeight);
+
         public Point LastWindowLocation { get; set; }
+
         public Size LastWindowsSize { get; set; }
+
         public FormStartPosition LastFormStartPosition { get; set; }
+
         public bool RememberUser { get; set; }
+
         public string LastAccessToken { get; set; }
 
         private AppSettings()
@@ -32,7 +36,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public static AppSettings LoadFromFile()
         {
-            AppSettings appSettings = null;
+            AppSettings appSettings;
             Stream stream = null;
 
             try

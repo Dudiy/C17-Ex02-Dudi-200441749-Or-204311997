@@ -17,7 +17,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private const DialogResult k_AlbumSelectionSuccessful = DialogResult.Yes;
         private readonly User r_AlbumsOwner;
         private bool m_IgnoreCheckChangeEvents;
-        public List<Album> SelectedAlbums { get; private set; }
+        private List<Album> m_SelectedAlbums;
 
         public AlbumsSelector(User i_User)
         {
@@ -26,11 +26,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             initAlbumsList();
         }
 
-        protected override void OnShown(EventArgs e)
+        protected override void OnShown(EventArgs i_Args)
         {
-            base.OnShown(e);
-            //every time the form is shown, clear the SelectedAlbums property
-            SelectedAlbums = new List<Album>();
+            base.OnShown(i_Args);
+            // every time the form is shown, clear the m_SelectedAlbums property
+            m_SelectedAlbums = new List<Album>();
         }
 
         private void initAlbumsList()
@@ -46,21 +46,21 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             ShowDialog();
 
-            return SelectedAlbums.ToArray();
+            return m_SelectedAlbums.ToArray();
         }
 
-        private void buttonContinue_Click(object sender, EventArgs e)
+        private void buttonContinue_Click(object i_Sender, EventArgs i_Args)
         {
-            SelectedAlbums = new List<Album>(listBoxAlbums.SelectedIndices.Count);
+            m_SelectedAlbums = new List<Album>(listBoxAlbums.SelectedIndices.Count);
             foreach (Album selectedAlbum in listBoxAlbums.SelectedItems)
             {
-                SelectedAlbums.Add(selectedAlbum);
+                m_SelectedAlbums.Add(selectedAlbum);
             }
 
             DialogResult = k_AlbumSelectionSuccessful;
         }
 
-        private void checkBoxSelectAll_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxSelectAll_CheckedChanged(object i_Sender, EventArgs i_Args)
         {
             if (!m_IgnoreCheckChangeEvents)
             {
@@ -77,7 +77,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         }
         
         // when an item is selected, update the "check all" combobox accordingly
-        private void listBoxAlbums_SelectedValueChanged(object sender, EventArgs e)
+        private void listBoxAlbums_SelectedValueChanged(object i_Sender, EventArgs i_Args)
         {
             m_IgnoreCheckChangeEvents = true;
             if (listBoxAlbums.SelectedIndices.Count == listBoxAlbums.Items.Count)

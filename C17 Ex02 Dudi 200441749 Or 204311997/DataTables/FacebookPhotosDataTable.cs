@@ -30,7 +30,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         private void getTotalPhotos()
         {
-            lock (m_PopulateRowsLock)
+            lock (this.r_PopulateRowsLock)
             {
                 TotalRows = 0;
 
@@ -52,7 +52,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             //    Thread.Sleep(100);
             //}
 
-            lock (m_PopulateRowsLock)
+            lock (this.r_PopulateRowsLock)
             {
                 DataTable.Rows.Clear();
                 populateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
@@ -85,9 +85,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     }
                 }
 
-                if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                if (this.r_NotifyAbstractParentPopulateRowsCompleted != null)
                 {
-                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                    this.r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
                 }
             }
             catch (Exception e)

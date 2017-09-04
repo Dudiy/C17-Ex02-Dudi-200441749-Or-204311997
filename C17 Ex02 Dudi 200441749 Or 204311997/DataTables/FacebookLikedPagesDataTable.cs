@@ -25,7 +25,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
-            lock (m_PopulateRowsLock)
+            lock (this.r_PopulateRowsLock)
             {
                 if (DataTable.Rows.Count == 0)
                 {
@@ -54,9 +54,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     }
                 }
 
-                if (NotifyAbstractParent_PopulateRowsCompleted != null)
+                if (this.r_NotifyAbstractParentPopulateRowsCompleted != null)
                 {
-                    NotifyAbstractParent_PopulateRowsCompleted.Invoke();
+                    this.r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
                 }
             }
             catch (Exception e)

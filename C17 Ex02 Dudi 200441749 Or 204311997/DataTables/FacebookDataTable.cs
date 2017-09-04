@@ -7,21 +7,24 @@
 */
 using System;
 using System.Data;
-using System.Collections.Generic;
 using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
-    using System.Threading;
-
     public abstract class FacebookDataTable : IDisplayable
     {
+        private Type m_ObjectTypeRepresentedByRow;
+
         private event Action PopulateRowsCompleted;
-        protected Action NotifyAbstractParent_PopulateRowsCompleted;
-        protected object m_PopulateRowsLock = new object();
-        protected Type m_ObjectTypeRepresentedByRow;
+        // TODO does this need a prefix?
+        protected readonly Action r_NotifyAbstractParentPopulateRowsCompleted;
+
+        protected readonly object r_PopulateRowsLock = new object();
+
         public int TotalRows { get; protected set; }
-        public DataTable DataTable { get; protected set; }
+
+        public DataTable DataTable { get; }
+
         public object ObjectToDisplay { get; set; }
 
         protected FacebookDataTable(string i_TableName, Type i_ObjectTypeRepresentedByRow)
@@ -31,7 +34,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // all tables initially have a column that holds the current row object displayed
             DataTable.Columns.Add("ObjectDisplayed", typeof(object));
             // only the abstract parent can invoke an event
-            NotifyAbstractParent_PopulateRowsCompleted += () =>
+            r_NotifyAbstractParentPopulateRowsCompleted += () =>
                 {
                     if (PopulateRowsCompleted != null)
                     {
