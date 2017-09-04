@@ -35,7 +35,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 {
                     DataTable.Rows.Add(
                         post,
-                        post.Message,
+                        string.IsNullOrEmpty(post.Message) ? "[No Message]" : post.Message,
                         post.CreatedTime,
                         post.LikedBy.Count,
                         post.Comments.Count);

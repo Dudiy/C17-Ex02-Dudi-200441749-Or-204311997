@@ -191,7 +191,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 }
 
                 // post comments
-                listBoxPostComment.DisplayMember = "Message";
                 foreach (Comment comment in i_Post.Comments)
                 {
                     listBoxPostComment.Items.Add(comment);
@@ -716,7 +715,7 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
             listBoxPhotosCommentedOn.Items.Clear();
             foreach (Comment comment in m_FriendshipAnalyzer.CommentsByFriend.Keys)
             {
-                listBoxPhotosCommentedOn.Items.Add(comment);
+                listBoxPhotosCommentedOn.Items.Add(new FacebookCommentProxy() { Comment = comment });
             }
         }
 
