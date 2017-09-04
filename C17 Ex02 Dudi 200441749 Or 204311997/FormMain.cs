@@ -180,7 +180,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 // posted photo
                 if (!string.IsNullOrEmpty(i_Post.PictureURL))
                 {
-                    pictureBoxLastPost.Load(i_Post.PictureURL);
+                    pictureBoxLastPost.LoadAsync(i_Post.PictureURL);
                 }
 
                 // people who liked the post
@@ -193,7 +193,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 // post comments
                 foreach (Comment comment in i_Post.Comments)
                 {
-                    listBoxPostComment.Items.Add(comment);
+                    listBoxPostComment.Items.Add(new FacebookCommentProxy() { Comment = comment });
                 }
             }
             else
@@ -231,7 +231,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         private void ListBoxPostComment_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            showCommentAsMessageBox(((ListBox)sender).SelectedItem as Comment);
+            if (((ListBox)sender).SelectedItem is FacebookCommentProxy selectedComment)
+            {
+                showCommentAsMessageBox(selectedComment.Comment);
+            }
         }
 
         private void FriendProfile_MouseClick(object sender, MouseEventArgs e)
@@ -721,9 +724,9 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void listBoxPhotosCommentedOn_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (((ListBox)sender).SelectedItem is Comment selectedComment)
+            if (((ListBox)sender).SelectedItem is FacebookCommentProxy selectedComment)
             {
-                new PhotoDetails(m_FriendshipAnalyzer.CommentsByFriend[selectedComment]).Show();
+                new PhotoDetails(m_FriendshipAnalyzer.CommentsByFriend[selectedComment.Comment]).Show();
             }
         }
 
@@ -760,7 +763,7 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
 @"{0} commented:
 {1}",
 friendWhoCommented.Name,
-i_Comment.Message);
+string.IsNullOrEmpty(i_Comment.Message) ? "[No Message]" : i_Comment.Message);
                 MessageBox.Show(message);
             }
         }
