@@ -1,5 +1,5 @@
 ﻿/*
- * C17_Ex01: PhotoDetails.cs
+ * C17_Ex01: FormPhotoDetails.cs
  * 
  * Written by:
  * 204311997 - Or Mantzur
@@ -14,20 +14,20 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class PhotoDetails : Form
+    public partial class FormPhotoDetails : Form
     {
-        private Photo m_Photo;
+        private readonly Photo r_Photo;
 
         private Thread m_LikesCounterThread;
 
         private Thread m_CommentsCounterThread;
 
-        public PhotoDetails(Photo i_Photo)
+        public FormPhotoDetails(Photo i_Photo)
         {
             InitializeComponent();
-            m_Photo = i_Photo;
+            r_Photo = i_Photo;
             initDetailsPane();
-            pictureBox.LoadAsync(m_Photo.PictureNormalURL);
+            pictureBox.LoadAsync(r_Photo.PictureNormalURL);
         }
 
         protected override void OnShown(EventArgs i_Args)
@@ -43,16 +43,16 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 @"
 Name: 
 {0}",
-m_Photo.Name ?? "No photo name");
+this.r_Photo.Name ?? "No photo name");
             labelAlbum.Text = string.Format(
 @"
 Album: 
 {0}",
-m_Photo.Album != null ? m_Photo.Album.Name : "No Album Name");
+this.r_Photo.Album != null ? this.r_Photo.Album.Name : "No Album Name");
             labelLikes.Text = string.Format(
 @"
 Likes ({0}):",
-m_Photo.LikedBy.Count);
+this.r_Photo.LikedBy.Count);
         }
 
         protected override void OnClosing(CancelEventArgs i_Args)
@@ -67,7 +67,7 @@ m_Photo.LikedBy.Count);
                 new Action(() =>
                         {
                             listBoxLikes.DisplayMember = "Name";
-                            foreach (User liker in m_Photo.LikedBy)
+                            foreach (User liker in this.r_Photo.LikedBy)
                             {
                                 listBoxLikes.Items.Add(liker);
                             }
@@ -78,7 +78,7 @@ m_Photo.LikedBy.Count);
         {
             try
             {
-                foreach (Comment comment in m_Photo.Comments)
+                foreach (Comment comment in this.r_Photo.Comments)
                 {
                     TreeNode node =
                         new TreeNode(comment.From.Name + ": " + comment.Message + " (" + comment.LikedBy.Count.ToString() + " Likes)")
@@ -110,7 +110,7 @@ m_Photo.LikedBy.Count);
 
         private void addCommentToView(TreeNode i_Comment)
         {
-            int totalComments = m_Photo.Comments.Count;
+            int totalComments = this.r_Photo.Comments.Count;
             int currentCounter = treeViewComments.Nodes.Count;
 
             if (!IsDisposed)
@@ -124,7 +124,7 @@ m_Photo.LikedBy.Count);
                                 string.Format(
                                 @"Loaded {0}/{1} comments",
                                 treeViewComments.Nodes.Count,
-                                m_Photo.Comments.Count);
+                                this.r_Photo.Comments.Count);
                         }));
             }
         }
@@ -135,7 +135,7 @@ m_Photo.LikedBy.Count);
 
             if (selectedUser != null)
             {
-                PictureFrame profilePic = new PictureFrame(selectedUser.PictureLargeURL);
+                FormPictureFrame profilePic = new FormPictureFrame(selectedUser.PictureLargeURL);
                 profilePic.Show();
             }
         }

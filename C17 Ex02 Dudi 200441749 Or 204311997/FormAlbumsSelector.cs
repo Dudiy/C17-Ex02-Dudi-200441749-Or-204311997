@@ -1,5 +1,5 @@
 ﻿/*
- * C17_Ex01: AlbumsSelector.cs
+ * C17_Ex01: FormAlbumsSelector.cs
  * 
  * Written by:
  * 204311997 - Or Mantzur
@@ -12,14 +12,14 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class AlbumsSelector : Form
+    public partial class FormAlbumsSelector : Form
     {
         private const DialogResult k_AlbumSelectionSuccessful = DialogResult.Yes;
         private readonly User r_AlbumsOwner;
         private bool m_IgnoreCheckChangeEvents;
         private List<Album> m_SelectedAlbums;
 
-        public AlbumsSelector(User i_User)
+        public FormAlbumsSelector(User i_User)
         {
             InitializeComponent();
             r_AlbumsOwner = i_User;

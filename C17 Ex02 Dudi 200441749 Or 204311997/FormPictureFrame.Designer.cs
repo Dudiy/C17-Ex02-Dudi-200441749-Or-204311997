@@ -1,6 +1,6 @@
 ﻿namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class PictureFrame
+    public partial class FormPictureFrame
     {
         /// <summary>
         /// Required designer variable.
@@ -42,7 +42,7 @@
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
-            // PictureFrame
+            // FormPictureFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -51,8 +51,8 @@
             this.ClientSize = new System.Drawing.Size(300, 301);
             this.Controls.Add(this.pictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "PictureFrame";
-            this.Text = "PictureFrame";
+            this.Name = "FormPictureFrame";
+            this.Text = "FormPictureFrame";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

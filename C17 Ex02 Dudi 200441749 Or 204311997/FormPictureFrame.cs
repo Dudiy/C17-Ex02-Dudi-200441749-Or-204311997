@@ -1,5 +1,5 @@
 ﻿/*
- * C17_Ex01: PictureFrame.cs
+ * C17_Ex01: FormPictureFrame.cs
  * 
  * Written by:
  * 204311997 - Or Mantzur
@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class PictureFrame : Form
+    public partial class FormPictureFrame : Form
     {
-        public PictureFrame(string i_ImageUrl)
+        public FormPictureFrame(string i_ImageUrl)
             : this(i_ImageUrl, string.Empty)
         {
         }
 
-        public PictureFrame(string i_ImageUrl, string i_ImageTitle)
+        public FormPictureFrame(string i_ImageUrl, string i_ImageTitle)
         {
             InitializeComponent();
             Text = i_ImageTitle;

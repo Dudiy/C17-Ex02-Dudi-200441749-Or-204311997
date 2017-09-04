@@ -1,6 +1,6 @@
 ﻿namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class PhotoDetails
+    public partial class FormPhotoDetails
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PhotoDetails));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPhotoDetails));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.labelName = new System.Windows.Forms.Label();
@@ -163,14 +163,14 @@
             this.treeViewComments.Size = new System.Drawing.Size(339, 602);
             this.treeViewComments.TabIndex = 0;
             // 
-            // PhotoDetails
+            // FormPhotoDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(668, 602);
             this.Controls.Add(this.splitContainer1);
-            this.Name = "PhotoDetails";
-            this.Text = "PhotoDetails";
+            this.Name = "FormPhotoDetails";
+            this.Text = "FormPhotoDetails";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();

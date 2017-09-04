@@ -35,11 +35,6 @@ r_Friend.FirstName);
             }
         }
 
-        private void listBoxLikedPage_SelectedIndexChanged(object i_Sender, EventArgs i_Args)
-        {
-            likedPagesBindingSource.DataSource = ((ListBox)i_Sender).SelectedItem as Page;
-        }
-
         private void linkLabelLikedPageUrl_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_Args)
         {
             // Specify that the link was visited.

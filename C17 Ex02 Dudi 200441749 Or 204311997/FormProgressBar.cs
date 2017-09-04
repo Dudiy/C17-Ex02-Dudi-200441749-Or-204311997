@@ -1,5 +1,5 @@
 ﻿/*
- * C17_Ex01: ProgressBarWindow.cs
+ * C17_Ex01: FormProgressBar.cs
  * 
  * Written by:
  * 204311997 - Or Mantzur
@@ -10,18 +10,18 @@ using System.Windows.Forms;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class ProgressBarWindow : Form
+    public partial class FormProgressBar : Form
     {
         private readonly object r_ProgressValueLock = new object();
 
         private bool m_CancleEnabled;
 
-        public ProgressBarWindow(string i_Description)
+        public FormProgressBar(string i_Description)
             : this(0, i_Description)
         {
         }
 
-        public ProgressBarWindow(int i_MaxValue, string i_Description)
+        public FormProgressBar(int i_MaxValue, string i_Description)
         {
             InitializeComponent();
             this.m_CancleEnabled = false;

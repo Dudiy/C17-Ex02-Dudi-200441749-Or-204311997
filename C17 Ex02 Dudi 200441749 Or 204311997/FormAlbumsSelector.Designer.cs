@@ -1,6 +1,6 @@
 ﻿namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    public partial class AlbumsSelector
+    public partial class FormAlbumsSelector
     {
         /// <summary>
         /// Required designer variable.
@@ -81,7 +81,7 @@
             this.checkBoxSelectAll.UseVisualStyleBackColor = true;
             this.checkBoxSelectAll.CheckedChanged += new System.EventHandler(this.checkBoxSelectAll_CheckedChanged);
             // 
-            // AlbumsSelector
+            // FormAlbumsSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,8 +90,8 @@
             this.Controls.Add(this.listBoxAlbums);
             this.Controls.Add(this.buttonContinue);
             this.Controls.Add(this.labelAlbumsSelect);
-            this.Name = "AlbumsSelector";
-            this.Text = "AlbumsSelector";
+            this.Name = "FormAlbumsSelector";
+            this.Text = "FormAlbumsSelector";
             this.ResumeLayout(false);
             this.PerformLayout();
 

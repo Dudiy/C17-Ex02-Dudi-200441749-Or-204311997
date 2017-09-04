@@ -383,8 +383,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             // TODO doesn't work because the tag is string, if we can pull the Photo from post update the tag and this will work
             if (((PictureBox)i_Sender).Tag is Photo photo)
             {
-                PhotoDetails photoDetails = new PhotoDetails(photo);
-                photoDetails.Show();
+                FormPhotoDetails formPhotoDetails = new FormPhotoDetails(photo);
+                formPhotoDetails.Show();
             }
         }
 
@@ -445,9 +445,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
             {
-                AlbumsSelector albumSelector = new AlbumsSelector(FacebookApplication.LoggedInUser);
-                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
-                myPhotosAdapter.AlbumsToLoad = albumSelector.GetAlbumsSelection();
+                FormAlbumsSelector formAlbumSelector = new FormAlbumsSelector(FacebookApplication.LoggedInUser);
+                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos){};
+                myPhotosAdapter.AlbumsToLoad = formAlbumSelector.GetAlbumsSelection();
                 collection = myPhotosAdapter.FetchDataWithProgressBar();
             }
             else if (i_DataTableType.Name == typeof(FacebookLikedPagesDataTable).Name)
@@ -556,19 +556,19 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private void friendshipAnalyzerFetchGeneralData()
         {
             buttonFetchGeneralData.Enabled = false;
-            ProgressBarWindow progressBar = new ProgressBarWindow(2 * m_FriendshipAnalyzer.AllPhotos.Count, "statistics");
-            progressBar.CancelEnabled = true; // likes + comments
-            progressBar.Show();
+            FormProgressBar formProgressBar = new FormProgressBar(2 * m_FriendshipAnalyzer.AllPhotos.Count, "statistics");
+            formProgressBar.CancelEnabled = true; // likes + comments
+            formProgressBar.Show();
             getMostRecentPhotoTogether();
             Thread getLikesThread = FacebookApplication.StartThread(
-                () => m_FriendshipAnalyzer.CountNumberOfPhotosFriendLiked(() => progressBar.ProgressValue++));
+                () => m_FriendshipAnalyzer.CountNumberOfPhotosFriendLiked(() => formProgressBar.ProgressValue++));
             Thread getCommentsThread = FacebookApplication.StartThread(
-                () => m_FriendshipAnalyzer.CountNumberOfPhotosFriendCommented(() => progressBar.ProgressValue++));
-            FriendSelectionChanged += () => progressBar.Close();
-            progressBar.Closing += (i_Sender, i_Args) =>
+                () => m_FriendshipAnalyzer.CountNumberOfPhotosFriendCommented(() => formProgressBar.ProgressValue++));
+            FriendSelectionChanged += () => formProgressBar.Close();
+            formProgressBar.Closing += (i_Sender, i_Args) =>
                 {
-                    FriendSelectionChanged -= () => progressBar.Close();
-                    if (progressBar.DialogResult == DialogResult.Cancel)
+                    FriendSelectionChanged -= () => formProgressBar.Close();
+                    if (formProgressBar.DialogResult == DialogResult.Cancel)
                     {
                         getCommentsThread.Abort();
                         getLikesThread.Abort();
@@ -579,7 +579,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             m_FriendshipAnalyzer.FinishedFetchingLikesAndComments += () =>
                 {
                     finishedFetchingLikesAndComments();
-                    progressBar.Close();
+                    formProgressBar.Close();
                 };
         }
 
@@ -621,8 +621,8 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private FacebookObjectCollection<Album> fetchAlbums(User i_User)
         {
-            AlbumsSelector albumSelector = new AlbumsSelector(i_User);
-            Album[] selectedAlbums = albumSelector.GetAlbumsSelection();
+            FormAlbumsSelector formAlbumSelector = new FormAlbumsSelector(i_User);
+            Album[] selectedAlbums = formAlbumSelector.GetAlbumsSelection();
             IFacebookCollection<Album> albumsAdapter = new FacebookCollectionAdapter<Album>(eFacebookCollectionType.Albums)
             {
                 AlbumsToLoad = selectedAlbums
@@ -654,14 +654,14 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
             if (i_SelectedNode.Tag is User)
             {
                 User selectedUser = i_SelectedNode.Tag as User;
-                PictureFrame profile = new PictureFrame(selectedUser.PictureLargeURL, selectedUser.Name);
+                FormPictureFrame profile = new FormPictureFrame(selectedUser.PictureLargeURL, selectedUser.Name);
                 profile.Show();
             }
             else if (i_SelectedNode.Tag is Photo)
             {
                 Photo selectedPhoto = i_SelectedNode.Tag as Photo;
-                PhotoDetails photoDetails = new PhotoDetails(selectedPhoto);
-                photoDetails.Show();
+                FormPhotoDetails formPhotoDetails = new FormPhotoDetails(selectedPhoto);
+                formPhotoDetails.Show();
             }
         }
 
@@ -713,9 +713,9 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
         {
             if (((PictureBox)i_Sender).Tag is Photo photo)
             {
-                PhotoDetails photoDetails = new PhotoDetails(photo);
+                FormPhotoDetails formPhotoDetails = new FormPhotoDetails(photo);
 
-                photoDetails.Show();
+                formPhotoDetails.Show();
             }
         }
 
@@ -733,7 +733,7 @@ m_FriendshipAnalyzer.CommentsByFriend.Count);
         {
             if (((ListBox)i_Sender).SelectedItem is FacebookCommentProxy selectedComment)
             {
-                new PhotoDetails(m_FriendshipAnalyzer.CommentsByFriend[selectedComment.Comment]).Show();
+                new FormPhotoDetails(m_FriendshipAnalyzer.CommentsByFriend[selectedComment.Comment]).Show();
             }
         }
 

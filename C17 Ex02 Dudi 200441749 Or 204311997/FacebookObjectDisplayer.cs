@@ -20,8 +20,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             object objectToDisplay = i_ObjectToDisplay.ObjectToDisplay;
             if (objectToDisplay is Photo)
             {
-                PhotoDetails photoDetails = new PhotoDetails(objectToDisplay as Photo);
-                photoDetails.Show();
+                FormPhotoDetails formPhotoDetails = new FormPhotoDetails(objectToDisplay as Photo);
+                formPhotoDetails.Show();
             }
             else if (objectToDisplay is User)
             {
@@ -30,8 +30,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
             else if (objectToDisplay is Page)
             {
-                PictureFrame pictureFrame = new PictureFrame(((Page)objectToDisplay).PictureLargeURL);
-                pictureFrame.Show();
+                FormPictureFrame formPictureFrame = new FormPictureFrame(((Page)objectToDisplay).PictureLargeURL);
+                formPictureFrame.Show();
             }
             else if (objectToDisplay is Post)
             {

@@ -71,13 +71,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             if (i_Args.Node.Tag is User selectedUser)
             {
-                PictureFrame profile = new PictureFrame(selectedUser.PictureLargeURL, selectedUser.Name);
+                FormPictureFrame profile = new FormPictureFrame(selectedUser.PictureLargeURL, selectedUser.Name);
                 profile.Show();
             }
             else if (i_Args.Node.Tag is Photo selectedPhoto)
             {
-                PhotoDetails photoDetails = new PhotoDetails(selectedPhoto);
-                photoDetails.Show();
+                FormPhotoDetails formPhotoDetails = new FormPhotoDetails(selectedPhoto);
+                formPhotoDetails.Show();
             }
         }
     }

@@ -119,7 +119,6 @@
             this.listBoxLikedPage.Size = new System.Drawing.Size(170, 212);
             this.listBoxLikedPage.TabIndex = 22;
             this.listBoxLikedPage.ValueMember = "AccessToken";
-            this.listBoxLikedPage.SelectedIndexChanged += new System.EventHandler(this.listBoxLikedPage_SelectedIndexChanged);
             // 
             // labelLikedPage
             // 
