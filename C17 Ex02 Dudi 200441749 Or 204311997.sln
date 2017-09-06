@@ -1,11 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1CBFB16-923E-463B-B424-668B494180AD}"
 	ProjectSection(SolutionItems) = preProject
-		C17 Ex01 Dudi 200441749 Or 204311997.docx = C17 Ex01 Dudi 200441749 Or 204311997.docx
 		Exercise Checking Report.txt = Exercise Checking Report.txt
 	EndProjectSection
 EndProject
@@ -27,5 +26,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{85A0BD04-2200-4FD2-9FC8-0456621ADB8D} = {D1CBFB16-923E-463B-B424-668B494180AD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77F779B8-7E0D-4FB3-9138-43BB4185019D}
 	EndGlobalSection
 EndGlobal

@@ -33,10 +33,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TabFriendshipAnalyzer));
             this.panelGeneralInfo = new System.Windows.Forms.Panel();
             this.listBoxPhotosCommentedOn = new System.Windows.Forms.ListBox();
-            this.treeViewPhotosOfFriendIAmTaggedIn = new TreeViewExtenderForFacebookPhotos();
-            this.treeViewTaggedTogether = new TreeViewExtenderForFacebookPhotos();
-            this.treeViewPhotosOfFriendInMyPhotos = new TreeViewExtenderForFacebookPhotos();
-            this.pictureBoxMostRecentTaggedTogether = new GrowingPictureBoxProxy();
+            this.treeViewPhotosOfFriendIAmTaggedIn = new C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies.TreeViewExtenderForFacebookPhotos();
+            this.treeViewTaggedTogether = new C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies.TreeViewExtenderForFacebookPhotos();
+            this.treeViewPhotosOfFriendInMyPhotos = new C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies.TreeViewExtenderForFacebookPhotos();
+            this.pictureBoxMostRecentTaggedTogether = new C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies.GrowingPictureBoxProxy();
             this.buttonFetchGeneralData = new System.Windows.Forms.Button();
             this.labelNumComments = new System.Windows.Forms.Label();
             this.labelLastName = new System.Windows.Forms.Label();
@@ -46,7 +46,7 @@
             this.labelNumLikes = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonFetchPhotosOfFriendIAmTaggedIn = new System.Windows.Forms.Button();
-            this.flowLayoutPanelExtenderForFacebookFriends = new FlowLayoutPanelExtenderForFacebookFriends();
+            this.flowLayoutPanelExtenderForFacebookFriends = new C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies.FlowLayoutPanelExtenderForFacebookFriends();
             this.panelGeneralInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMostRecentTaggedTogether)).BeginInit();
             this.SuspendLayout();
@@ -206,6 +206,7 @@
             // 
             // flowLayoutPanelExtenderForFacebookFriends
             // 
+            this.flowLayoutPanelExtenderForFacebookFriends.AutoScroll = true;
             this.flowLayoutPanelExtenderForFacebookFriends.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.flowLayoutPanelExtenderForFacebookFriends.Dock = System.Windows.Forms.DockStyle.Left;
             this.flowLayoutPanelExtenderForFacebookFriends.Location = new System.Drawing.Point(0, 0);

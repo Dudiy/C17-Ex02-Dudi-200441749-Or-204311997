@@ -67,9 +67,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
         }
 
         private void buttonLogout_Click(object i_Sender, EventArgs i_Args)
-        {
+        {   
             this.m_LogoutClicked = true;
             FacebookApplication.Logout();
         }
+        
     }
 }

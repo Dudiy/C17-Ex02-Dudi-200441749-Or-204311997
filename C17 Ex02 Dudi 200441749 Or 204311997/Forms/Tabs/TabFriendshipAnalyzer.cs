@@ -54,8 +54,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
         private void friendshipAnalyzerFetchGeneralData()
         {
             this.buttonFetchGeneralData.Enabled = false;
-            FormProgressBar formProgressBar = new FormProgressBar(2 * this.m_FriendshipAnalyzer.AllPhotos.Count, "statistics");
-            formProgressBar.CancelEnabled = true; // likes + comments
+            FormProgressBar formProgressBar =
+                new FormProgressBar(2 * this.m_FriendshipAnalyzer.AllPhotos.Count, "statistics") { CancelEnabled = true };
             formProgressBar.Show();
             this.getMostRecentPhotoTogether();
             Thread getLikesThread = FacebookApplication.StartThread(
