@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Forms\FormPostDetails.cs">
       <SubType>Form</SubType>
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Forms\FormPostDetails.Designer.cs">
       <DependentUpon>FormPostDetails.cs</DependentUpon>

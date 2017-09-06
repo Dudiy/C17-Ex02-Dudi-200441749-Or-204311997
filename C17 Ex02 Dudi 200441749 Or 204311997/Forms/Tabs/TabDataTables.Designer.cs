@@ -105,6 +105,7 @@
             this.toolStrip1.Size = new System.Drawing.Size(1071, 25);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.Visible = false;
             // 
             // toolStripStatusLabel
             // 
@@ -116,6 +117,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.panelTop);

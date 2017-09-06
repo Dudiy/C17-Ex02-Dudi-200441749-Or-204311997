@@ -79,8 +79,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
             if (i_DataTableType.Name == typeof(FacebookPhotosDataTable).Name)
             {
                 FormAlbumsSelector formAlbumSelector = new FormAlbumsSelector(FacebookApplication.LoggedInUser);
-                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos);
-                myPhotosAdapter.AlbumsToLoad = formAlbumSelector.GetAlbumsSelection();
+                IFacebookCollection<Photo> myPhotosAdapter = new FacebookCollectionAdapter<Photo>(eFacebookCollectionType.AlbumPhotos)
+                {
+                    AlbumsToLoad = formAlbumSelector.GetAlbumsSelection()
+                };
                 collection = myPhotosAdapter.FetchDataWithProgressBar();
             }
             else if (i_DataTableType.Name == typeof(FacebookLikedPagesDataTable).Name)

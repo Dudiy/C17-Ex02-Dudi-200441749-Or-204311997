@@ -55,7 +55,7 @@
             this.labelPostStatus = new System.Windows.Forms.Label();
             this.labelFriendTitle = new System.Windows.Forms.Label();
             this.panelFriends = new System.Windows.Forms.Panel();
-            this.flowLayoutPanelExtenderForFacebookFriends = new FlowLayoutPanelExtenderForFacebookFriends();
+            this.flowLayoutPanelExtenderForFacebookFriends = new C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies.FlowLayoutPanelExtenderForFacebookFriends();
             this.buttonRefreshFriends = new System.Windows.Forms.Button();
             this.panelLastPost = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
@@ -467,6 +467,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.panelPostPhoto);
             this.Controls.Add(this.labelPostPhoto);
             this.Controls.Add(this.panelLikedPage);
