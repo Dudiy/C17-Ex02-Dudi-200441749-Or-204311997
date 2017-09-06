@@ -63,18 +63,20 @@
             this.labelUserName.BackColor = System.Drawing.SystemColors.Control;
             this.labelUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.labelUserName.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.labelUserName.Location = new System.Drawing.Point(117, 123);
+            this.labelUserName.Location = new System.Drawing.Point(176, 189);
+            this.labelUserName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelUserName.Name = "labelUserName";
-            this.labelUserName.Size = new System.Drawing.Size(160, 31);
+            this.labelUserName.Size = new System.Drawing.Size(238, 47);
             this.labelUserName.TabIndex = 3;
             this.labelUserName.Text = "User Name";
             // 
             // buttonLogout
             // 
             this.buttonLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLogout.Location = new System.Drawing.Point(1135, 15);
+            this.buttonLogout.Location = new System.Drawing.Point(1387, 14);
+            this.buttonLogout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonLogout.Name = "buttonLogout";
-            this.buttonLogout.Size = new System.Drawing.Size(67, 26);
+            this.buttonLogout.Size = new System.Drawing.Size(100, 40);
             this.buttonLogout.TabIndex = 7;
             this.buttonLogout.Text = "Logout";
             this.buttonLogout.UseVisualStyleBackColor = true;
@@ -83,9 +85,10 @@
             // buttonExit
             // 
             this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.Location = new System.Drawing.Point(1207, 15);
+            this.buttonExit.Location = new System.Drawing.Point(1387, 64);
+            this.buttonExit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(67, 26);
+            this.buttonExit.Size = new System.Drawing.Size(100, 40);
             this.buttonExit.TabIndex = 8;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
@@ -96,41 +99,43 @@
             this.tabPageFriendshipAnalyzer.AutoScroll = true;
             this.tabPageFriendshipAnalyzer.Controls.Add(this.tabFriendshipAnalyzer);
             this.tabPageFriendshipAnalyzer.Location = new System.Drawing.Point(4, 29);
-            this.tabPageFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPageFriendshipAnalyzer.Name = "tabPageFriendshipAnalyzer";
-            this.tabPageFriendshipAnalyzer.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.tabPageFriendshipAnalyzer.Size = new System.Drawing.Size(971, 476);
+            this.tabPageFriendshipAnalyzer.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageFriendshipAnalyzer.Size = new System.Drawing.Size(1460, 750);
             this.tabPageFriendshipAnalyzer.TabIndex = 2;
             this.tabPageFriendshipAnalyzer.Text = "Friendship Analyzer";
             this.tabPageFriendshipAnalyzer.UseVisualStyleBackColor = true;
             // 
             // tabFriendshipAnalyzer
             // 
+            this.tabFriendshipAnalyzer.AutoScroll = true;
             this.tabFriendshipAnalyzer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFriendshipAnalyzer.Location = new System.Drawing.Point(3, 3);
             this.tabFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.tabFriendshipAnalyzer.Name = "tabFriendshipAnalyzer";
-            this.tabFriendshipAnalyzer.Size = new System.Drawing.Size(1744, 856);
+            this.tabFriendshipAnalyzer.Size = new System.Drawing.Size(1454, 744);
             this.tabFriendshipAnalyzer.TabIndex = 0;
             // 
             // tabPageDataTables
             // 
             this.tabPageDataTables.Controls.Add(this.tabDataTables);
             this.tabPageDataTables.Location = new System.Drawing.Point(4, 29);
+            this.tabPageDataTables.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageDataTables.Name = "tabPageDataTables";
-            this.tabPageDataTables.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPageDataTables.Size = new System.Drawing.Size(971, 476);
+            this.tabPageDataTables.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPageDataTables.Size = new System.Drawing.Size(1460, 750);
             this.tabPageDataTables.TabIndex = 1;
             this.tabPageDataTables.Text = "Data Tables";
             this.tabPageDataTables.UseVisualStyleBackColor = true;
             // 
             // tabDataTables
             // 
+            this.tabDataTables.AutoScroll = true;
             this.tabDataTables.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabDataTables.Location = new System.Drawing.Point(4, 5);
             this.tabDataTables.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.tabDataTables.Name = "tabDataTables";
-            this.tabDataTables.Size = new System.Drawing.Size(1742, 852);
+            this.tabDataTables.Size = new System.Drawing.Size(1452, 740);
             this.tabDataTables.TabIndex = 0;
             // 
             // tabPageAboutMe
@@ -140,9 +145,10 @@
             this.tabPageAboutMe.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.tabPageAboutMe.Controls.Add(this.tabAboutMe);
             this.tabPageAboutMe.Location = new System.Drawing.Point(4, 29);
+            this.tabPageAboutMe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageAboutMe.Name = "tabPageAboutMe";
-            this.tabPageAboutMe.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPageAboutMe.Size = new System.Drawing.Size(1164, 549);
+            this.tabPageAboutMe.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPageAboutMe.Size = new System.Drawing.Size(1460, 750);
             this.tabPageAboutMe.TabIndex = 0;
             this.tabPageAboutMe.Text = "About Me";
             this.tabPageAboutMe.UseVisualStyleBackColor = true;
@@ -154,7 +160,7 @@
             this.tabAboutMe.Location = new System.Drawing.Point(4, 5);
             this.tabAboutMe.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.tabAboutMe.Name = "tabAboutMe";
-            this.tabAboutMe.Size = new System.Drawing.Size(1726, 842);
+            this.tabAboutMe.Size = new System.Drawing.Size(1448, 736);
             this.tabAboutMe.TabIndex = 0;
             // 
             // tabControl
@@ -166,10 +172,11 @@
             this.tabControl.Controls.Add(this.tabPageDataTables);
             this.tabControl.Controls.Add(this.tabPageFriendshipAnalyzer);
             this.tabControl.ItemSize = new System.Drawing.Size(150, 25);
-            this.tabControl.Location = new System.Drawing.Point(17, 180);
+            this.tabControl.Location = new System.Drawing.Point(26, 277);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(979, 509);
+            this.tabControl.Size = new System.Drawing.Size(1468, 783);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 0;
             this.tabControl.Tag = "";
@@ -177,10 +184,11 @@
             // pictureBoxProfilePicture
             // 
             this.pictureBoxProfilePicture.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxProfilePicture.Image")));
-            this.pictureBoxProfilePicture.Location = new System.Drawing.Point(25, 84);
+            this.pictureBoxProfilePicture.Location = new System.Drawing.Point(38, 129);
+            this.pictureBoxProfilePicture.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBoxProfilePicture.Name = "pictureBoxProfilePicture";
-            this.pictureBoxProfilePicture.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
-            this.pictureBoxProfilePicture.Size = new System.Drawing.Size(81, 79);
+            this.pictureBoxProfilePicture.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBoxProfilePicture.Size = new System.Drawing.Size(122, 122);
             this.pictureBoxProfilePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxProfilePicture.TabIndex = 2;
             this.pictureBoxProfilePicture.TabStop = false;
@@ -188,9 +196,10 @@
             // pictureBoxCoverPhoto
             // 
             this.pictureBoxCoverPhoto.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxCoverPhoto.Image")));
-            this.pictureBoxCoverPhoto.Location = new System.Drawing.Point(17, 15);
+            this.pictureBoxCoverPhoto.Location = new System.Drawing.Point(26, 23);
+            this.pictureBoxCoverPhoto.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBoxCoverPhoto.Name = "pictureBoxCoverPhoto";
-            this.pictureBoxCoverPhoto.Size = new System.Drawing.Size(499, 126);
+            this.pictureBoxCoverPhoto.Size = new System.Drawing.Size(748, 194);
             this.pictureBoxCoverPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxCoverPhoto.TabIndex = 4;
             this.pictureBoxCoverPhoto.TabStop = false;
@@ -204,41 +213,11 @@
             // 
             this.friendsBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.User);
             // 
-            // tabAboutMe
-            // 
-            this.tabAboutMe.AutoScroll = true;
-            this.tabAboutMe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabAboutMe.Location = new System.Drawing.Point(3, 3);
-            this.tabAboutMe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabAboutMe.Name = "tabAboutMe";
-            this.tabAboutMe.Size = new System.Drawing.Size(1154, 539);
-            this.tabAboutMe.TabIndex = 0;
-            // 
-            // tabDataTables
-            // 
-            this.tabDataTables.AutoScroll = true;
-            this.tabDataTables.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabDataTables.Location = new System.Drawing.Point(3, 3);
-            this.tabDataTables.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabDataTables.Name = "tabDataTables";
-            this.tabDataTables.Size = new System.Drawing.Size(965, 470);
-            this.tabDataTables.TabIndex = 0;
-            // 
-            // tabFriendshipAnalyzer
-            // 
-            this.tabFriendshipAnalyzer.AutoScroll = true;
-            this.tabFriendshipAnalyzer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabFriendshipAnalyzer.Location = new System.Drawing.Point(2, 2);
-            this.tabFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabFriendshipAnalyzer.Name = "tabFriendshipAnalyzer";
-            this.tabFriendshipAnalyzer.Size = new System.Drawing.Size(967, 472);
-            this.tabFriendshipAnalyzer.TabIndex = 0;
-            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 701);
+            this.ClientSize = new System.Drawing.Size(1512, 1078);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonLogout);
             this.Controls.Add(this.labelUserName);
@@ -246,6 +225,7 @@
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.pictureBoxCoverPhoto);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMain";

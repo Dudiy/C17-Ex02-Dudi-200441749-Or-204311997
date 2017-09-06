@@ -26,7 +26,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies
 
                         foreach (User friend in FacebookApplication.LoggedInUser.Friends)
                         {
-                            GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy
+                            PictureBox friendsProfilePic = new GrowingPictureBoxProxy
                             {
                                 ImageLocation = friend.PictureLargeURL,
                                 Tag = friend

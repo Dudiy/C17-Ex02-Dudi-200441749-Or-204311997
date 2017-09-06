@@ -15,8 +15,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     public class AppSettings
     {
         private const string k_SettingsFilePath = "AppSettings.xml";
-        public const int k_DefaultMainFormWidth = 1200;
-        public const int k_DefaultMainFormHeight = 800;
+        public const int k_DefaultMainFormWidth = 1220;
+        public const int k_DefaultMainFormHeight = 820;
         private static readonly Size sr_DefaultFormSize = new Size(k_DefaultMainFormHeight, k_DefaultMainFormHeight);
 
         public Point LastWindowLocation { get; set; }
