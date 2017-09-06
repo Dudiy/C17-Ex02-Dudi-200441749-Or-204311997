@@ -59,7 +59,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
                 }
 
                 this.dataGridView.DataSource = this.m_DataTableBindedToView.DataTable;
-
                 if (this.dataGridView.Columns["ObjectDisplayed"] != null)
                 {
                     this.dataGridView.Columns["ObjectDisplayed"].Visible = false;
@@ -108,6 +107,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
         private void displayDetailsForRowObject(DataGridViewRow i_RowSelected)
         {
             object selectedObject = i_RowSelected.Cells["ObjectDisplayed"].Value;
+
             this.m_DataTableBindedToView.ObjectToDisplay = selectedObject;
             this.m_DataTableBindedToView.DisplayObject();
         }
@@ -119,6 +119,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
             this.dataGridView.Refresh();
             int totalRows = this.m_DataTableBindedToView.TotalRows;
             int loadedRows = this.m_DataTableBindedToView.DataTable.Rows.Count;
+
             if (totalRows == loadedRows)
             {
                 this.toolStripStatusLabel.Text = "All rows loaded";

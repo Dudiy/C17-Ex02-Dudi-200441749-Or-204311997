@@ -25,6 +25,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
         private void initMainForm()
         {
             string userName = FacebookApplication.LoggedInUser.Name ?? string.Empty;
+
             this.Text = userName;
             this.labelUserName.Text = userName;
             this.MinimumSize = sr_MinimumWindowSize;
@@ -63,6 +64,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
         private void buttonExit_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.ExitSelected = true;
+
             this.Close();
         }
 

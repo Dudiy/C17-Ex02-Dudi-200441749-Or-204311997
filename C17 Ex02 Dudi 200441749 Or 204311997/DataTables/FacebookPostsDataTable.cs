@@ -18,7 +18,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 try
                 {
                     TotalRows = FacebookApplication.LoggedInUser.Posts.Count;
-
                     foreach (FacebookObject facebookObject in i_Posts)
                     {
                         if (facebookObject is Post post)

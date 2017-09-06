@@ -23,10 +23,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies
                     {
                         FacebookApplication.LoggedInUser.ReFetch("friends");
                         this.Invoke(new Action(() => this.Controls.Clear()));
-
                         foreach (User friend in FacebookApplication.LoggedInUser.Friends)
                         {
                             GrowingPictureBoxProxy friendsProfilePic = new GrowingPictureBoxProxy(friend.PictureLargeURL, friend);
+                            
                             friendsProfilePic.MouseClick += i_OnMouseEventHandlerouseClick;
                             this.Invoke(new Action(() => this.Controls.Add(friendsProfilePic)));
                         }

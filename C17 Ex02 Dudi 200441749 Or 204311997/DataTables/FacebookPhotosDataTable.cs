@@ -29,7 +29,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
             m_AbortRunningThread = m_PopulateRowsThread != null && m_PopulateRowsThread.IsAlive;
             TotalRows = i_Collection.Count;
-
             // if abort running thread is true wait for the currently running thread to stop
             while (m_AbortRunningThread)
             {
@@ -52,7 +51,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     if (facebookObject is Photo photo)
                     {
                         string photoTags = buildTagsString(photo);
-
                         DataTable.Rows.Add(
                             photo,
                             photo.Album.Name,

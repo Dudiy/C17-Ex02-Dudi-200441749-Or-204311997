@@ -23,7 +23,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             try
             {
                 TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
-
                 foreach (FacebookObject facebookObject in i_LikedPages)
                 {
                     if (facebookObject is Page page)

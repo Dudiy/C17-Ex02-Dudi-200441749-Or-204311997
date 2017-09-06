@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal static class FacebookDataTableFactory
+    public static class FacebookDataTableFactory
     {
         public static FacebookDataTable CreateTable(eFacebookDataTableType i_TableType)
         {

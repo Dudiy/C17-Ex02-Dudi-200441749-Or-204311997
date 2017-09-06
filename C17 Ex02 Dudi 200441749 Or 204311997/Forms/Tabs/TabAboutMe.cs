@@ -264,7 +264,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
                 if (!string.IsNullOrEmpty(this.m_PostPicturePath))
                 {
                     FacebookApplication.LoggedInUser.PostPhoto(this.m_PostPicturePath, i_Title: this.richTextBoxPostPhoto.Text);
-
                     // TODO do we need to check if postedItem != null?
                     MessageBox.Show("The photo was successfully posted!");
                     this.richTextBoxPostPhoto.Clear();
