@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 using C17_Ex01_Dudi_200441749_Or_204311997.Adapter;
+using C17_Ex01_Dudi_200441749_Or_204311997.Properties;
 using C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies;
 using FacebookWrapper.ObjectModel;
 
@@ -36,17 +37,18 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
         {
             User selectedFriend = this.m_FriendshipAnalyzer.Friend;
 
-            this.panelGeneralInfo.Visible = false;
-            this.clearAllTreeViews();
-            this.listBoxPhotosCommentedOn.Items.Clear();
-            this.pictureBoxMostRecentTaggedTogether.Reset();
-            this.labelFirstName.Text = selectedFriend.FirstName;
-            this.labelLastName.Text = selectedFriend.LastName;
-            this.labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
-            this.labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
-            this.buttonFetchMyPhotosFriendIsIn.Text = string.Format("Fetch photos of mine {0} is in", selectedFriend.FirstName);
-            this.buttonFetchPhotosOfFriendIAmTaggedIn.Text = string.Format("Fetch {0}'s Photos I am Tagged in", selectedFriend.FirstName);
-            this.panelGeneralInfo.Visible = true;
+            panelGeneralInfo.Visible = false;
+            clearAllTreeViews();
+            listBoxPhotosCommentedOn.Items.Clear();
+            pictureBoxMostRecentTaggedTogether.Image = Resources.Picture_not_found;
+            pictureBoxMostRecentTaggedTogether.Tag = null;
+            labelFirstName.Text = selectedFriend.FirstName;
+            labelLastName.Text = selectedFriend.LastName;
+            labelNumLikes.Text = string.Format("Number of times {0} liked my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
+            labelNumComments.Text = string.Format("Number of times {0} commented on my photos: {1}", selectedFriend.FirstName, "[no data fetched]");
+            buttonFetchMyPhotosFriendIsIn.Text = string.Format("Fetch photos of mine {0} is in", selectedFriend.FirstName);
+            buttonFetchPhotosOfFriendIAmTaggedIn.Text = string.Format("Fetch {0}'s Photos I am Tagged in", selectedFriend.FirstName);
+            panelGeneralInfo.Visible = true;
         }
 
         private void friendshipAnalyzerFetchGeneralData()

@@ -6,16 +6,15 @@
  * 200441749 - Dudi Yecheskel 
 */
 using System;
+using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
-
+using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
+    
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-    using System.Collections.Generic;
-    using System.Threading;
-
-    using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
 
     public static class FacebookApplication
     {
@@ -25,7 +24,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public const byte k_MaxPhotosInAlbum = 100;
         private static readonly List<Thread> sr_Threads = new List<Thread>();
         private static Form s_MainForm;
-        private static Timer s_AppTimer;
+        private static System.Threading.Timer s_AppTimer;
         private static bool s_IsFirstLogoutCall = true;
 
         public static User LoggedInUser { get; private set; }
@@ -39,7 +38,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             try
             {
                 // timer that starts after 10 seconds and removes all disposed threads every 1 minute
-                s_AppTimer = new Timer(i_State => removeDisposedThreads(), null, k_TimeBeforeStartingTimer, k_TimeBetweenTimerTicks);
+                s_AppTimer = new System.Threading.Timer(i_State => removeDisposedThreads(), null, k_TimeBeforeStartingTimer, k_TimeBetweenTimerTicks);
                 FacebookService.s_CollectionLimit = k_CollectionLimit;
                 ExitSelected = false;
                 AppSettings = AppSettings.LoadFromFile();

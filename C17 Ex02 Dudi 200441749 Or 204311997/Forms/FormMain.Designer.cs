@@ -37,16 +37,16 @@
             this.buttonLogout = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
             this.tabPageFriendshipAnalyzer = new System.Windows.Forms.TabPage();
+            this.tabFriendshipAnalyzer = new C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs.TabFriendshipAnalyzer();
             this.tabPageDataTables = new System.Windows.Forms.TabPage();
+            this.tabDataTables = new C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs.TabDataTables();
             this.tabPageAboutMe = new System.Windows.Forms.TabPage();
+            this.tabAboutMe = new C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs.TabAboutMe();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.pictureBoxProfilePicture = new System.Windows.Forms.PictureBox();
             this.pictureBoxCoverPhoto = new System.Windows.Forms.PictureBox();
             this.likedPagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.friendsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.tabAboutMe = new C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs.TabAboutMe();
-            this.tabDataTables = new C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs.TabDataTables();
-            this.tabFriendshipAnalyzer = new C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs.TabFriendshipAnalyzer();
             this.tabPageFriendshipAnalyzer.SuspendLayout();
             this.tabPageDataTables.SuspendLayout();
             this.tabPageAboutMe.SuspendLayout();
@@ -100,11 +100,20 @@
             this.tabPageFriendshipAnalyzer.Controls.Add(this.tabFriendshipAnalyzer);
             this.tabPageFriendshipAnalyzer.Location = new System.Drawing.Point(4, 29);
             this.tabPageFriendshipAnalyzer.Name = "tabPageFriendshipAnalyzer";
-            this.tabPageFriendshipAnalyzer.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageFriendshipAnalyzer.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageFriendshipAnalyzer.Size = new System.Drawing.Size(1750, 862);
             this.tabPageFriendshipAnalyzer.TabIndex = 2;
             this.tabPageFriendshipAnalyzer.Text = "Friendship Analyzer";
             this.tabPageFriendshipAnalyzer.UseVisualStyleBackColor = true;
+            // 
+            // tabFriendshipAnalyzer
+            // 
+            this.tabFriendshipAnalyzer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabFriendshipAnalyzer.Location = new System.Drawing.Point(3, 3);
+            this.tabFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.tabFriendshipAnalyzer.Name = "tabFriendshipAnalyzer";
+            this.tabFriendshipAnalyzer.Size = new System.Drawing.Size(1744, 856);
+            this.tabFriendshipAnalyzer.TabIndex = 0;
             // 
             // tabPageDataTables
             // 
@@ -118,6 +127,15 @@
             this.tabPageDataTables.Text = "Data Tables";
             this.tabPageDataTables.UseVisualStyleBackColor = true;
             // 
+            // tabDataTables
+            // 
+            this.tabDataTables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabDataTables.Location = new System.Drawing.Point(4, 5);
+            this.tabDataTables.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.tabDataTables.Name = "tabDataTables";
+            this.tabDataTables.Size = new System.Drawing.Size(1742, 852);
+            this.tabDataTables.TabIndex = 0;
+            // 
             // tabPageAboutMe
             // 
             this.tabPageAboutMe.AutoScroll = true;
@@ -128,10 +146,20 @@
             this.tabPageAboutMe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageAboutMe.Name = "tabPageAboutMe";
             this.tabPageAboutMe.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPageAboutMe.Size = new System.Drawing.Size(1750, 862);
+            this.tabPageAboutMe.Size = new System.Drawing.Size(1738, 856);
             this.tabPageAboutMe.TabIndex = 0;
             this.tabPageAboutMe.Text = "About Me";
             this.tabPageAboutMe.UseVisualStyleBackColor = true;
+            // 
+            // tabAboutMe
+            // 
+            this.tabAboutMe.AutoScroll = true;
+            this.tabAboutMe.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabAboutMe.Location = new System.Drawing.Point(4, 5);
+            this.tabAboutMe.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.tabAboutMe.Name = "tabAboutMe";
+            this.tabAboutMe.Size = new System.Drawing.Size(1726, 842);
+            this.tabAboutMe.TabIndex = 0;
             // 
             // tabControl
             // 
@@ -146,7 +174,7 @@
             this.tabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1758, 895);
+            this.tabControl.Size = new System.Drawing.Size(1746, 889);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 0;
             this.tabControl.Tag = "";
@@ -182,33 +210,6 @@
             // friendsBindingSource
             // 
             this.friendsBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.User);
-            // 
-            // tabAboutMe
-            // 
-            this.tabAboutMe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabAboutMe.Location = new System.Drawing.Point(4, 5);
-            this.tabAboutMe.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.tabAboutMe.Name = "tabAboutMe";
-            this.tabAboutMe.Size = new System.Drawing.Size(1738, 848);
-            this.tabAboutMe.TabIndex = 0;
-            // 
-            // tabDataTables
-            // 
-            this.tabDataTables.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabDataTables.Location = new System.Drawing.Point(4, 5);
-            this.tabDataTables.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.tabDataTables.Name = "tabDataTables";
-            this.tabDataTables.Size = new System.Drawing.Size(1742, 852);
-            this.tabDataTables.TabIndex = 0;
-            // 
-            // tabFriendshipAnalyzer
-            // 
-            this.tabFriendshipAnalyzer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabFriendshipAnalyzer.Location = new System.Drawing.Point(3, 3);
-            this.tabFriendshipAnalyzer.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.tabFriendshipAnalyzer.Name = "tabFriendshipAnalyzer";
-            this.tabFriendshipAnalyzer.Size = new System.Drawing.Size(1744, 856);
-            this.tabFriendshipAnalyzer.TabIndex = 0;
             // 
             // FormMain
             // 
