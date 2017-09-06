@@ -77,14 +77,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
                     {
                         // Do nothing if the window is disposed
                     }
-                }
-                else
-                {
-//                    throw new ArgumentOutOfRangeException(string.Format(
-//@"Valid values for this progress bar are {0}-{1}",
-//this.progressBar.Minimum,
-//this.progressBar.Maximum));
-                }
+                }                
             }
         }
 
