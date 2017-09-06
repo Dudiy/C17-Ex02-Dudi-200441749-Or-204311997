@@ -9,7 +9,7 @@ using System;
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
 {
     public partial class FormFriendDetails : Form
     {
@@ -17,30 +17,30 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public FormFriendDetails(User i_Friend)
         {
-            InitializeComponent();
-            r_Friend = i_Friend;
-            userBindingSource.DataSource = r_Friend;
+            this.InitializeComponent();
+            this.r_Friend = i_Friend;
+            this.userBindingSource.DataSource = this.r_Friend;
         }
 
         protected override void OnLoad(EventArgs i_Args)
         {
             base.OnLoad(i_Args);
-            labelLikedPage.Text = string.Format(
+            this.labelLikedPage.Text = string.Format(
 @"Pages that {0} liked",
-r_Friend.FirstName);
-            if (!string.IsNullOrEmpty(labelBirthday.Text))
+this.r_Friend.FirstName);
+            if (!string.IsNullOrEmpty(this.labelBirthday.Text))
             {
-                labelBirthdayTitle.Visible = false;
-                labelBirthday.Visible = false;
+                this.labelBirthdayTitle.Visible = false;
+                this.labelBirthday.Visible = false;
             }
         }
 
         private void linkLabelLikedPageUrl_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_Args)
         {
             // Specify that the link was visited.
-            linkLabelLikedPageURL.LinkVisited = true;
+            this.linkLabelLikedPageURL.LinkVisited = true;
             // Navigate to a URL.
-            System.Diagnostics.Process.Start(linkLabelLikedPageURL.Text);
+            System.Diagnostics.Process.Start(this.linkLabelLikedPageURL.Text);
         }
     }
 }

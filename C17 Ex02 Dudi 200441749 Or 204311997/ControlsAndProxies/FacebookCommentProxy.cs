@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies
 {
     public class FacebookCommentProxy
     {
@@ -9,9 +9,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public override string ToString()
         {
-            StringBuilder commentStr = new StringBuilder(Comment.From.Name);
+            StringBuilder commentStr = new StringBuilder(this.Comment.From.Name);
             commentStr.Append(": ");
-            commentStr.Append(string.IsNullOrEmpty(Comment.Message) ? "[No Message]" : Comment.Message);
+            commentStr.Append(string.IsNullOrEmpty(this.Comment.Message) ? "[No Message]" : this.Comment.Message);
             return commentStr.ToString();
         }
     }

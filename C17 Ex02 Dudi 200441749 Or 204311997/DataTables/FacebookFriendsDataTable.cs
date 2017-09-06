@@ -18,18 +18,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
         }
 
-        public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
-        {
-            lock (this.r_PopulateRowsLock)
-            {
-                if (DataTable.Rows.Count == 0)
-                {
-                    FacebookApplication.StartThread(() => populateRows(i_Collection));
-                }
-            }
-        }
-
-        private void populateRows(FacebookObjectCollection<FacebookObject> i_FriendsList)
+        protected override void PopulateRowsImplementation(FacebookObjectCollection<FacebookObject> i_FriendsList)
         {
             try
             {
@@ -46,9 +35,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                             friend.Gender != null ? friend.Gender.ToString() : string.Empty);
                     }
 
-                    if (this.r_NotifyAbstractParentPopulateRowsCompleted != null)
+                    if (NotifyAbstractParentPopulateRowsCompleted != null)
                     {
-                        this.r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
+                        NotifyAbstractParentPopulateRowsCompleted.Invoke();
                     }
                 }
             }

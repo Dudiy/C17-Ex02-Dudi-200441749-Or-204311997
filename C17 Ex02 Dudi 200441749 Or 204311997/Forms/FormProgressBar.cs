@@ -8,7 +8,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
 {
     public partial class FormProgressBar : Form
     {
@@ -23,27 +23,27 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public FormProgressBar(int i_MaxValue, string i_Description)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.m_CancleEnabled = false;
-            progressBar.Minimum = 0;
-            progressBar.Maximum = i_MaxValue;
-            labelLoading.Text = string.Format("Loading {0}...", i_Description);
+            this.progressBar.Minimum = 0;
+            this.progressBar.Maximum = i_MaxValue;
+            this.labelLoading.Text = string.Format("Loading {0}...", i_Description);
         }
 
         public bool CancelEnabled
         {
-            get { return m_CancleEnabled; }
+            get { return this.m_CancleEnabled; }
             set
             {
-                m_CancleEnabled = value;
-                buttonCancel.Visible = value;
+                this.m_CancleEnabled = value;
+                this.buttonCancel.Visible = value;
             }
         }
 
         public int MaxValue
         {
-            get { return progressBar.Maximum; }
-            set { progressBar.Maximum = Math.Min(value, FacebookApplication.k_CollectionLimit); }
+            get { return this.progressBar.Maximum; }
+            set { this.progressBar.Maximum = Math.Min(value, FacebookApplication.k_CollectionLimit); }
         }
 
         public int ProgressValue
@@ -52,25 +52,25 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 lock (this.r_ProgressValueLock)
                 {
-                    return progressBar.Value;
+                    return this.progressBar.Value;
                 }
             }
 
             set
             {
-                if (value <= progressBar.Maximum)
+                if (value <= this.progressBar.Maximum)
                 {
                     try
                     {
-                        Invoke(
+                        this.Invoke(
                             new Action(
                                 () =>
                                     {
-                                        progressBar.Value = value;
-                                        labelLoadedPercent.Text = string.Format(
+                                        this.progressBar.Value = value;
+                                        this.labelLoadedPercent.Text = string.Format(
                                             "{0:P0}",
-                                            (float)value / progressBar.Maximum);
-                                        Refresh();
+                                            (float)value / this.progressBar.Maximum);
+                                        this.Refresh();
                                     }));
                     }
                     catch (ObjectDisposedException e)
@@ -82,23 +82,23 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 {
                     throw new ArgumentOutOfRangeException(string.Format(
 @"Valid values for this progress bar are {0}-{1}",
-progressBar.Minimum,
-progressBar.Maximum));
+this.progressBar.Minimum,
+this.progressBar.Maximum));
                 }
             }
         }
 
         public new void Close()
         {
-            if (!IsDisposed)
+            if (!this.IsDisposed)
             {
-                Invoke(new Action(() => base.Close()));
+                this.Invoke(new Action(() => base.Close()));
             }
         }
 
         private void buttonCancel_Click(object i_Sender, EventArgs i_Args)
         {
-            Close();
+            this.Close();
         }
     }
 }

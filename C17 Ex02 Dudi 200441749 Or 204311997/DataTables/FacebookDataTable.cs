@@ -13,11 +13,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 {
     public abstract class FacebookDataTable : IDisplayable
     {
-        private event Action PopulateRowsCompleted;
-        // TODO does this need a prefix?
-        protected readonly Action r_NotifyAbstractParentPopulateRowsCompleted;
-
         protected readonly object r_PopulateRowsLock = new object();
+
+        private event Action PopulateRowsCompleted;
+
+        protected readonly Action NotifyAbstractParentPopulateRowsCompleted;
 
         public int TotalRows { get; protected set; }
 
@@ -31,7 +31,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             // all tables initially have a column that holds the current row object displayed
             DataTable.Columns.Add("ObjectDisplayed", typeof(object));
             // only the abstract parent can invoke an event
-            r_NotifyAbstractParentPopulateRowsCompleted += () =>
+            NotifyAbstractParentPopulateRowsCompleted += () =>
                 {
                     if (PopulateRowsCompleted != null)
                     {
@@ -47,7 +47,18 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         }
 
         // adds all FacebookObjects of the given collection that are of type T to the data table rows
-        public abstract void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection);
+        public virtual void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
+        {
+            lock (r_PopulateRowsLock)
+            {
+                if (DataTable.Rows.Count == 0)
+                {
+                    FacebookApplication.StartThread(() => PopulateRowsImplementation(i_Collection));
+                }
+            }
+        }
+
+        protected abstract void PopulateRowsImplementation(FacebookObjectCollection<FacebookObject> i_Collection);
 
         protected abstract void InitColumns();
     }

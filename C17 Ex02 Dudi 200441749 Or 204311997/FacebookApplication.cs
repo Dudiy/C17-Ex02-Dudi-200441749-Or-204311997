@@ -15,6 +15,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
     using System.Collections.Generic;
     using System.Threading;
 
+    using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
+
     public static class FacebookApplication
     {
         private const int k_TimeBeforeStartingTimer = 10 * 1000; // 10 seconds
@@ -36,10 +38,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             try
             {
-                // timer that starts after 10 seconds and removes all disposed threads every 30 seconds
+                // timer that starts after 10 seconds and removes all disposed threads every 1 minute
                 s_AppTimer = new Timer(i_State => removeDisposedThreads(), null, k_TimeBeforeStartingTimer, k_TimeBetweenTimerTicks);
                 FacebookService.s_CollectionLimit = k_CollectionLimit;
-
                 ExitSelected = false;
                 AppSettings = AppSettings.LoadFromFile();
                 while (!ExitSelected)
@@ -56,16 +57,18 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             }
             catch (Exception e)
             {
-                // TODO delete
                 MessageBox.Show("Exception while showing main form: " + e.Message);
             }
         }
 
+        // Facebook application manages all threads, any new thread started should be done using this method
         public static Thread StartThread(ThreadStart i_ThreadStart)
         {
             Thread newThread = new Thread(i_ThreadStart);
+
             sr_Threads.Add(newThread);
             newThread.Start();
+
             return newThread;
         }
 
@@ -138,9 +141,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             {
                 try
                 {
-                    if (AppSettings.RememberUser &&
-                        !string.IsNullOrEmpty(AppSettings.LastAccessToken) &&
-                        isFirstLoginAttempt)
+                    if (AppSettings.RememberUser && !string.IsNullOrEmpty(AppSettings.LastAccessToken) && isFirstLoginAttempt)
                     {
                         loginResult = FacebookService.Connect(AppSettings.LastAccessToken);
                     }

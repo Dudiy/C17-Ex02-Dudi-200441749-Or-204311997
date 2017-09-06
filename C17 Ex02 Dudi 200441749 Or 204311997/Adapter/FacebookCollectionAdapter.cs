@@ -4,13 +4,14 @@ using FacebookWrapper.ObjectModel;
 
 namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
 {
+    using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
+
     internal class FacebookCollectionAdapter<T> : IFacebookCollection<T>
         where T : class
     {
-        private readonly Func<FacebookObjectCollection<FacebookObject>> r_FetchDataDelegate;
-        // TODO like event ? no m_ ?
+        private readonly Func<FacebookObjectCollection<FacebookObject>> FetchDataDelegate;
         private FormProgressBar m_FormProgressBar;
-
+        // according to stylecop we need a space here
         private event Action FetchFinished;
 
         private bool CancelDataFetching { get; set; }
@@ -22,22 +23,22 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
             switch (i_CollectionType)
             {
                 case eFacebookCollectionType.Friends:
-                    this.r_FetchDataDelegate = fetchFriends;
+                    FetchDataDelegate = fetchFriends;
                     break;
                 case eFacebookCollectionType.LikedPages:
-                    this.r_FetchDataDelegate = fetchLikedPages;
+                    FetchDataDelegate = fetchLikedPages;
                     break;
                 case eFacebookCollectionType.AlbumPhotos:
-                    this.r_FetchDataDelegate = fetchMyPhotos;
+                    FetchDataDelegate = fetchMyPhotos;
                     break;
                 case eFacebookCollectionType.PhotosTaggedIn:
-                    this.r_FetchDataDelegate = fetchPhotosTaggedIn;
+                    FetchDataDelegate = fetchPhotosTaggedIn;
                     break;
                 case eFacebookCollectionType.Albums:
-                    this.r_FetchDataDelegate = fetchAlbums;
+                    FetchDataDelegate = fetchAlbums;
                     break;
                 case eFacebookCollectionType.MyPosts:
-                    this.r_FetchDataDelegate = fetchMyPosts;
+                    FetchDataDelegate = fetchMyPosts;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i_CollectionType), i_CollectionType, null);
@@ -47,7 +48,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         public FacebookObjectCollection<FacebookObject> FetchDataWithProgressBar()
         {
             CancelDataFetching = false;
-            FacebookObjectCollection<FacebookObject> fetchedCollection = this.r_FetchDataDelegate.Invoke();
+            FacebookObjectCollection<FacebookObject> fetchedCollection = FetchDataDelegate.Invoke();
 
             if (FetchFinished != null)
             {
@@ -79,9 +80,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         {
             FacebookObjectCollection<FacebookObject> friendsList = new FacebookObjectCollection<FacebookObject>();
 
-            this.m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.Friends.Count, "friends");
-            this.m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;
-            this.m_FormProgressBar.Show();
+            m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.Friends.Count, "friends");
+            m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;
+            m_FormProgressBar.Show();
             foreach (User friend in FacebookApplication.LoggedInUser.Friends)
             {
                 if (CancelDataFetching)
@@ -90,10 +91,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
                 }
 
                 friendsList.Add(friend);
-                this.m_FormProgressBar.ProgressValue++;
+                m_FormProgressBar.ProgressValue++;
             }
 
-            this.m_FormProgressBar.Close();
+            m_FormProgressBar.Close();
 
             return friendsList;
         }
@@ -103,8 +104,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         {
             FacebookObjectCollection<FacebookObject> likedPagesList = new FacebookObjectCollection<FacebookObject>();
 
-            this.m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.LikedPages.Count, "liked pages");
-            this.m_FormProgressBar.Show();
+            m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.LikedPages.Count, "liked pages");
+            m_FormProgressBar.Show();
             foreach (Page page in FacebookApplication.LoggedInUser.LikedPages)
             {
                 if (CancelDataFetching)
@@ -113,10 +114,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
                 }
 
                 likedPagesList.Add(page);
-                this.m_FormProgressBar.ProgressValue++;
+                m_FormProgressBar.ProgressValue++;
             }
 
-            this.m_FormProgressBar.Close();
+            m_FormProgressBar.Close();
 
             return likedPagesList;
         }
@@ -125,9 +126,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         private FacebookObjectCollection<FacebookObject> fetchMyPosts()
         {
             FacebookObjectCollection<FacebookObject> myPostsList = new FacebookObjectCollection<FacebookObject>();
-            this.m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.Posts.Count, "my posts");
-            this.m_FormProgressBar.Show();
-            this.m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;
+            m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.Posts.Count, "my posts");
+            m_FormProgressBar.Show();
+            m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;
             foreach (Post post in FacebookApplication.LoggedInUser.Posts)
             {
                 if (CancelDataFetching)
@@ -136,10 +137,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
                 }
 
                 myPostsList.Add(post);
-                this.m_FormProgressBar.ProgressValue++;
+                m_FormProgressBar.ProgressValue++;
             }
 
-            this.m_FormProgressBar.Close();
+            m_FormProgressBar.Close();
 
             return myPostsList;
         }
@@ -149,8 +150,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         {
             FacebookObjectCollection<FacebookObject> myPhotosList = new FacebookObjectCollection<FacebookObject>();
 
-            this.m_FormProgressBar = new FormProgressBar("my photos");
-            this.m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;
+            m_FormProgressBar = new FormProgressBar("my photos");
+            m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;
             if (AlbumsToLoad == null)
             {
                 AlbumsToLoad = FacebookApplication.LoggedInUser.Albums.ToArray();
@@ -160,11 +161,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
             {
                 if (album.Count != null)
                 {
-                    this.m_FormProgressBar.MaxValue += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
+                    m_FormProgressBar.MaxValue += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
                 }
             }
 
-            this.m_FormProgressBar.Show();
+            m_FormProgressBar.Show();
             foreach (Album album in AlbumsToLoad)
             {
                 foreach (Photo photo in album.Photos)
@@ -175,11 +176,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
                     }
 
                     myPhotosList.Add(photo);
-                    this.m_FormProgressBar.ProgressValue++;
+                    m_FormProgressBar.ProgressValue++;
                 }
             }
 
-            this.m_FormProgressBar.Close();
+            m_FormProgressBar.Close();
 
             return myPhotosList;
         }
@@ -188,8 +189,8 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         {
             FacebookObjectCollection<FacebookObject> photosTaggedIn = new FacebookObjectCollection<FacebookObject>();
 
-            this.m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.PhotosTaggedIn.Count, "Photos tagged in");
-            this.m_FormProgressBar.Show();
+            m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.PhotosTaggedIn.Count, "Photos tagged in");
+            m_FormProgressBar.Show();
             foreach (Photo photo in FacebookApplication.LoggedInUser.PhotosTaggedIn)
             {
                 if (CancelDataFetching)
@@ -198,10 +199,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
                 }
 
                 photosTaggedIn.Add(photo);
-                this.m_FormProgressBar.ProgressValue++;
+                m_FormProgressBar.ProgressValue++;
             }
 
-            this.m_FormProgressBar.Close();
+            m_FormProgressBar.Close();
 
             return photosTaggedIn;
         }
@@ -210,7 +211,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         {
             FacebookObjectCollection<FacebookObject> myAlbumsList = new FacebookObjectCollection<FacebookObject>();
 
-            this.m_FormProgressBar = new FormProgressBar("my photos");
+            m_FormProgressBar = new FormProgressBar("my photos");
             if (AlbumsToLoad == null)
             {
                 AlbumsToLoad = FacebookApplication.LoggedInUser.Albums.ToArray();
@@ -220,11 +221,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
             {
                 if (album.Count != null)
                 {
-                    this.m_FormProgressBar.MaxValue += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
+                    m_FormProgressBar.MaxValue += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
                 }
             }
 
-            this.m_FormProgressBar.Show();
+            m_FormProgressBar.Show();
             foreach (Album album in AlbumsToLoad)
             {                
                 foreach (Photo photo in album.Photos)
@@ -234,13 +235,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
                         break;
                     }
 
-                    this.m_FormProgressBar.ProgressValue++;
+                    m_FormProgressBar.ProgressValue++;
                 }
 
                 myAlbumsList.Add(album);
             }
 
-            this.m_FormProgressBar.Close();
+            m_FormProgressBar.Close();
 
             return myAlbumsList;
         }

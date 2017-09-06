@@ -11,20 +11,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
         }
 
-        public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
+        protected override void PopulateRowsImplementation(FacebookObjectCollection<FacebookObject> i_Posts)
         {
-            lock (this.r_PopulateRowsLock)
-            {
-                if (DataTable.Rows.Count == 0)
-                {
-                    FacebookApplication.StartThread(() => populateRows(i_Collection));
-                }
-            }
-        }
-
-        private void populateRows(FacebookObjectCollection<FacebookObject> i_Posts)
-        {
-            lock (this.r_PopulateRowsLock)
+            lock (r_PopulateRowsLock)
             {
                 try
                 {
@@ -36,15 +25,16 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                         {
                             DataTable.Rows.Add(
                                 post,
+                                post.From.Name,
                                 string.IsNullOrEmpty(post.Message) ? "[No Message]" : post.Message,
                                 post.CreatedTime,
                                 post.LikedBy.Count,
                                 post.Comments.Count);
                         }
 
-                        if (this.r_NotifyAbstractParentPopulateRowsCompleted != null)
+                        if (NotifyAbstractParentPopulateRowsCompleted != null)
                         {
-                            this.r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
+                            NotifyAbstractParentPopulateRowsCompleted.Invoke();
                         }
                     }
                 }
@@ -60,6 +50,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
 
         protected override void InitColumns()
         {
+            DataTable.Columns.Add("Uploaded by", typeof(string));
             DataTable.Columns.Add("Message", typeof(string));
             DataTable.Columns.Add("Time Updated", typeof(DateTime));
             DataTable.Columns.Add("Num Likes", typeof(int));

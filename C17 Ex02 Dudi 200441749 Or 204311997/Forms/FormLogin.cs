@@ -9,7 +9,7 @@ using System;
 using System.Windows.Forms;
 using FacebookWrapper;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
 {
     public partial class FormLogin : Form
     {
@@ -19,10 +19,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public FormLogin()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             if (FacebookApplication.AppSettings != null)
             {
-                checkBoxRememberMe.Checked = FacebookApplication.AppSettings.RememberUser;
+                this.checkBoxRememberMe.Checked = FacebookApplication.AppSettings.RememberUser;
             }
         }
 
@@ -30,20 +30,19 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             try
             {
-                login();
-                DialogResult = k_LoginSuccesfull;
+                this.login();
+                this.DialogResult = k_LoginSuccesfull;
             }
             catch
             {
-                Show();
+                this.Show();
                 MessageBox.Show("Error logging in, please check internet connection and try again");
             }
         }
 
-        // TODO see which permission we need
         private void login()
         {
-            LoginResult = FacebookService.Login(
+            this.LoginResult = FacebookService.Login(
                 "197501144117907",
                 "public_profile",
                 "email",
@@ -64,14 +63,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private void buttonExit_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.ExitSelected = true;
-            Close();
+            this.Close();
         }
 
         private void checkBoxRememberMe_CheckedChanged(object i_Sender, EventArgs i_Args)
         {
             if (FacebookApplication.AppSettings != null)
             {
-                FacebookApplication.AppSettings.RememberUser = checkBoxRememberMe.Checked;
+                FacebookApplication.AppSettings.RememberUser = this.checkBoxRememberMe.Checked;
             }
         }
     }

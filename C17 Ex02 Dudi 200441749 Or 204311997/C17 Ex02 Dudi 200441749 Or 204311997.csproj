@@ -53,20 +53,41 @@
   <ItemGroup>
     <Compile Include="Adapter\eFacebookCollectionType.cs" />
     <Compile Include="Adapter\IFacebookCollection.cs" />
-    <Compile Include="FormAlbumsSelector.cs">
+    <Compile Include="Forms\FormAlbumsSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAlbumsSelector.Designer.cs">
+    <Compile Include="Forms\FormAlbumsSelector.Designer.cs">
       <DependentUpon>FormAlbumsSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="AppSettings.cs" />
     <Compile Include="DataTables\PopulateRowsException.cs" />
-    <Compile Include="FacebookCommentProxy.cs" />
+    <Compile Include="ControlsAndProxies\FacebookCommentProxy.cs" />
     <Compile Include="DataTables\eFacebookDataTableType.cs" />
     <Compile Include="DataTables\FacebookDataTableFactory.cs" />
     <Compile Include="Adapter\FacebookCollectionAdapter.cs" />
     <Compile Include="DataTables\FacebookPostsDataTable.cs" />
-    <Compile Include="FacebookPhotosTreeViewProxy.cs">
+    <Compile Include="ControlsAndProxies\FlowLayoutPanelExtenderForFacebookFriends.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Tabs\TabAboutMe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Tabs\TabAboutMe.Designer.cs">
+      <DependentUpon>TabAboutMe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tabs\TabDataTables.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Tabs\TabDataTables.Designer.cs">
+      <DependentUpon>TabDataTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tabs\TabFriendshipAnalyzer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Tabs\TabFriendshipAnalyzer.Designer.cs">
+      <DependentUpon>TabFriendshipAnalyzer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlsAndProxies\TreeViewExtenderForFacebookPhotos.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FacebookApplication.cs" />
@@ -76,84 +97,93 @@
     <Compile Include="DataTables\FacebookLikedPagesDataTable.cs" />
     <Compile Include="DataTables\FacebookPhotosDataTable.cs" />
     <Compile Include="FacebookObjectDisplayer.cs" />
-    <Compile Include="FormLogin.cs">
+    <Compile Include="Forms\FormLogin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormLogin.Designer.cs">
+    <Compile Include="Forms\FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormMain.cs">
+    <Compile Include="Forms\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain.Designer.cs">
+    <Compile Include="Forms\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormFriendDetails.cs">
+    <Compile Include="Forms\FormFriendDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormFriendDetails.Designer.cs">
+    <Compile Include="Forms\FormFriendDetails.Designer.cs">
       <DependentUpon>FormFriendDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPostDetails.cs">
+    <Compile Include="Forms\FormPostDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPostDetails.Designer.cs">
+    <Compile Include="Forms\FormPostDetails.Designer.cs">
       <DependentUpon>FormPostDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="FriendshipAnalyzer.cs" />
-    <Compile Include="GrowingPictureBoxProxy.cs">
+    <Compile Include="ControlsAndProxies\GrowingPictureBoxProxy.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IDisplayable.cs" />
-    <Compile Include="FormPhotoDetails.cs">
+    <Compile Include="Forms\FormPhotoDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPhotoDetails.Designer.cs">
+    <Compile Include="Forms\FormPhotoDetails.Designer.cs">
       <DependentUpon>FormPhotoDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPictureFrame.cs">
+    <Compile Include="Forms\FormPictureFrame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPictureFrame.Designer.cs">
+    <Compile Include="Forms\FormPictureFrame.Designer.cs">
       <DependentUpon>FormPictureFrame.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="FormProgressBar.cs">
+    <Compile Include="Forms\FormProgressBar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormProgressBar.Designer.cs">
+    <Compile Include="Forms\FormProgressBar.Designer.cs">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormAlbumsSelector.resx">
+    <EmbeddedResource Include="Forms\FormAlbumsSelector.resx">
       <DependentUpon>FormAlbumsSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormLogin.resx">
+    <EmbeddedResource Include="Forms\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
+    <EmbeddedResource Include="Forms\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormFriendDetails.resx">
+    <EmbeddedResource Include="Forms\FormFriendDetails.resx">
       <DependentUpon>FormFriendDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPostDetails.resx">
+    <EmbeddedResource Include="Forms\FormPostDetails.resx">
       <DependentUpon>FormPostDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPhotoDetails.resx">
+    <EmbeddedResource Include="Forms\FormPhotoDetails.resx">
       <DependentUpon>FormPhotoDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPictureFrame.resx">
+    <EmbeddedResource Include="Forms\FormPictureFrame.resx">
       <DependentUpon>FormPictureFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormProgressBar.resx">
+    <EmbeddedResource Include="Forms\FormProgressBar.resx">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Tabs\TabAboutMe.resx">
+      <DependentUpon>TabAboutMe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Tabs\TabDataTables.resx">
+      <DependentUpon>TabDataTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Tabs\TabFriendshipAnalyzer.resx">
+      <DependentUpon>TabFriendshipAnalyzer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\DataSources\FacebookWrapper.ObjectModel.User.datasource" />
     <None Include="Properties\DataSources\FriendshipAnalyzer.datasource" />

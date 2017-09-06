@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
+using C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies;
 using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
 {
     public partial class FormPostDetails : Form
     {
@@ -13,32 +14,32 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public FormPostDetails()
         {
-            InitializeComponent();
-            postsBindingSource.DataSource = r_Post;
+            this.InitializeComponent();
+            this.postsBindingSource.DataSource = this.r_Post;
         }
 
         private void initNonBindedComponents()
         {
             try
             {
-                if (!string.IsNullOrEmpty(r_Post.PictureURL))
+                if (!string.IsNullOrEmpty(this.r_Post.PictureURL))
                 {
                     try
                     {
-                        pictureBoxPhoto.Load(r_Post.PictureURL);
+                        this.pictureBoxPhoto.Load(this.r_Post.PictureURL);
                     }
                     catch
                     {
-                        Invoke(new Action(() => MessageBox.Show(ActiveForm, "The PictureURL of this post is not supported")));
+                        this.Invoke(new Action(() => MessageBox.Show(ActiveForm, "The PictureURL of this post is not supported")));
                     }
                 }
 
                 foreach (Comment postComment in this.r_Post.Comments)
                 {
-                    listBoxComments.Invoke(new Action(() => listBoxComments.Items.Add(new FacebookCommentProxy() { Comment = postComment })));
+                    this.listBoxComments.Invoke(new Action(() => this.listBoxComments.Items.Add(new FacebookCommentProxy() { Comment = postComment })));
                 }
 
-                labelLikes.Invoke(new Action(() => labelLikes.Text = string.Format("Likes ({0}): ", this.r_Post.LikedBy.Count)));
+                this.labelLikes.Invoke(new Action(() => this.labelLikes.Text = string.Format("Likes ({0}): ", this.r_Post.LikedBy.Count)));
             }
             catch (Exception e)
             {
@@ -52,23 +53,23 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         protected override void OnShown(EventArgs i_Args)
         {
             base.OnShown(i_Args);
-            m_InitNonBindedComponentsThread = FacebookApplication.StartThread(initNonBindedComponents);
+            this.m_InitNonBindedComponentsThread = FacebookApplication.StartThread(this.initNonBindedComponents);
         }
 
         protected override void OnClosing(CancelEventArgs i_Args)
         {
             base.OnClosing(i_Args);
-            if (m_InitNonBindedComponentsThread != null && m_InitNonBindedComponentsThread.IsAlive)
+            if (this.m_InitNonBindedComponentsThread != null && this.m_InitNonBindedComponentsThread.IsAlive)
             {
-                m_InitNonBindedComponentsThread.Abort();
+                this.m_InitNonBindedComponentsThread.Abort();
             }
         }
 
         public FormPostDetails(Post i_Post)
         {
-            InitializeComponent();
-            r_Post = i_Post;
-            postsBindingSource.DataSource = i_Post;
+            this.InitializeComponent();
+            this.r_Post = i_Post;
+            this.postsBindingSource.DataSource = i_Post;
         }
     }
 }

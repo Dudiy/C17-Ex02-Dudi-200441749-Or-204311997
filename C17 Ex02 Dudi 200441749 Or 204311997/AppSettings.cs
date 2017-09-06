@@ -70,7 +70,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
             using (Stream stream = new FileStream(k_SettingsFilePath, FileMode.Truncate))
             {
-                XmlSerializer serializer = new XmlSerializer(this.GetType());
+                XmlSerializer serializer = new XmlSerializer(GetType());
 
                 serializer.Serialize(stream, this);
             }

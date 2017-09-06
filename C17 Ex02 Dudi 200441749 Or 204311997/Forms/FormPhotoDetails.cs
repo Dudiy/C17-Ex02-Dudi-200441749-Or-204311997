@@ -6,50 +6,48 @@
  * 200441749 - Dudi Yecheskel 
 */
 using System;
-using System.Windows.Forms;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows.Forms;
 using Facebook;
 using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
 {
     public partial class FormPhotoDetails : Form
     {
         private readonly Photo r_Photo;
-
         private Thread m_LikesCounterThread;
-
         private Thread m_CommentsCounterThread;
 
         public FormPhotoDetails(Photo i_Photo)
         {
-            InitializeComponent();
-            r_Photo = i_Photo;
-            initDetailsPane();
-            pictureBox.LoadAsync(r_Photo.PictureNormalURL);
+            this.InitializeComponent();
+            this.r_Photo = i_Photo;
+            this.initDetailsPane();
+            this.pictureBox.LoadAsync(this.r_Photo.PictureNormalURL);
         }
 
         protected override void OnShown(EventArgs i_Args)
         {
             base.OnShown(i_Args);
-            m_LikesCounterThread = FacebookApplication.StartThread(initLikes);
-            m_CommentsCounterThread = FacebookApplication.StartThread(initComments);
+            this.m_LikesCounterThread = FacebookApplication.StartThread(this.initLikes);
+            this.m_CommentsCounterThread = FacebookApplication.StartThread(this.initComments);
         }
 
         private void initDetailsPane()
         {
-            labelName.Text = string.Format(
+            this.labelName.Text = string.Format(
 @"
 Name: 
 {0}",
 this.r_Photo.Name ?? "No photo name");
-            labelAlbum.Text = string.Format(
+            this.labelAlbum.Text = string.Format(
 @"
 Album: 
 {0}",
 this.r_Photo.Album != null ? this.r_Photo.Album.Name : "No Album Name");
-            labelLikes.Text = string.Format(
+            this.labelLikes.Text = string.Format(
 @"
 Likes ({0}):",
 this.r_Photo.LikedBy.Count);
@@ -57,19 +55,19 @@ this.r_Photo.LikedBy.Count);
 
         protected override void OnClosing(CancelEventArgs i_Args)
         {
-            m_LikesCounterThread.Abort();
-            m_CommentsCounterThread.Abort();
+            this.m_LikesCounterThread.Abort();
+            this.m_CommentsCounterThread.Abort();
         }
 
         private void initLikes()
         {
-            listBoxLikes.Invoke(
+            this.listBoxLikes.Invoke(
                 new Action(() =>
                         {
-                            listBoxLikes.DisplayMember = "Name";
+                            this.listBoxLikes.DisplayMember = "Name";
                             foreach (User liker in this.r_Photo.LikedBy)
                             {
-                                listBoxLikes.Items.Add(liker);
+                                this.listBoxLikes.Items.Add(liker);
                             }
                         }));
         }
@@ -96,7 +94,7 @@ this.r_Photo.LikedBy.Count);
                         node.Nodes.Add(child);
                     }
 
-                    addCommentToView(node);
+                    this.addCommentToView(node);
                 }
             }
             catch (Exception e)
@@ -111,19 +109,19 @@ this.r_Photo.LikedBy.Count);
         private void addCommentToView(TreeNode i_Comment)
         {
             int totalComments = this.r_Photo.Comments.Count;
-            int currentCounter = treeViewComments.Nodes.Count;
+            int currentCounter = this.treeViewComments.Nodes.Count;
 
-            if (!IsDisposed)
+            if (!this.IsDisposed)
             {
-                treeViewComments.Invoke(new Action(
+                this.treeViewComments.Invoke(new Action(
                     () =>
                         {
-                            treeViewComments.Nodes.Add(i_Comment);
-                            toolStripLabelCommentsProgress.Text = totalComments == currentCounter ?
+                            this.treeViewComments.Nodes.Add(i_Comment);
+                            this.toolStripLabelCommentsProgress.Text = totalComments == currentCounter ?
                                 "All comments loaded" :
                                 string.Format(
                                 @"Loaded {0}/{1} comments",
-                                treeViewComments.Nodes.Count,
+                                this.treeViewComments.Nodes.Count,
                                 this.r_Photo.Comments.Count);
                         }));
             }
@@ -131,9 +129,7 @@ this.r_Photo.LikedBy.Count);
 
         private void listBoxLikes_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            User selectedUser = listBoxLikes.SelectedItem as User;
-
-            if (selectedUser != null)
+            if (this.listBoxLikes.SelectedItem is User selectedUser)
             {
                 FormPictureFrame profilePic = new FormPictureFrame(selectedUser.PictureLargeURL);
                 profilePic.Show();

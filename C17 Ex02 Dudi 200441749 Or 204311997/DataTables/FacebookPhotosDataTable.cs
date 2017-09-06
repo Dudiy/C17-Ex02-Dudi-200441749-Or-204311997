@@ -25,21 +25,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
         {
         }
 
-        // TODO delete?
-        // private void getTotalPhotos()
-        // {
-        //     lock (r_PopulateRowsLock)
-        //     {
-        //         TotalRows = 0;
-        //         foreach (Album album in FacebookApplication.LoggedInUser.Albums)
-        //         {
-        //             if (album.Count != null)
-        //             {
-        //                 TotalRows += Math.Min((int)album.Count, FacebookApplication.k_MaxPhotosInAlbum);
-        //             }
-        //         }
-        //     }
-        // }
         public override void PopulateRows(FacebookObjectCollection<FacebookObject> i_Collection)
         {
             m_AbortRunningThread = m_PopulateRowsThread != null && m_PopulateRowsThread.IsAlive;
@@ -54,11 +39,11 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             lock (r_PopulateRowsLock)
             {
                 DataTable.Rows.Clear();
-                m_PopulateRowsThread = FacebookApplication.StartThread(() => populateRows(i_Collection));
+                m_PopulateRowsThread = FacebookApplication.StartThread(() => PopulateRowsImplementation(i_Collection));
             }
         }
 
-        private void populateRows(FacebookObjectCollection<FacebookObject> i_MyPhotos)
+        protected override void PopulateRowsImplementation(FacebookObjectCollection<FacebookObject> i_MyPhotos)
         {
             try
             {
@@ -84,9 +69,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     }
                 }
 
-                if (r_NotifyAbstractParentPopulateRowsCompleted != null)
+                if (NotifyAbstractParentPopulateRowsCompleted != null)
                 {
-                    r_NotifyAbstractParentPopulateRowsCompleted.Invoke();
+                    NotifyAbstractParentPopulateRowsCompleted.Invoke();
                 }
             }
             catch (Exception e)

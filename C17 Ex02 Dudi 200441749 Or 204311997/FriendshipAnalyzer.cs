@@ -20,6 +20,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         private readonly object r_GetAllPhotosLock = new object();
         private bool m_FinishedFetchingComments;
         private bool m_FinishedFetchingLikes;
+        private FacebookObjectCollection<Photo> m_AllPhotos;
 
         public event Action FinishedFetchingLikesAndComments;
 
@@ -28,8 +29,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public FacebookObjectCollection<Photo> PhotosFriendLiked { get; }
 
         public User Friend { get; set; }
-
-        private FacebookObjectCollection<Photo> m_AllPhotos;
 
         public FriendshipAnalyzer()
         {
@@ -69,16 +68,23 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
                 {
                     photosTaggedTogether.Add(photo);
                 }
-            }
-
-            photosTaggedTogether.OrderBy(i_Photo => i_Photo.CreatedTime);
+            }            
 
             return photosTaggedTogether;
         }
 
         public Photo GetMostRecentPhotoTaggedTogether(FacebookObjectCollection<Photo> i_PhotosTaggedTogether)
         {
-            return i_PhotosTaggedTogether.Count > 0 ? i_PhotosTaggedTogether[0] : null;
+            Photo mostRecentPhoto;
+
+            using (IEnumerator<Photo> enumerator =
+                i_PhotosTaggedTogether.OrderByDescending(i_Photo => i_Photo.CreatedTime).GetEnumerator())
+            {
+                enumerator.MoveNext();
+                mostRecentPhoto = enumerator.Current;
+            }
+
+            return mostRecentPhoto;
         }
 
         public void CountNumberOfPhotosFriendLiked(Action i_PromoteProgressBar)
@@ -99,7 +105,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             catch (Exception e)
             {
                 if (!(e.InnerException is ThreadAbortException) && !(e is ThreadAbortException))
-                {                    
+                {
                     string message = string.Format("Error while counting likes: {0}", e.Message);
                     MessageBox.Show(message);
                 }

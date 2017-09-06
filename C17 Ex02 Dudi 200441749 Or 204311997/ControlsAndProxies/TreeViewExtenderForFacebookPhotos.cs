@@ -2,10 +2,12 @@
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
 
-namespace C17_Ex01_Dudi_200441749_Or_204311997
+namespace C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies
 {
-    public class FacebookPhotosTreeViewProxy : TreeView
-    {        
+    using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
+
+    public class TreeViewExtenderForFacebookPhotos : TreeView
+    {
         public enum eGroupBy
         {
             Uploader,
@@ -14,15 +16,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
 
         public void SetValues(FacebookObjectCollection<Photo> i_Photos, eGroupBy i_GroupBy)
         {
-            Nodes.Clear();
+            this.Nodes.Clear();
 
             switch (i_GroupBy)
             {
                 case eGroupBy.Uploader:
-                    groupPhotosByUser(i_Photos);
+                    this.groupPhotosByUser(i_Photos);
                     break;
                 case eGroupBy.Album:
-                    groupPhotosByAlbum(i_Photos);
+                    this.groupPhotosByAlbum(i_Photos);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i_GroupBy), i_GroupBy, null);
@@ -33,13 +35,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             foreach (Photo photo in i_Photos)
             {
-                if (!Nodes.ContainsKey(photo.Album.Id))
+                if (!this.Nodes.ContainsKey(photo.Album.Id))
                 {
-                    TreeNode userNode = Nodes.Add(photo.Album.Id, string.Format(photo.Album.Name));
+                    TreeNode userNode = this.Nodes.Add(photo.Album.Id, string.Format(photo.Album.Name));
                     userNode.Tag = photo.Album;
                 }
 
-                TreeNode photoNode = Nodes[photo.Album.Id].Nodes.Add(
+                TreeNode photoNode = this.Nodes[photo.Album.Id].Nodes.Add(
                     string.Format(
                         @"{0} - {1}",
                         photo.CreatedTime.ToString(),
@@ -52,13 +54,13 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         {
             foreach (Photo photo in i_Photos)
             {
-                if (!Nodes.ContainsKey(photo.From.Id))
+                if (!this.Nodes.ContainsKey(photo.From.Id))
                 {
-                    TreeNode userNode = Nodes.Add(photo.From.Id, string.Format("Photos by {0}", photo.From.Name));
+                    TreeNode userNode = this.Nodes.Add(photo.From.Id, string.Format("Photos by {0}", photo.From.Name));
                     userNode.Tag = photo.From;
                 }
 
-                TreeNode photoNode = Nodes[photo.From.Id].Nodes.Add(
+                TreeNode photoNode = this.Nodes[photo.From.Id].Nodes.Add(
                     string.Format(
                         @"{0} - {1}",
                         photo.CreatedTime.ToString(),
