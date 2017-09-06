@@ -65,7 +65,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
             foreach (FacebookObject facebookObject in i_Collection)
             {
                 T converted = facebookObject as T;
-
                 if (converted != null)
                 {
                     returnedList.Add(converted);
@@ -126,6 +125,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Adapter
         private FacebookObjectCollection<FacebookObject> fetchMyPosts()
         {
             FacebookObjectCollection<FacebookObject> myPostsList = new FacebookObjectCollection<FacebookObject>();
+
             m_FormProgressBar = new FormProgressBar(FacebookApplication.LoggedInUser.Posts.Count, "my posts");
             m_FormProgressBar.Show();
             m_FormProgressBar.Closing += (i_Sender, i_Args) => CancelDataFetching = true;

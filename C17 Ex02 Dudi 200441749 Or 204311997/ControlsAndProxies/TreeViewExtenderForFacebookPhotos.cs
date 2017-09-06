@@ -17,7 +17,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies
         public void SetValues(FacebookObjectCollection<Photo> i_Photos, eGroupBy i_GroupBy)
         {
             this.Nodes.Clear();
-
             switch (i_GroupBy)
             {
                 case eGroupBy.Uploader:

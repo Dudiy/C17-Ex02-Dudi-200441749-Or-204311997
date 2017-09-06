@@ -56,6 +56,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
             this.buttonFetchGeneralData.Enabled = false;
             FormProgressBar formProgressBar =
                 new FormProgressBar(2 * this.m_FriendshipAnalyzer.AllPhotos.Count, "statistics") { CancelEnabled = true };
+
             formProgressBar.Show();
             this.getMostRecentPhotoTogether();
             Thread getLikesThread = FacebookApplication.StartThread(
@@ -107,6 +108,7 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
             FacebookObjectCollection<FacebookObject> boxPhotosTaggedIn = photosTaggedInAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Photo> photosTaggedIn = photosTaggedInAdapter.UnboxCollection(boxPhotosTaggedIn);
             FacebookObjectCollection<Photo> photosTaggedTogether = this.m_FriendshipAnalyzer.PhotosTaggedTogether(photosTaggedIn);
+
             this.treeViewTaggedTogether.SetValues(photosTaggedTogether, TreeViewExtenderForFacebookPhotos.eGroupBy.Uploader);
         }
 
@@ -114,6 +116,7 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
         {
             FacebookObjectCollection<Album> albums = this.fetchAlbums(FacebookApplication.LoggedInUser);
             FacebookObjectCollection<Photo> photosOfFriend = this.m_FriendshipAnalyzer.GetPhotosFromAlbumsUserIsTaggedIn(this.m_FriendshipAnalyzer.Friend, albums);
+
             this.treeViewPhotosOfFriendInMyPhotos.SetValues(photosOfFriend, TreeViewExtenderForFacebookPhotos.eGroupBy.Album);
         }
 
@@ -125,7 +128,6 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
             {
                 AlbumsToLoad = selectedAlbums
             };
-
             FacebookObjectCollection<FacebookObject> boxAlbumsTaggedIn = albumsAdapter.FetchDataWithProgressBar();
             FacebookObjectCollection<Album> albums = albumsAdapter.UnboxCollection(boxAlbumsTaggedIn);
 
@@ -136,6 +138,7 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
         {
             FacebookObjectCollection<Album> albums = this.fetchAlbums(this.m_FriendshipAnalyzer.Friend);
             FacebookObjectCollection<Photo> photos = this.m_FriendshipAnalyzer.GetPhotosFromAlbumsUserIsTaggedIn(FacebookApplication.LoggedInUser, albums);
+
             this.treeViewPhotosOfFriendIAmTaggedIn.SetValues(photos, TreeViewExtenderForFacebookPhotos.eGroupBy.Album);
         }
 
@@ -212,7 +215,6 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
             if (((PictureBox)i_Sender).Tag is Photo photo)
             {
                 FormPhotoDetails formPhotoDetails = new FormPhotoDetails(photo);
-
                 formPhotoDetails.Show();
             }
         }
