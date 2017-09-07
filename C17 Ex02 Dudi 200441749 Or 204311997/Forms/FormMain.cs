@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * C17_Ex01: FormMain.cs
+ * 
+ * Written by:
+ * 204311997 - Or Mantzur
+ * 200441749 - Dudi Yecheskel 
+*/
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -20,6 +27,21 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
         {
             base.OnShown(i_Args);
             this.initMainForm();
+        }
+
+        protected override void OnClosing(CancelEventArgs i_Args)
+        {
+            base.OnClosing(i_Args);
+            FacebookApplication.KillAllRunningThreads();
+
+            if (!this.m_LogoutClicked)
+            {
+                // exitSelected is set here in case the user hits the X button or alt+F4
+                FacebookApplication.ExitSelected = true;
+                FacebookApplication.AppSettings.LastFormStartPosition = FormStartPosition.Manual;
+                FacebookApplication.AppSettings.LastWindowLocation = this.Location;
+                FacebookApplication.AppSettings.LastWindowsSize = this.Size;
+            }
         }
 
         private void initMainForm()
@@ -46,21 +68,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
             }
         }
 
-        protected override void OnClosing(CancelEventArgs i_Args)
-        {
-            base.OnClosing(i_Args);
-            FacebookApplication.KillAllRunningThreads();
-
-            if (!this.m_LogoutClicked)
-            {
-                // exitSelected is set here in case the user hits the X button or alt+F4
-                FacebookApplication.ExitSelected = true;
-                FacebookApplication.AppSettings.LastFormStartPosition = FormStartPosition.Manual;
-                FacebookApplication.AppSettings.LastWindowLocation = this.Location;
-                FacebookApplication.AppSettings.LastWindowsSize = this.Size;
-            }
-        }
-
         private void buttonExit_Click(object i_Sender, EventArgs i_Args)
         {
             FacebookApplication.ExitSelected = true;
@@ -73,6 +80,5 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
             this.m_LogoutClicked = true;
             FacebookApplication.Logout();
         }
-        
     }
 }

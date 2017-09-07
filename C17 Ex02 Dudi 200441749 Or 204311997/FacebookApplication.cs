@@ -15,7 +15,6 @@ using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
     
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
-
     public static class FacebookApplication
     {
         private const int k_TimeBeforeStartingTimer = 10 * 1000; // 10 seconds
@@ -23,8 +22,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
         public const int k_CollectionLimit = 500;
         public const byte k_MaxPhotosInAlbum = 100;
         private static readonly List<Thread> sr_Threads = new List<Thread>();
-        private static Form s_MainForm;
-        private static System.Threading.Timer s_AppTimer;
+        private static FormMain s_MainForm;
         private static bool s_IsFirstLogoutCall = true;
 
         public static User LoggedInUser { get; private set; }
@@ -38,7 +36,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             try
             {
                 // timer that starts after 10 seconds and removes all disposed threads every 1 minute
-                s_AppTimer = new System.Threading.Timer(i_State => removeDisposedThreads(), null, k_TimeBeforeStartingTimer, k_TimeBetweenTimerTicks);
+                new System.Threading.Timer(i_State => removeDisposedThreads(), null, k_TimeBeforeStartingTimer, k_TimeBetweenTimerTicks);
                 FacebookService.s_CollectionLimit = k_CollectionLimit;
                 ExitSelected = false;
                 AppSettings = AppSettings.LoadFromFile();
@@ -69,24 +67,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             newThread.Start();
 
             return newThread;
-        }
-
-        private static void removeDisposedThreads()
-        {
-            List<Thread> disposedThreads = new List<Thread>();
-
-            foreach (Thread thread in sr_Threads)
-            {
-                if (!thread.IsAlive)
-                {
-                    disposedThreads.Add(thread);
-                }
-            }
-
-            foreach (Thread thread in disposedThreads)
-            {
-                sr_Threads.Remove(thread);
-            }
         }
 
         public static void KillAllRunningThreads()
@@ -217,6 +197,24 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             for (int i = numOfOpenForms; i > 0; i--)
             {
                 Application.OpenForms[i - 1].Close();
+            }
+        }
+
+        private static void removeDisposedThreads()
+        {
+            List<Thread> disposedThreads = new List<Thread>();
+
+            foreach (Thread thread in sr_Threads)
+            {
+                if (!thread.IsAlive)
+                {
+                    disposedThreads.Add(thread);
+                }
+            }
+
+            foreach (Thread thread in disposedThreads)
+            {
+                sr_Threads.Remove(thread);
             }
         }
     }

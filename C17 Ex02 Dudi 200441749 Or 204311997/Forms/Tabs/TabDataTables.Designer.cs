@@ -105,13 +105,13 @@
             this.toolStrip1.Size = new System.Drawing.Size(1071, 25);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
-            this.toolStrip1.Visible = false;
             // 
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(112, 22);
             this.toolStripStatusLabel.Text = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Visible = false;
             // 
             // TabDataTables
             // 

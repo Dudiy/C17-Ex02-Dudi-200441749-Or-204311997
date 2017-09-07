@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * C17_Ex01: FacebookCollectionAdapter.cs
+ * 
+ * Written by:
+ * 204311997 - Or Mantzur
+ * 200441749 - Dudi Yecheskel 
+*/
+using System;
 using System.Linq;
 using FacebookWrapper.ObjectModel;
 

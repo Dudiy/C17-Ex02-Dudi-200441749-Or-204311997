@@ -1,7 +1,14 @@
-﻿namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
-{
-    using System;
+﻿/*
+ * C17_Ex01: FacebookDataTableFactory.cs
+ * 
+ * Written by:
+ * 204311997 - Or Mantzur
+ * 200441749 - Dudi Yecheskel 
+*/
+using System;
 
+namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
+{
     public static class FacebookDataTableFactory
     {
         public static FacebookDataTable CreateTable(eFacebookDataTableType i_TableType)
@@ -10,7 +17,7 @@
 
             switch (i_TableType)
             {
-                case eFacebookDataTableType.Friends:                    
+                case eFacebookDataTableType.Friends:
                     tableCreated = new FacebookFriendsDataTable();
                     break;
                 case eFacebookDataTableType.LikedPages:
