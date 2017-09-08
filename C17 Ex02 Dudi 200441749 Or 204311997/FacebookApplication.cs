@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
 using C17_Ex01_Dudi_200441749_Or_204311997.Forms;
-    
+
 namespace C17_Ex01_Dudi_200441749_Or_204311997
 {
     public static class FacebookApplication
@@ -215,7 +215,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997
             foreach (Thread thread in disposedThreads)
             {
                 sr_Threads.Remove(thread);
-            }
+            }            
         }
     }
 }

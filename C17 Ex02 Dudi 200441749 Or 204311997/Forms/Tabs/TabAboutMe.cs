@@ -63,10 +63,10 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
                         likedPages = FacebookApplication.LoggedInUser.LikedPages;
                     }
 
-                    this.listBoxLikedPage.Invoke(new Action(() =>
+                    this.listBoxLikedPages.Invoke(new Action(() =>
                     {
                         this.likedPagesBindingSource.DataSource = likedPages;
-                        this.listBoxLikedPage.ClearSelected();
+                        this.listBoxLikedPages.ClearSelected();
                     }));
                 }
                 catch (Exception e)

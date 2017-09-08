@@ -19,16 +19,17 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
         private readonly Post r_Post;
         private Thread m_InitNonBindedComponentsThread;
 
-        public FormPostDetails()
+        public FormPostDetails(Post i_Post)
         {
             this.InitializeComponent();
-            this.postsBindingSource.DataSource = this.r_Post;
+            this.r_Post = i_Post;
+            this.postsBindingSource.DataSource = i_Post;
         }
 
         private void initNonBindedComponents()
         {
             try
-            {
+            {   
                 if (!string.IsNullOrEmpty(this.r_Post.PictureURL))
                 {
                     try
@@ -70,13 +71,6 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms
             {
                 this.m_InitNonBindedComponentsThread.Abort();
             }
-        }
-
-        public FormPostDetails(Post i_Post)
-        {
-            this.InitializeComponent();
-            this.r_Post = i_Post;
-            this.postsBindingSource.DataSource = i_Post;
         }
     }
 }
