@@ -25,7 +25,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 TotalRows = FacebookApplication.LoggedInUser.Friends.Count;
                 foreach (FacebookObject facebookObject in i_FriendsList)
                 {
-                    if (facebookObject is User friend)
+                    User friend = facebookObject as User;
+
+                    if (friend != null)
                     {
                         DataTable.Rows.Add(
                             friend,

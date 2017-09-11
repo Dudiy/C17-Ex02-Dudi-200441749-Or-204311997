@@ -175,12 +175,14 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void friendshipAnalyzerFriendsDockPhoto_MouseClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((PictureBox)i_Sender).Tag is User friend)
+            User friend = ((PictureBox)i_Sender).Tag as User;
+
+            if (friend != null)
             {
-                this.m_FriendshipAnalyzer.Friend = friend;
-                if (this.FriendSelectionChanged != null)
+                m_FriendshipAnalyzer.Friend = friend;
+                if (FriendSelectionChanged != null)
                 {
-                    this.FriendSelectionChanged.Invoke();
+                    FriendSelectionChanged.Invoke();
                 }
             }
         }
@@ -219,7 +221,9 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void pictureBoxMostRecentTaggedTogether_Click(object i_Sender, EventArgs i_Args)
         {
-            if (((PictureBox)i_Sender).Tag is Photo photo)
+            Photo photo = ((PictureBox)i_Sender).Tag as Photo;
+
+            if (photo != null)
             {
                 FormPhotoDetails formPhotoDetails = new FormPhotoDetails(photo);
                 formPhotoDetails.Show();
@@ -238,7 +242,9 @@ this.m_FriendshipAnalyzer.CommentsByFriend.Count);
 
         private void listBoxPhotosCommentedOn_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((ListBox)i_Sender).SelectedItem is FacebookCommentProxy selectedComment)
+            FacebookCommentProxy selectedComment = ((ListBox)i_Sender).SelectedItem as FacebookCommentProxy;
+
+            if (selectedComment != null)
             {
                 new FormPhotoDetails(this.m_FriendshipAnalyzer.CommentsByFriend[selectedComment.Comment]).Show();
             }

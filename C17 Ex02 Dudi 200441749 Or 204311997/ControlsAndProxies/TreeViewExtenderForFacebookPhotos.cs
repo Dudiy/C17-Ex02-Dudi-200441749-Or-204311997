@@ -77,13 +77,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.ControlsAndProxies
 
         protected override void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs i_Args)
         {
-            if (i_Args.Node.Tag is User selectedUser)
+            if (i_Args.Node.Tag is User)
             {
+                User selectedUser = i_Args.Node.Tag as User;
                 FormPictureFrame profile = new FormPictureFrame(selectedUser.PictureLargeURL, selectedUser.Name);
                 profile.Show();
             }
-            else if (i_Args.Node.Tag is Photo selectedPhoto)
+            else if (i_Args.Node.Tag is Photo)
             {
+                Photo selectedPhoto = i_Args.Node.Tag as Photo;
                 FormPhotoDetails formPhotoDetails = new FormPhotoDetails(selectedPhoto);
                 formPhotoDetails.Show();
             }

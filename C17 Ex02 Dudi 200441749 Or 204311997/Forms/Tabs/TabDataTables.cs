@@ -47,7 +47,7 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
             {
                 this.dataGridView.DataSource = null;
                 this.m_DataTableBindedToView = (FacebookDataTable)this.comboBoxDataTableBindingSelection.SelectedItem;
-                if (this.m_DataTableBindedToView.DataTable.Rows.Count == 0 || this.m_DataTableBindedToView is FacebookPhotosDataTable)
+                if (m_DataTableBindedToView.DataTable.Rows.Count == 0 || m_DataTableBindedToView is FacebookPhotosDataTable)
                 {
                     try
                     {

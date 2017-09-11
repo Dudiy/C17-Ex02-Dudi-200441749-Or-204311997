@@ -161,7 +161,14 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
 
         private void displayFriendDetailsInAboutMeTab(PictureBox i_PictureBoxSelected)
         {
-            if (i_PictureBoxSelected != null && i_PictureBoxSelected.Tag is User friendSelected)
+            User friendSelected = null;
+
+            if (i_PictureBoxSelected != null)
+            {
+                friendSelected = i_PictureBoxSelected.Tag as User;
+            }
+
+            if (friendSelected != null)
             {
                 new FormFriendDetails(friendSelected).ShowDialog();
             }
@@ -293,13 +300,15 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
         private void pictureBoxLastPost_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
             // TODO doesn't work because the tag is string, if we can pull the Photo from post update the tag and this will work
-            if (((PictureBox)i_Sender).Tag is Photo photo)
+            Photo photo = ((PictureBox)i_Sender).Tag as Photo;
+
+            if (photo != null)
             {
                 FormPhotoDetails formPhotoDetails = new FormPhotoDetails(photo);
                 formPhotoDetails.Show();
             }
         }
-        
+
         private void linkLabelLikedPageURL_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_Args)
         {
             // Specify that the link was visited.
@@ -310,7 +319,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
 
         private void listBoxPostComment_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((ListBox)i_Sender).SelectedItem is FacebookCommentProxy commentSelected)
+            FacebookCommentProxy commentSelected = ((ListBox)i_Sender).SelectedItem as FacebookCommentProxy;
+
+            if (commentSelected != null)
             {
                 MessageBox.Show(commentSelected.ToString());
             }
@@ -318,7 +329,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.Forms.Tabs
 
         private void listBoxPostLiked_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (((ListBox)i_Sender).SelectedItem is User friend)
+            User friend = ((ListBox)i_Sender).SelectedItem as User;
+
+            if (friend != null)
             {
                 MessageBox.Show(string.Format("{0} Liked your post!", friend.Name));
             }

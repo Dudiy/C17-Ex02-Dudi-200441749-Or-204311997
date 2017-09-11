@@ -25,7 +25,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                 TotalRows = FacebookApplication.LoggedInUser.LikedPages.Count;
                 foreach (FacebookObject facebookObject in i_LikedPages)
                 {
-                    if (facebookObject is Page page)
+                    Page page = facebookObject as Page;
+
+                    if (page != null)
                     {
                         DataTable.Rows.Add(
                             page,

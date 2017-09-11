@@ -129,7 +129,9 @@ this.r_Photo.LikedBy.Count);
 
         private void listBoxLikes_MouseDoubleClick(object i_Sender, MouseEventArgs i_Args)
         {
-            if (this.listBoxLikes.SelectedItem is User selectedUser)
+            User selectedUser = listBoxLikes.SelectedItem as User;
+
+            if (selectedUser != null)
             {
                 FormPictureFrame profilePic = new FormPictureFrame(selectedUser.PictureLargeURL);
                 profilePic.Show();

@@ -48,7 +48,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
             {
                 foreach (FacebookObject facebookObject in i_MyPhotos)
                 {
-                    if (facebookObject is Photo photo)
+                    Photo photo = facebookObject as Photo;
+
+                    if (photo != null)
                     {
                         string photoTags = buildTagsString(photo);
                         DataTable.Rows.Add(

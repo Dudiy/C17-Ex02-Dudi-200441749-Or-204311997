@@ -27,7 +27,9 @@ namespace C17_Ex01_Dudi_200441749_Or_204311997.DataTables
                     TotalRows = FacebookApplication.LoggedInUser.Posts.Count;
                     foreach (FacebookObject facebookObject in i_Posts)
                     {
-                        if (facebookObject is Post post)
+                        Post post = facebookObject as Post;
+
+                        if (post != null)
                         {
                             DataTable.Rows.Add(
                                 post,
